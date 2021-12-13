@@ -114,9 +114,11 @@ class Admin extends CI_Controller {
     
     public function dashboard()
     {   
-        $data['title'] = 'Dashboard';
-        $data['page']  = 'dashboard';
-        // $data['it_staff'] = $this->model->allRecords('users','user_staus');
+        $data['title']          = 'Dashboard';
+        $data['page']           = 'dashboard';
+        $data['it_staff']       = $this->model->countUsersByRoleId(2);
+        $data['district_admin'] = $this->model->countUsersByRoleId(3);
+        $data['complainant']    = $this->model->countUsersByRoleId(4);
         $this->load->view('template',$data);
     }
     //==========================================================================

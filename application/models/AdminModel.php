@@ -42,6 +42,10 @@ class AdminModel extends CI_Model
     {
         return $this->db->get($table_name)->result();
     }
+    function countUsersByRoleId($user_role_id_fk)
+    {
+      return  $this->db->where('user_role_id_fk',$user_role_id_fk)->where('user_status',1)->count_all_results('users');
+    }
     
     public function district_add()
     {
