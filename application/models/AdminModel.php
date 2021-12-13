@@ -4,9 +4,23 @@ if (!defined('BASEPATH'))	exit('No direct script access allowed');
 
 class AdminModel extends CI_Model
 {
-    function IT_staff_list()
+    function user_by_role($table_name,$user_role_id_fk,$user_district_id_fk=null)
     {
-        return $this->db->where('user_role_id_fk',2)->get('users')->result();
+        if($user_district_id_fk != null )
+        {
+         return $this->db->where('user_role_id_fk',$user_role_id_fk)
+                        ->join('districts d','d.district_id=users.user_district_id_fk','left')
+                         ->get($table_name)->result();   
+        }
+        else
+        {
+            return $this->db->where('user_role_id_fk',$user_role_id_fk)->get($table_name)->result();
+        }
+        
+    }
+    function status_active_record($table_name,$table_status_column_name,$table_status_column_value)
+    {
+        return $this->db->where($table_status_column_name,$table_status_column_value)->get($table_name)->result();
     }
     function exist_record_row($talbe_column_name,$table_id,$table_name)
     {
@@ -23,6 +37,10 @@ class AdminModel extends CI_Model
     function insert($inert_array,$table_name)
     {
         return $this->db->insert($table_name,$inert_array);
+    }
+    function get_all_records($table_name)
+    {
+        return $this->db->get($table_name)->result();
     }
     
     public function district_add()

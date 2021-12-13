@@ -9,7 +9,7 @@
                     <h4><?= $title ?></h4>
                   </div>
                   <div class="card-body">
-                  <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;">Add IT-staff</button>
+                  <!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;">Add IT-staff</button> -->
                       <!-- start messages --->
                       <div style="text-align: center">
                               <?php if($feedback =$this->session->flashdata('feedback')){
@@ -34,20 +34,20 @@
                       <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                         <thead class="">
                           <tr>
-                            <th>Staff Name</th>
+                            <th>District Name</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <?php if($it_staff):?>
+                        <?php if($districts):?>
                             <tbody>
-                            <?php foreach($it_staff as $onByOne):?>
+                            <?php foreach($districts as $onByOne):?>
                                 <tr>
-                                    <td><?= $onByOne->user_name?></td>
-                                    <td><?= ($onByOne->user_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
+                                    <td><?= $onByOne->district_name?></td>
+                                    <td><?= ($onByOne->district_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
-                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel" href="javascript:void(0)" onclick="IT_staff_update(<?= $onByOne->user_id?>)"></a>
-                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/IT_staff_delete/'.$onByOne->user_id) ?>"></a>
+                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel"  href="javascript:void(0)" onclick="districts_update(<?= $onByOne->district_id?>)"></a>
+                                        <!-- <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/districts_delete/'.$onByOne->district_id) ?>"></a> -->
                                     </td>
                                 </tr>
                             <?php endforeach;?>
@@ -64,11 +64,11 @@
       </div>
 
       <!--- edit form -->
-      <div class="modal fade" id="editModel" role="dialog" aria-labelledby="formModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal fade" id="editModel"  role="dialog" aria-labelledby="formModal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="formModal">Update IT-staff </h5>
+                    <h5 class="modal-title text-white" id="formModal">Update district </h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -76,27 +76,16 @@
                     <div class="modal-body">
                     <!-- body-->
                        <!-- <span class="itStaffUpdateModel"></span> -->
-                       <form class="" method="post" action="<?= base_url("admin/IT_staff_update") ?>">
+                       <form class="" method="post" action="<?= base_url("admin/district_update") ?>">
                             <div class="form-group">
-                            <label>Username</label>
+                            <label>District Name</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-user"></i>
                                 </div>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Username" name="user_name" required id="edit_user_name">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label>Password</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                                </div>
-                                <input type="password" class="form-control" placeholder="Password" name="user_password" requored id="edit_user_password">
+                                <input type="text" class="form-control" placeholder="District Name" name="district_name" id="edit_district_name" required >
                             </div>
                             </div>
                             <div class="form-group">
@@ -107,13 +96,13 @@
                                     <i class="fas fa-user"></i>
                                 </div>
                                 </div>
-                                    <select class="form-control" name="user_status" id="edit_user_status">
+                                    <select class="form-control" name="district_status" id="edit_district_status">
                                         <option value="1">Active</option>
                                         <option value="0">Inactive<option>
                                     </select>
                             </div>
                             </div>
-                            <input type="hidden" name="user_id" id="edit_user_id">
+                            <input type="hidden" name="district_id" id="edit_district_id" >
                             <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
                         </form>
                     </div>
@@ -121,7 +110,7 @@
             </div>
         </div>
         <!-- add form -->
-        <div class="modal fade" id="addModel" tabindex="-1" role="dialog" aria-labelledby="formModaladd" aria-hidden="true" data-backdrop="static">
+        <div class="modal fade" id="addModel" tabindex="-1" role="dialog" aria-labelledby="formModaladd" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-info">
@@ -132,7 +121,7 @@
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                        <form class="" method="post" action="<?= base_url("admin/IT_staff_insert") ?>">
+                        <form class="" method="post" action="<?= base_url("admin/districts_insert") ?>">
                                 <div class="form-group">
                                 <label>Username</label>
                                 <div class="input-group">
@@ -141,7 +130,7 @@
                                         <i class="fas fa-user"></i>
                                     </div>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Username" name="user_name" required>
+                                    <input type="text" class="form-control" placeholder="Username" name="district_name" required>
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -162,15 +151,14 @@
             </div>
         </div>
       <script>
-          function IT_staff_update(user_id)		{
+          function districts_update(district_id)		{
 			$.ajax({
-				url: 'admin/IT_staff_edit_model/'+user_id,
+				url: 'admin/districts_edit_model/'+district_id,
 				dataType: 'json',
-				success: function(response){  
-              $('#edit_user_name').val(response.user_name);
-              $('#edit_user_password').val(response.user_password);
-              $('#edit_user_id').val(response.user_id); 
-              $('#edit_user_status option[value="' + response.user_status + '"]').prop('selected', true);
+				success: function(response){ 
+					$('#edit_district_name').val(response.district_name);
+          $('#edit_district_id').val(response.district_id); 
+          $('#edit_district_status option[value="' + response.district_status + '"]').prop('selected', true);
 				}
 			});
 		}

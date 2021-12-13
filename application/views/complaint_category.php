@@ -9,7 +9,7 @@
                     <h4><?= $title ?></h4>
                   </div>
                   <div class="card-body">
-                  <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;">Add IT-staff</button>
+                  <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;">Add Complaint Category</button>
                       <!-- start messages --->
                       <div style="text-align: center">
                               <?php if($feedback =$this->session->flashdata('feedback')){
@@ -34,20 +34,20 @@
                       <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
                         <thead class="">
                           <tr>
-                            <th>Staff Name</th>
+                            <th>Complaint Category Name</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <?php if($it_staff):?>
+                        <?php if($complaint_categories):?>
                             <tbody>
-                            <?php foreach($it_staff as $onByOne):?>
+                            <?php foreach($complaint_categories as $onByOne):?>
                                 <tr>
-                                    <td><?= $onByOne->user_name?></td>
-                                    <td><?= ($onByOne->user_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
+                                    <td><?= $onByOne->complaint_category_name?></td>
+                                    <td><?= ($onByOne->complaint_category_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
-                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel" href="javascript:void(0)" onclick="IT_staff_update(<?= $onByOne->user_id?>)"></a>
-                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/IT_staff_delete/'.$onByOne->user_id) ?>"></a>
+                                       <a class="fa fa-edit text-info" data-target="#editModel" data-toggle="modal" href="javascript:void(0)" onclick="complaint_categories_update(<?= $onByOne->complaint_category_id?>)"></a>
+                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/complaint_categories_delete/'.$onByOne->complaint_category_id) ?>"></a>
                                     </td>
                                 </tr>
                             <?php endforeach;?>
@@ -64,11 +64,11 @@
       </div>
 
       <!--- edit form -->
-      <div class="modal fade" id="editModel" role="dialog" aria-labelledby="formModal" aria-hidden="true" data-backdrop="static">
+      <div class="modal fade" id="editModel"  role="dialog" aria-labelledby="formModal" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="formModal">Update IT-staff </h5>
+                    <h5 class="modal-title text-white" id="formModal">Update Complaint Category </h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -76,27 +76,16 @@
                     <div class="modal-body">
                     <!-- body-->
                        <!-- <span class="itStaffUpdateModel"></span> -->
-                       <form class="" method="post" action="<?= base_url("admin/IT_staff_update") ?>">
+                       <form class="" method="post" action="<?= base_url("admin/complaint_category_update") ?>">
                             <div class="form-group">
-                            <label>Username</label>
+                            <label>Complaint Category Name</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-user"></i>
                                 </div>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Username" name="user_name" required id="edit_user_name">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label>Password</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                                </div>
-                                <input type="password" class="form-control" placeholder="Password" name="user_password" requored id="edit_user_password">
+                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" required id="edit_complaint_category_name">
                             </div>
                             </div>
                             <div class="form-group">
@@ -107,13 +96,13 @@
                                     <i class="fas fa-user"></i>
                                 </div>
                                 </div>
-                                    <select class="form-control" name="user_status" id="edit_user_status">
+                                    <select class="form-control" name="complaint_category_status" id="edit_complaint_category_status">
                                         <option value="1">Active</option>
                                         <option value="0">Inactive<option>
                                     </select>
                             </div>
                             </div>
-                            <input type="hidden" name="user_id" id="edit_user_id">
+                            <input type="hidden" name="complaint_category_id" id="edit_complaint_category_id" >
                             <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
                         </form>
                     </div>
@@ -125,52 +114,40 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="formModaladd">Add IT-staff </h5>
+                    <h5 class="modal-title text-white" id="formModaladd">Add Complainyt Category </h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                        <form class="" method="post" action="<?= base_url("admin/IT_staff_insert") ?>">
-                                <div class="form-group">
-                                <label>Username</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Username" name="user_name" required>
+                    <form class="" method="post" action="<?= base_url("admin/complaint_category_insert") ?>">
+                            <div class="form-group">
+                            <label>Complaint Category Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
                                 </div>
                                 </div>
-                                <div class="form-group">
-                                <label>Password</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-lock"></i>
-                                    </div>
-                                    </div>
-                                    <input type="password" class="form-control" placeholder="Password" name="user_password" requored >
-                                </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" required>
+                            </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Add</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
       <script>
-          function IT_staff_update(user_id)		{
+          function complaint_categories_update(complaint_category_id)		{
 			$.ajax({
-				url: 'admin/IT_staff_edit_model/'+user_id,
-				dataType: 'json',
-				success: function(response){  
-              $('#edit_user_name').val(response.user_name);
-              $('#edit_user_password').val(response.user_password);
-              $('#edit_user_id').val(response.user_id); 
-              $('#edit_user_status option[value="' + response.user_status + '"]').prop('selected', true);
+				url: 'admin/complaint_categories_edit_model/'+complaint_category_id,
+        dataType:'json',
+				success: function(response){ 
+              $('#edit_complaint_category_name').val(response.complaint_category_name);
+              $('#edit_complaint_category_id').val(response.complaint_category_id); 
+              $('#edit_complaint_category_status option[value="' + response.complaint_category_status + '"]').prop('selected', true);
 				}
 			});
 		}

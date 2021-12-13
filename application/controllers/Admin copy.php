@@ -10,9 +10,17 @@ class Admin extends CI_Controller {
     public function __construct()
 	{
 		parent::__construct();
-        $this->load->model('AdminModel','model');
-        $this->load->library('auto_no.php','zend');
-        $this->load->library('form_validation');
+		
+		// if($this->session->userdata('user_role_id_fk'))
+		// {
+			$this->load->model('AdminModel','model');
+            $this->load->library('auto_no.php','zend');
+            $this->load->library('form_validation');
+		//}
+		// else
+		// {	
+		// 	redirect(base_url());
+		// }
 	} 
 	
     //==========================================================================
@@ -113,10 +121,9 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function dashboard()
-    {   
+    {
         $data['title'] = 'Dashboard';
         $data['page']  = 'dashboard';
-        // $data['it_staff'] = $this->model->allRecords('users','user_staus');
         $this->load->view('template',$data);
     }
     //==========================================================================
@@ -150,30 +157,92 @@ class Admin extends CI_Controller {
             $talbe_column_name = 'user_name';
             $table_id          = $user_name;
             $table_name        = 'users';
-
-            $inert_it_array   = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_status'=>1,'user_role_id_fk'=>2);
-            $table_name        = 'users';
-            $response = $this->model->insert($inert_it_array,$table_name);
-                if($response == true)
-                {
-                    $this->messages('alert-success','Successfully Added');
-                    return redirect('admin/IT_staff'); 
-                }
-                else
-                {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/IT_staff');
-                }
+                // $dublicate = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);
+                //     if(is_object($dublicate))
+                //     {
+                //         $this->messages('alert-danger','Username Already Exists');
+                //         return redirect('admin/IT_staff'); 
+                //     }
+                //     else
+                //     {
+                        $inert_it_array   = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_status'=>1,'user_role_id_fk'=>2);
+                        $table_name        = 'users';
+                        $response = $this->model->insert($inert_it_array,$table_name);
+                            if($response == true)
+                            {
+                                $this->messages('alert-success','Successfully Added');
+                                return redirect('admin/IT_staff'); 
+                            }
+                            else
+                            {
+                                $this->messages('alert-danger','Some Thing Wrong');
+                                return redirect('admin/IT_staff');
+                            }
+                    // }
         }
     }
-    function IT_staff_edit_model($user_id)
+    function IT_staff_edit_model()
     {
+        if($this->input->post('user_id'))
+        {
+            $user_id           = $this->input->post('user_id');
             $table_name        = "users";
             $talbe_column_name = 'user_id';
             $table_id          = $user_id;
 
             $IT_staff = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
-            echo json_encode($IT_staff);exit();
+            $active_class = '';
+            $inactive_class = '';
+            if($IT_staff->user_status == 1){ $active_class = 'selected'; } else{ $inactive_class = 'selected';}
+
+            $html ='
+                        <form class="" method="post" action="'.base_url("admin/IT_staff_update").'">
+                            <div class="form-group">
+                            <label>Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Username" name="user_name" required value="'.$IT_staff->user_name.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password" name="user_password" requored value="'.$IT_staff->user_password.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Status</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                    <select class="form-control" name="user_status">
+                                        <option value="1" '.$active_class.'>Active</option>
+                                        <option value="0" '.$inactive_class.'>Inactive<option>
+                                    </select>
+                            </div>
+                            </div>
+                            <input type="hidden" name="user_id" value="'.$IT_staff->user_id.'" >
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                        </form>
+                ';
+        }
+        else
+        {
+            $html ="No Record Found Against Selected User";
+        }   
+        echo $html;       
     }
     function IT_staff_update()
     {
@@ -230,10 +299,8 @@ class Admin extends CI_Controller {
         {   
             $talbe_column_name = 'user_id';
             $table_name        = 'users';
-            $table_id          = $user_id; 
-            $update_it_array   = array('user_status'=>0);
-            $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id); 
-            // $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
+            $table_id          = $user_id;
+            $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
             if($response == true)
             {
                 $this->messages('alert-success','Successfully Deleted');
@@ -298,86 +365,95 @@ class Admin extends CI_Controller {
                 }
         }
     }
-    function district_admin_edit_model($user_id)
-    { 
-        $table_name        = "users";
-        $talbe_column_name = 'user_id';
-        $table_id          = $user_id;
-
-        $district_admins = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
-        echo json_encode($district_admins); exit;      
-    }
-    function district_admin_update()
+    function district_admin_edit_model()
     {
         if($this->input->post('user_id'))
-        {   
-            $user_id           = $this->input->post('user_id');
-            $user_name         = $this->input->post('user_name');
-            $user_password     = $this->input->post('user_password');
-            $user_district_id_fk=$this->input->post('district_id');
-            $user_status       = $this->input->post('user_status');
-            $table_name        = "users";
-            $talbe_column_name = 'user_id';
-            $table_id          = $user_id;
-
-            $IT_staff = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
-            $exists_user_name =  $IT_staff->user_name;
-            if($exists_user_name != $user_name)
-            {
-              $this->form_validation->set_rules('user_name', 'Username', 'required|trim|is_unique[users.user_name]');  
-            }
-            else
-            {
-                $this->form_validation->set_rules('user_name', 'Username', 'required|trim');
-            }
+        {
+            $user_id            = $this->input->post('user_id');
+            $table_name         = "users";
+            $talbe_column_name  = 'user_id';
+            $table_id           = $user_id;
+            $table_name2        = 'districts';
+            $talbe_column_name2 = 'district_id';
+            $table_status_column_name = 'district_status';
+            $table_status_column_value = 1;
             
-            $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
-            if ($this->form_validation->run() == FALSE)
-            {
-                $error   = array('error' => validation_errors());
-                $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/district_admin');
-                
-            }
-            else
-            {
+            $district = $this->model->status_active_record($table_name2,$table_status_column_name,$table_status_column_value);
+            $IT_staff = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
 
-                $update_it_array   = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_status'=>$user_status,'user_district_id_fk'=>$user_district_id_fk);
-                $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
-                    if($response == true)
-                    {
-                        $this->messages('alert-success','Successfully Update');
-                        return redirect('admin/district_admin'); 
+                $select  = '<select class="form-control select2" name="district_id" style="width:90%" required>';
+                    if($district){ 
+                        foreach($district as $dist)
+                        {
+                            ($dist->district_id == $IT_staff->user_district_id_fk )? $slected = 'selected' :  $slected = '';
+                            $select .='<option value='.$dist->district_id.' '.$slected.'>'.$dist->district_name.'</option>';
+                        } 
                     }
-                    else
-                    {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/district_admin');
-                    }
-            }
+                $select .= '</select>';
+
+            $active_class = '';
+            $inactive_class = '';
+            if($IT_staff->user_status == 1){ $active_class = 'selected'; } else{ $inactive_class = 'selected';}
+
+            $html ='
+                        <form class="" method="post" action="'.base_url("admin/IT_staff_update").'">
+                            <div class="form-group">
+                                <label>District</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    </div>
+                                    '.$select.'
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Username" name="user_name" required value="'.$IT_staff->user_name.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password" name="user_password" requored value="'.$IT_staff->user_password.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Status</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                    <select class="form-control" name="user_status">
+                                        <option value="1" '.$active_class.'>Active</option>
+                                        <option value="0" '.$inactive_class.'>Inactive<option>
+                                    </select>
+                            </div>
+                            </div>
+                            <input type="hidden" name="user_id" value="'.$IT_staff->user_id.'" >
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                        </form>
+                ';
         }
-    }
-    function district_admin_delete($user_id= null)
-    {
-        if($user_id > 0)
-        {   
-            $talbe_column_name = 'user_id';
-            $table_name        = 'users';
-            $table_id          = $user_id; 
-            $update_it_array   = array('user_status'=>0);
-            $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id); 
-            if($response == true)
-            {
-                $this->messages('alert-success','Successfully Deleted');
-                return redirect('admin/district_admin'); 
-            }
-            else
-            {
-                $this->messages('alert-danger','Some Thing Wrong');
-                return redirect('admin/district_admin');
-            }
-        }
+        else
+        {
+            $html ="No Record Found Against Selected User";
+        }   
+        echo $html;       
     }
     //==========================================================================
     // respondents
@@ -400,14 +476,57 @@ class Admin extends CI_Controller {
         $data['page']     = 'districts';
         $this->load->view('template',$data);
     }
-    public function districts_edit_model($district_id)
+    public function districts_edit_model()
     {
+        if($this->input->post('district_id'))
+        {
+            $district_id       = $this->input->post('district_id');
             $table_name        = "districts";
             $talbe_column_name = 'district_id';
             $table_id          = $district_id;
 
             $districts = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
-            echo json_encode($districts); exit(); 
+            $active_class = '';
+            $inactive_class = '';
+            if($districts->district_status == 1){ $active_class = 'selected'; } else{ $inactive_class = 'selected';}
+
+            $html ='
+                        <form class="" method="post" action="'.base_url("admin/district_update").'">
+                            <div class="form-group">
+                            <label>District Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="District Name" name="district_name" required value="'.$districts->district_name.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Status</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                    <select class="form-control" name="district_status">
+                                        <option value="1" '.$active_class.'>Active</option>
+                                        <option value="0" '.$inactive_class.'>Inactive<option>
+                                    </select>
+                            </div>
+                            </div>
+                            <input type="hidden" name="district_id" value="'.$districts->district_id.'" >
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                        </form>
+                ';
+        }
+        else
+        {
+            $html ="No Record Found Against Selected User";
+        }   
+        echo $html; 
     }
     public function district_update()
     {
@@ -464,14 +583,57 @@ class Admin extends CI_Controller {
         $this->load->view('template',$data);
     }
 
-    public function complaint_categories_edit_model($complaint_category_id)
+    public function complaint_categories_edit_model()
     {
-        $table_name        = "complaint_categories";
-        $talbe_column_name = 'complaint_category_id';
-        $table_id          = $complaint_category_id;
+        if($this->input->post('complaint_category_id'))
+        {
+            $complaint_category_id       = $this->input->post('complaint_category_id');
+            $table_name        = "complaint_categories";
+            $talbe_column_name = 'complaint_category_id';
+            $table_id          = $complaint_category_id;
 
-        $complaint_cat = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
-        echo json_encode($complaint_cat); exit;
+            $complaint_cat = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
+            $active_class = '';
+            $inactive_class = '';
+            if($complaint_cat->complaint_category_status == 1){ $active_class = 'selected'; } else{ $inactive_class = 'selected';}
+
+            $html ='
+                        <form class="" method="post" action="'.base_url("admin/complaint_category_update").'">
+                            <div class="form-group">
+                            <label>Complaint Category Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" required value="'.$complaint_cat->complaint_category_name.'">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label>Status</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                </div>
+                                    <select class="form-control" name="complaint_category_status">
+                                        <option value="1" '.$active_class.'>Active</option>
+                                        <option value="0" '.$inactive_class.'>Inactive<option>
+                                    </select>
+                            </div>
+                            </div>
+                            <input type="hidden" name="complaint_category_id" value="'.$complaint_cat->complaint_category_id.'" >
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                        </form>
+                ';
+        }
+        else
+        {
+            $html ="No Record Found Against Selected User";
+        }   
+        echo $html; 
     }
     
     public function complaint_category_update()
@@ -560,8 +722,7 @@ class Admin extends CI_Controller {
             $talbe_column_name = 'complaint_category_id';
             $table_name        = 'complaint_categories';
             $table_id          = $complaint_category_id;
-            $update_it_array   = array('complaint_category_status'=>0);
-            $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
+            $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
             if($response == true)
             {
                 $this->messages('alert-success','Successfully Deleted');
@@ -618,9 +779,9 @@ class Admin extends CI_Controller {
         
     }
     
-    public function complaints()
+    public function complaints_view()
     {
-        echo "complaint list here";
+        
     }
     
     public function complaint_edit()
