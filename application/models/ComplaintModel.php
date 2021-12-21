@@ -64,7 +64,7 @@ class ComplaintModel extends CI_Model
         
         if(trim($data_arr['complainant_id_fk']) == '' || trim($data_arr['complainant_id_fk']) == '0')
         {
-            return array('response'=>0,'response_msg'=>'Complaint-Category Required');
+            return array('response'=>0,'response_msg'=>'Complainant-Id Required');
         }
         
         //======================================================================
@@ -93,7 +93,7 @@ class ComplaintModel extends CI_Model
         // category validation
         //======================================================================
         
-        $find_category = $this->db->query('select * from complaint_categories where category_id = ?',array($data_arr['complaint_category_id_fk']))->result_array();
+        $find_category = $this->db->query('select * from complaint_categories where complaint_category_id = ?',array($data_arr['complaint_category_id_fk']))->result_array();
         
         if(count($find_category) == 0)
         {
@@ -101,11 +101,22 @@ class ComplaintModel extends CI_Model
         }
         
         //======================================================================
+        // Complaint-Detail validation
+        //======================================================================
+
+        if(trim($data_arr['complaint_detail']) == '' || trim($data_arr['complaint_detail']) == '0')
+        {
+            return array('response'=>0,'response_msg'=>'Please enter complaint-detail');
+        }
+        
+        //======================================================================
         // check duplication 
         //======================================================================
         
-        $find_complaint = $this->db->query('select * from complaints where complainant_id_fk = ? and district_id_fk = ? and complaint_category_id_fk = ? and complaint_detail = ?',
-                                            array($data_arr['complainant_id_fk'],$data_arr['district_id_fk'],$data_arr['complaint_category_id_fk']))->result_array();
+        $find_complaint = $this->db->query('select * from complaints 
+                                            where 
+                                            complainant_id_fk = ? and district_id_fk = ? and complaint_category_id_fk = ? and complaint_detail = ?',
+                                            array($data_arr['complainant_id_fk'],$data_arr['district_id_fk'],$data_arr['complaint_category_id_fk'],$data_arr['complaint_detail']))->result_array();
         
         if(count($find_complaint) > 0)
         {
@@ -160,7 +171,7 @@ class ComplaintModel extends CI_Model
                 // return
                 //==============================================================
                 
-                return array('response'=>1,'response_msg'=>'Complaint Registered Successfully','complaint_id'=>$complainant_id);
+                return array('response'=>1,'response_msg'=>'Complaint Registered Successfully','complaint_id'=>$complaint_id);
             }
             else
             {
