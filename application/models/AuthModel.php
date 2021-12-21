@@ -2,25 +2,60 @@
 
 if (!defined('BASEPATH'))	exit('No direct script access allowed');
 
+
+use \Firebase\JWT\JWT;
+
 class AuthModel extends CI_Model
 {
     public static $role_id_complainant = 4;
     
-    public function user_login_check()
+    public function user_token_validation()
     {
+        $token = null;
+        
+        if($this->input->post('token'))
+        {
+            $token = $this->input->post('token');
+        }
+        else
+        {
+            return false;
+        }
+        
+        
+        /// Decoding
+        try 
+        {
+            $decoded = JWT::decode($token, PRIVATE_KEY, array('HS256'));
+        }
+        catch(Exception $e) 
+        {
+            // print_r($e);
+            return false;
+        }
+        
+        return $decoded;
     
     }
     
     public function user_login($data_arr)
     { 
+        //======================================================================
+        // query
+        //======================================================================
         
-            $this->db->select('users.*,user_roles.user_role_name')->from('users');
-            $this->db->join('user_roles','user_roles.user_role_id=users.user_role_id_fk');
-            $this->db->where('user_name',trim($data_arr['user_name']));
-            $this->db->where('user_password',md5(trim($data_arr['user_password'])));
-            $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
-            $this->db->where('user_status',1);
-	return  $this->db->get()->row();
+        $this->db->select('users.*,user_roles.user_role_name')->from('users');
+        $this->db->join('user_roles','user_roles.user_role_id=users.user_role_id_fk');
+        $this->db->where('user_name',trim($data_arr['user_name']));
+        $this->db->where('user_password',md5(trim($data_arr['user_password'])));
+        $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
+        $this->db->where('user_status',1);
+        
+        //======================================================================
+        // return
+        //======================================================================
+        
+	    return $this->db->get()->row();
     }
     
     public function user_add($data_arr)
@@ -30,7 +65,7 @@ class AuthModel extends CI_Model
 
         if(count($missing) > 0)
         {
-            return array('response'=>0,'data'=>array('response_msg'=>'Required Fields: '.implode(", ",array_keys($missing))));
+            return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
         }
         
         //======================================================================
@@ -41,7 +76,7 @@ class AuthModel extends CI_Model
         
         if(count($find_user) > 0)
         {
-            return array('response'=>0,'data'=>array('response_msg'=>'This user_name or user_password already exists'));
+            return array('response'=>0,'response_msg'=>'This user_name or user_password already exists');
         }
         else
         {
