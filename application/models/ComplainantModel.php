@@ -116,7 +116,7 @@ class ComplainantModel extends CI_Model
         
         // echo 'update complainant set '.$set_query_formatted;
         
-        $update_complainant = $this->db->query('update complainant set '.$set_query_formatted.' where complainant_id = ? ',$data_arr_update);
+        $update_complainant = $this->db->query('update complainants set '.$set_query_formatted.' where complainant_id = ? ',$data_arr_update);
         
         if($update_complainant == false)
         {
