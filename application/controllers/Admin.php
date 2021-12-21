@@ -617,7 +617,13 @@ class Admin extends CI_Controller {
     
     public function complaint_register()
     {
+        // get complainant on cnic base
+        // if return the extract complainant_id
+        // if not then add complainant and use this newly inserted complainant id
         
+        
+        // now proceed to register complaint
+        // pass that complainant_id and further info to -> complaint_add() function
     }
     
     public function complaints()
