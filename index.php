@@ -1,4 +1,13 @@
 <?php
+
+
+require __DIR__ . '/vendor/autoload.php';
+
+
+
+define("PRIVATE_KEY", "723847327487384hh3j4hj32h4h4jhj3h4j2j4hj2h3j4h23j4hj3h4j2j4hj2h3j4j3");
+
+
 /**
  * CodeIgniter
  *

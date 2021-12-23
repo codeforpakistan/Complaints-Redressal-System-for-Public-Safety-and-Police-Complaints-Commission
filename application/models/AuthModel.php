@@ -2,24 +2,60 @@
 
 if (!defined('BASEPATH'))	exit('No direct script access allowed');
 
+
+use \Firebase\JWT\JWT;
+
 class AuthModel extends CI_Model
 {
     public static $role_id_complainant = 4;
     
-    public function user_login_check()
+    public function user_token_validation()
     {
+        $token = null;
+        
+        if($this->input->post('token'))
+        {
+            $token = $this->input->post('token');
+        }
+        else
+        {
+            return false;
+        }
+        
+        
+        /// Decoding
+        try 
+        {
+            $decoded = JWT::decode($token, PRIVATE_KEY, array('HS256'));
+        }
+        catch(Exception $e) 
+        {
+            // print_r($e);
+            return false;
+        }
+        
+        return $decoded;
     
     }
     
     public function user_login($data_arr)
     { 
+        //======================================================================
+        // query
+        //======================================================================
         
-            $this->db->select('*')->from('users');
-            $this->db->where('user_name',trim($data_arr['user_name']));
-            $this->db->where('user_password',md5(trim($data_arr['user_password'])));
-            $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
-            $this->db->where('user_status',1);
-	return  $this->db->get()->row();
+        $this->db->select('users.*,user_roles.user_role_name')->from('users');
+        $this->db->join('user_roles','user_roles.user_role_id=users.user_role_id_fk');
+        $this->db->where('user_name',trim($data_arr['user_name']));
+        $this->db->where('user_password',md5(trim($data_arr['user_password'])));
+        $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
+        $this->db->where('user_status',1);
+        
+        //======================================================================
+        // return
+        //======================================================================
+        
+	    return $this->db->get()->row();
     }
     
     public function user_add($data_arr)
@@ -29,7 +65,7 @@ class AuthModel extends CI_Model
 
         if(count($missing) > 0)
         {
-            return array('response'=>0,'data'=>array('response_msg'=>'Required Fields: '.implode(", ",array_keys($missing))));
+            return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
         }
         
         //======================================================================
@@ -40,7 +76,7 @@ class AuthModel extends CI_Model
         
         if(count($find_user) > 0)
         {
-            return array('response'=>0,'data'=>array('response_msg'=>'This user_name or user_password already exists'));
+            return array('response'=>0,'response_msg'=>'This user_name or user_password already exists');
         }
         else
         {
@@ -78,76 +114,103 @@ class AuthModel extends CI_Model
         {
             if(isset($data_arr[$value]))
             {
-                $cond_row = ' or  '.$value.' = ?';
+                $cond_row = ' and  '.$value.' = ?';
                 
                 $cond_query .= $cond_row;
                 $cond_arr[$value] = trim($data_arr[$value]);
             }
         } 
+        
+        if(isset($data_arr['user_password']))
+        {
+            $cond_query .= ' and user_password = ?';
+            $cond_arr['user_password'] = md5(trim($data_arr['user_password']));
+        }
+        
         //======================================================================
         // query
         //======================================================================
         
-        $cond_query_formatted = ltrim(trim($cond_query),"or"); 
-        
+        $cond_query_formatted = ltrim(trim($cond_query),"and"); 
+
         $get_users = $this->db->query('select * from users where '.$cond_query_formatted,$cond_arr)->result_array();
         
         return $get_users;
         
     }
     
-    public function user_edit()
-    {
-        
-    }			
-}
-
-?><?php 
-
-//======================================================================
-// sadam code
-//======================================================================
-
-// if (!defined('BASEPATH'))	exit('No direct script access allowed');
-
-// class AuthModel extends CI_Model
-// {
     
-// 	public function checkUser($array)
-// 	{      
-// 		$sql= $this->db->select('*')->from('users')->where($array)->get()->row();
-//      	return $sql;
-// 	}
-	
-//     function insertRecord($array)
-// 	{
-//       return $this->db->insert('users',$array);
-// 	}
-	
-// 	function logincheck($username,$password)
-// 	{
-// 		$this->db->select('*')->from('users');
-// 		$this->db->where('user_name',$username);
-// 		$this->db->where('user_password',md5($password));
-// 		$this->db->where('user_status',1);
-// 		return $this->db->get()->row(); 
-// 	}
-// 	function logincheckByContact($contact)
-// 	{
-// 		$this->db->select('*')->from('users');
-// 		$this->db->where('user_contact',$contact);
-// 		$this->db->where('user_status',1);
-// 		return $this->db->get()->row();
-// 	}
+    public function user_edit($data_arr)
+    {
+        $required_fields = array('user_id'=>0);
+        $missing = array_diff_key($required_fields,$data_arr);
 
-// 	function logincheckByUsername($username)
-// 	{
-// 		$this->db->select('*')->from('users');
-// 		$this->db->where('user_name',$username);
-// 		$this->db->where('user_status',1);
-// 		return $this->db->get()->row();
-// 	}
-				
-// }
+        if(count($missing) > 0)
+        {
+            return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
+        }
+        
+        //======================================================================
+        // optional update columns
+        //======================================================================
+        
+        $data_arr_update = [];
+        $set_query = '';
+        
+        $optional_update_cols = array('user_district_id_fk','user_name','user_contact','user_status');
+        
+        foreach($optional_update_cols as $key=>$value)
+        {
+           if(isset($data_arr[$value]))
+           {
+               $data_arr_update[$value] =  trim($data_arr[$value]);
+               $set_query_row = ' ,  '.$value.' = ?';
+               $set_query .= $set_query_row;
+           }
+        }
+        
+        //======================================================================
+        // if password update
+        //======================================================================
+        
+        if(isset($data_arr['user_password']))
+        {
+            $data_arr_update['user_password'] =  md5(trim($data_arr['user_password']));
+            $set_query_row = ' , user_password = ?';
+            $set_query .= $set_query_row;
+        }
+        
+        //======================================================================
+        // if not data sent for updation
+        //======================================================================
+        
+        if(count($data_arr_update) == 0)
+        {
+            return array('response'=>0,'response_msg'=>'Select data to update');
+        }
+        
+        //======================================================================
+        // update query
+        //======================================================================
+        
+        $set_query_formatted = ltrim(trim($set_query),","); 
+        
+        // echo 'update users set '.$set_query_formatted.' where complainant_id = ?'; exit();
+        
+        $data_arr_update['user_id'] = $data_arr['user_id'];
+        
+        $update_complainant = $this->db->query('update users set '.$set_query_formatted.' where user_id = ? ',$data_arr_update);
+        
+        if($update_complainant == false)
+        {
+            return array('response'=>0,'response_msg'=>'Failed to update user#'.$data_arr["user_id"]);
+        }
+        else
+        {
+            return array('response'=>1,'data'=>array('response_msg'=>'User#'.$data_arr["user_id"].' Updated Successfully'));
+        }
+    
+    }
+}
 
 ?>
