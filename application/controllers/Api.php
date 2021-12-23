@@ -5,9 +5,6 @@ error_reporting(0);
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-use \Firebase\JWT\JWT;
-
-
 class Api extends CI_Controller {
     
     
@@ -15,34 +12,9 @@ class Api extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('AuthModel');
-		$this->load->model('GeneralModel');
-		$this->load->model('ComplainantModel');
-		$this->load->model('ComplaintModel');
 	} 
 	
-	//==========================================================================
-    // Token Session Check
-    //==========================================================================
-	
-	private function check_session()
-	{
-	    $session = $this->AuthModel->user_token_validation();
-        
-        if(!$session)
-        {
-            $this->format_response('error','Login is required',[]);
-        }
-        else
-        {
-            return $session;
-        }
-	}
-	
-	//==========================================================================
-    // Format Response
-    //==========================================================================
-	
-	public function format_response($response_type,$response_msg,$data_arr)
+	public function format_response($response_type,$data_arr)
 	{
 	    $return_arr = [];
 	    
@@ -50,25 +22,12 @@ class Api extends CI_Controller {
 	    {
 	        case 'success':
 	            $return_arr['response'] = 1;
-	            $return_arr['response_msg'] = $response_msg;
-	            
-	            if(count($data_arr) != 0)
-	            {
-	                 $return_arr['data'] = $data_arr;
-	            }
-	            
+	            $return_arr['data'] = $data_arr;
 	        break;
 	        
 	        case 'error':
 	            $return_arr['response'] = 0;
-	            $return_arr['response_msg'] = $response_msg;
-	            
-	            if(count($data_arr) != 0)
-	            {
-	                array_push($return_arr,$data_arr);
-	                // $return_arr['data'] = $data_arr;
-	            }
-	             
+	            $return_arr['data'] = $data_arr;
 	        break;
 	    }
 	    
@@ -89,12 +48,12 @@ class Api extends CI_Controller {
         
         if(!$this->input->post('user_name'))
         {
-            $this->format_response('error','user_name is required',[]);
+            $this->format_response('error',array('response_msg'=>'user_name is required'));
         }
         
         if(!$this->input->post('user_password'))
         {
-            $this->format_response('error','user_password is required',[]);
+            $this->format_response('error',array('response_msg'=>'user_password is required'));
         }
         
         //======================================================================
@@ -109,38 +68,17 @@ class Api extends CI_Controller {
         
         if(is_object($complainant_login))
         {
-            //==================================================================
-            // find complainant id for token
-            //==================================================================
-            
-            $find_complainant = $this->ComplainantModel->complainants_get(array('user_id_fk'=>$complainant_login->user_id));
-            
-            if(count($find_complainant) == 0)
-            {
-                $this->format_response('error','User is not linked with any complainant',[]);
-            }
-            
-            //==================================================================
-            
-            $key = PRIVATE_KEY;
-            $iat = time(); // current timestamp value
-            $exp = $iat + 3600;
-     
-            $payload = array(
-                                "iat"            => $iat, //Time the JWT issued at
-                                "exp"            => $exp, // Expiration time of token
-                                "user_id"        => $complainant_login->user_id,
-                                "user_name"      => $complainant_login->user_name,
-                                "complainant_id" => $find_complainant[0]['complainant_id']
-                            );
-             
-            $token = JWT::encode($payload, $key, 'HS256');
+            $data = array(
+                            'user_id'     => $complainant_login->user_id,
+                            'user_name'   => $complainant_login->user_name,
+                            'user_status' => $complainant_login->user_status
+                         );
                          
-            $this->format_response('success','Logged-in Successfully',["token" => $token]);
+            $this->format_response('success',$data);
         }
         else
         {
-            $this->format_response('error','username or password is incorrect',[]);
+            $this->format_response('error',array('response_msg'=>'username or password is incorrect'));
         }
     }
     
@@ -150,6 +88,7 @@ class Api extends CI_Controller {
     
     public function complainant_registration()
     {
+        $this->load->model('ComplainantModel');
         
         $user_name     = $this->input->post('user_name');
         $user_contact  = $this->input->post('user_contact');
@@ -157,7 +96,7 @@ class Api extends CI_Controller {
         
         if($user_name == '' || $user_contact == '' || $user_password == '')
         {
-            $this->format_response('error','User name,contact & password are required fields',[]);
+            $this->format_response('error',array('response_msg'=>'User name,contact & password are required fields'));
         }
         
         //======================================================================
@@ -170,7 +109,7 @@ class Api extends CI_Controller {
         
         if(count($find_user_duplication))
         {
-           $this->format_response('error','This user_name or user_contact already exists',[]);
+           $this->format_response('error',array('response_msg'=>'This user_name or user_contact already exists'));
         }
         
         //======================================================================
@@ -183,7 +122,7 @@ class Api extends CI_Controller {
         
         if(count($find_complainant_duplication))
         {
-          $this->format_response('error','This contact has already registered as complainant',[]);
+          $this->format_response('error',array('response_msg'=>'This contact has already registered as complainant'));
         }
         
         //======================================================================
@@ -203,7 +142,7 @@ class Api extends CI_Controller {
         
         if($insert_user['response'] == 0)
         {
-            $this->format_response('error','Failed to add user',[]);
+            $this->format_response('error',array('response_msg'=>'Failed to add user'));
         }
         else
         {
@@ -232,48 +171,62 @@ class Api extends CI_Controller {
             
         if($insert_complainant['response'] == 0)
         {
-            $this->format_response('error',$insert_complainant['response_msg'],[]);
+            $this->format_response('error',$insert_complainant['data']);
         }
         else
         {
             $complainant_id = $insert_complainant['complainant_id'];
-            $this->format_response('success','Complainant Registered Successfully',array('user_id'=>$user_id,'complainant_id'=>$complainant_id));
+            $this->format_response('success',array('response_msg'=>'Complainant Registered Successfully','user_id'=>$user_id,'complainant_id'=>$complainant_id));
         }
     }
     
-    //==========================================================================
-    // Profile Update
-    //==========================================================================
     
     public function complainant_profile_update()
     {
-        $session_info = $this->check_session();
-        $session_user_id = $session_info->user_id;
-        $session_complainant_id = $session_info->complainant_id;
+        $this->load->model('ComplainantModel');
         
-        //======================================================================
+        $user_id = $this->input->post('user_id'); // logged-in user's id
         
-        if($session_user_id == 0 || $session_user_id == null || trim($session_user_id) == '')
+        if($user_id == 0 || $user_id == null || trim($user_id) == '')
         {
-            $this->format_response('error','Logged-in user\'s id is required',[]);
+            $this->format_response('error',array('response_msg'=>'Logged-in user\'s id is required'));
         }
         
         //======================================================================
         //  Find user - check if this exists or not
         //======================================================================
         
-        $find_user = $this->AuthModel->users_get(array('user_id'=>$session_user_id));
+        $find_user = $this->AuthModel->users_get(array('user_id'=>$user_id));
         
         if(count($find_user) == 0)
         {
-            $this->format_response('error','This user_id does not exist',[]);
+            $this->format_response('error',array('response_msg'=>'This user_id does not exist'));
+        }
+        
+        //======================================================================
+        //  Find Complainant-id of Logged-in User
+        //======================================================================
+        
+        $data_arr_c = array('user_id_fk'=>$user_id);
+        
+        $find_complainant = $this->ComplainantModel->complainants_get($data_arr_c);
+        
+        if(count($find_complainant) != 0)
+        {
+          $this->format_response('error',array('response_msg'=>'Given user_id #'.$user_id.' is not connected to complainant'));
+        }
+        
+        if(count($find_complainant) > 1)
+        {
+          $this->format_response('error',array('response_msg'=>'More than one complainant connected with given user_id'));
         }
         
         //======================================================================
         // Complainant-id extracted from logged-in user
         //======================================================================
         
-        $data_arr_complainant = array('complainant_id'=>$session_complainant_id);
+        $complainant_id = $find_complainant['complainant_id'];
+        $data_arr_complainant = array('complainant_id'=>$complainant_id);
         
         //======================================================================
         // 1. columns which are allowed to be updated from complainant's side (android)
@@ -294,290 +247,44 @@ class Api extends CI_Controller {
         // call model function to update complainant
         //======================================================================
         
+        print_r($data_arr_complainant);
+        
         $complianant_update = $this->ComplainantModel->complainant_edit($data_arr_complainant);
         
         if($complianant_update['response'] == 0)
         {
-            if(isset($complianant_update['response_msg']))
-            {
-                $msg = trim($complianant_update['response_msg']);
-            }
-            else
-            {
-                $msg = 'Failed to update complainant\'s profile';   
-            }
-            
-            $this->format_response('error',$msg,[]);
+            $this->format_response('success',array('response_msg'=>'Failed to update complainant\'s profile'));
         }
         else
         {
-            $complainant_updated_info = $this->ComplainantModel->complainants_get(array('complainant_id'=>$session_complainant_id));
-            $this->format_response('success','Complainant\'s profile updated successfully',array('complainant'=>$complainant_updated_info));
+            $find_complainant_afterUpdate = $this->ComplainantModel->complainants_get(array('complainant_id'=>$complainant_id));
+            $this->format_response('success',array('response_msg'=>'Complainant\'s profile updated successfully',$find_complainant_afterUpdate));
         }
+        
     }
     
     //==========================================================================
-    // Get Districts
-    //==========================================================================
-    
-    public function districts_get()
-    {
-        $this->check_session();
-        
-        $districts_data = $this->GeneralModel->districts_get(array('district_status'=>'1'));
-        
-        if(count($districts_data) == 0)
-        {
-            $this->format_response('error','No districts found',[]);
-        }
-        else
-        {
-            $this->format_response('success','Districts Fetched Successfully',array('districts'=>$districts_data));
-        }
-    }
-    
-    //==========================================================================
-    // Get Complaint categories
-    //==========================================================================
-    
-    public function complaint_categories_get()
-    {
-        $this->check_session();
-        
-        $complaint_categories_data = $this->GeneralModel->complaint_categories_get(array('complaint_category_status'=>'1'));
-        
-        if(count($complaint_categories_data) == 0)
-        {
-            $this->format_response('error','No complaint categories found',[]);
-        }
-        else
-        {
-            $this->format_response('success','Complaint Categories Fetched Successfully',array('complaint_categories'=>$complaint_categories_data));
-        }
-    }
-    
-    //==========================================================================
-    // Complainant Profile
-    //==========================================================================
-    
-    public function complainant_profile()
-    {
-        $this->check_session();
-        
-        //==================================================================
-        // find complainant 
-        //==================================================================
-            
-        $find_complainant = $this->ComplainantModel->complainants_get(array('user_id_fk'=>$complainant_login->user_id));
-            
-        if(count($find_complainant) == 0)
-        {
-            $this->format_response('error','User is not linked with any complainant',[]);
-        }
-    }
-    
-    //==========================================================================
-    // Complaint Register
+    // Complaints
     //==========================================================================
     
     public function complaint_register()
     {
-        $session_info = $this->check_session();
-        $session_user_id = $session_info->user_id;
-        $session_complainant_id = $session_info->complainant_id;
         
-        $data_arr = [];
-        
-        $data_arr['complaint_source']         = 'complainant';
-        $data_arr['complainant_id_fk']        = $session_complainant_id;
-        $data_arr['registered_by_user']       = $session_user_id;
-        $data_arr['district_id_fk']           = $this->input->post('district_id_fk');
-        $data_arr['complaint_category_id_fk'] = $this->input->post('complaint_category_id_fk');
-        $data_arr['complaint_detail']         = $this->input->post('complaint_detail');
-        $data_arr['complaint_status']         = 'pending';
-        
-        //======================================================================
-        // validation
-        //======================================================================
-        
-        if(trim($data_arr['complaint_category_id_fk']) == '' || trim($data_arr['complaint_category_id_fk']) == '0')
-        {
-            $this->format_response('error','Complaint-Category Required',[]);
-        }
-        
-        if(trim($data_arr['complaint_detail']) == '')
-        {
-            $this->format_response('error','Complaint-Detail Required',[]);
-        }
-        
-        //======================================================================
-        // proceed to register complaint
-        //======================================================================
-        
-        $complaint_add_response = $this->ComplaintModel->complaint_add($data_arr);
-        
-        if($complaint_add_response['response'] == '1')
-        {
-            $this->format_response('success','Complainant Registered Successfully',array('complaint_id'=>$complaint_add_response['complaint_id']));
-        }
-        else
-        {
-            $this->format_response('error',$complaint_add_response['response_msg'],[]);
-        }
     }
     
-    //==========================================================================
-    // Get Complaints
-    //==========================================================================
-    
-    public function complainant_complaints()
+    public function complaints_view()
     {
-        $session_info = $this->check_session();
-        $session_user_id = $session_info->user_id;
-        $session_complainant_id = $session_info->complainant_id;
         
-        $complaint_data = $this->ComplaintModel->complaints_get(array('complainant_id_fk'=>$session_complainant_id));
-        
-        if(count($complaint_data) == 0)
-        {
-            $this->format_response('error','No complaints data',[]);
-        }
-        else
-        {
-            $this->format_response('success','Complaints Fetched Successfully',array('complaints'=>$complaint_data));
-        }
     }
     
-    //==========================================================================
-    // Phone.no Validation
-    //==========================================================================
-    
-    public function phone_validation()
+    public function complaint_edit()
     {
-        if(!$this->input->post('complainant_contact'))
-        {
-            $this->format_response('error','Complainant\'s contact is required',[]);
-        }
         
-        $complainant_contact = $this->input->post('complainant_contact');
-        
-        if($complainant_contact != null && trim($complainant_contact) != '' && $complainant_contact != '0')
-        {
-            
-            if(strlen($complainant_contact) == 11)
-            {
-                $user_data = $this->AuthModel->users_get(array('user_contact'=>trim($complainant_contact)));
-                
-                if(count($user_data) == 0)
-                {
-                    $this->format_response('error','No user found with this contact detail',[]);
-                }
-                else
-                {
-                    $complainant_data = $this->ComplainantModel->complainants_get(array('complainant_contact'=>trim($complainant_contact),'user_id_fk'=>$user_data[0]['user_contact']));
-        
-                    if(count($complainant_data) == 0)
-                    {
-                       $this->format_response('error','Provided contact is not linked',[]);
-                    }
-                    else
-                    {
-                        $this->format_response('success','Phone.no Verified',['complainant_id'=>$complainant_data[0]['complainant_id'],'user_id'=>$user_data[0]['user_contact']]);
-                    }
-                }
-            }
-            else
-            {
-                $this->format_response('error','Complainant\'s contact required format eg; 03331234567',[]);
-            }
-        }
-        else
-        {
-            $this->format_response('error','Complainant\'s contact can not be empty',[]);
-        }
     }
-    
-    //==========================================================================
-    // Reset Password
-    //==========================================================================
-    
-    public function reset_password()
-    {
-        $session_info = $this->check_session();
-        $session_user_id = $session_info->user_id;
-        $session_complainant_id = $session_info->complainant_id;
-        
-        //======================================================================
-        // current password validation 
-        //======================================================================
-        
-        if(!$this->input->post('user_password'))
-        {
-            $this->format_response('error','Current Password is required',[]);
-        }
-        
-        $user_password = trim($this->input->post('user_password'));
-        
-        $user_data = $this->AuthModel->users_get(array('user_id'=>$session_user_id,'user_password'=>$user_password),1);
-        
-        if(count($user_data) == 0)
-        {
-            $this->format_response('error','Incorrect current password',[]);
-        }
-        
-        if($user_data[0]['user_role_id_fk'] != '4')
-        {
-            $this->format_response('error','This user has not registered as complainant',[]);
-        }
-        
-        //======================================================================
-        // new password validation 
-        //======================================================================
-        
-        if(!$this->input->post('new_password'))
-        {
-            $this->format_response('error','New password is required',[]);
-        }
-        
-        $new_password = trim($this->input->post('new_password'));
-        
-        if(strlen($new_password) < 5)
-        {
-            $this->format_response('error','New password length should not be less than five letters' ,[]);
-        }
-        
-        //======================================================================
-        // new password and old password comparison 
-        //======================================================================
-        
-        if(md5($new_password) == md5($user_password))
-        {
-             $this->format_response('error','New-password & old-Password can not be same' ,[]);
-        }
-        
-        //======================================================================
-        // proceed to update
-        //======================================================================
-        
-        $update_complainant = $this->AuthModel->user_edit(array('user_id'=>$session_user_id,'user_password'=>trim($new_password)));
-        
-        if($update_complainant['response'] == 0)
-        {
-            $this->format_response('error','Failed to reset password',[]);
-        }
-        else
-        {
-            $this->format_response('success','Password updated successfully',[]);
-        }
-    }
-    
-    //==========================================================================
-    // Complainant Feedback on Complaint
-    //==========================================================================
     
     public function complaint_feedback()
     {
-        $this->check_session();
+        
     }
 
 }

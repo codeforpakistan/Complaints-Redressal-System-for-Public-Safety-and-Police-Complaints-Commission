@@ -12,7 +12,7 @@ class ComplainantModel extends CI_Model
 
         if(count($missing) > 0)
         {
-            return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
+            return array('response'=>0,'data'=>array('response_msg'=>'Required Fields: '.implode(", ",array_keys($missing))));
         }
         
         //======================================================================
@@ -23,7 +23,7 @@ class ComplainantModel extends CI_Model
         
         if(count($find_complainant) > 0)
         {
-            return array('response'=>0,'response_msg'=>'This contact has already registered as complainant');
+            return array('response'=>0,'data'=>array('response_msg'=>'This contact has already registered as complainant'));
         }
         else
         {
@@ -47,6 +47,7 @@ class ComplainantModel extends CI_Model
     
     public function complainants_get($data_arr)
     {
+        
         $cond_query = '';
         $cond_arr = [];
         
@@ -83,7 +84,7 @@ class ComplainantModel extends CI_Model
 
         if(count($missing) > 0)
         {
-            return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
+            return array('response'=>0,'data'=>array('response_msg'=>'Required Fields: '.implode(", ",array_keys($missing))));
         }
         
         //======================================================================
@@ -105,14 +106,7 @@ class ComplainantModel extends CI_Model
            }
         }
         
-        //======================================================================
-        // if not data sent for updation
-        //======================================================================
-        
-        if(count($data_arr_update) == 0)
-        {
-            return array('response'=>0,'response_msg'=>'Select data to update');
-        }
+        $data_arr_update['complainant_id'] = $data_arr['complainant_id'];
         
         //======================================================================
         // update query
@@ -120,19 +114,17 @@ class ComplainantModel extends CI_Model
         
         $set_query_formatted = ltrim(trim($set_query),","); 
         
-        // echo 'update complainant set '.$set_query_formatted.' where complainant_id = ?'; exit();
+        // echo 'update complainant set '.$set_query_formatted;
         
-        $data_arr_update['complainant_id'] = $data_arr['complainant_id'];
-        
-        $update_complainant = $this->db->query('update complainants set '.$set_query_formatted.' where complainant_id = ? ',$data_arr_update);
+        $update_complainant = $this->db->query('update complainant set '.$set_query_formatted.' where complainant_id = ? ',$data_arr_update);
         
         if($update_complainant == false)
         {
-            return array('response'=>0,'response_msg'=>'Failed to update complainant#'.$data_arr["complainant_id"]);
+            return array('response'=>0,'data'=>array('response_msg'=>'Failed to update complainant#'.$data_arr["complainant_id"]));
         }
         else
         {
-            return array('response'=>1,'data'=>array('response_msg'=>'Complainant#'.$data_arr["complainant_id"].' Updated Successfully'));
+            return array('response'=>1,'data'=>array('response_msg'=>'Complainant#'.$data_arr["complainant_id"].' Updated Successfullt'));
         }
     
     }

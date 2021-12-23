@@ -3,15 +3,22 @@
 if (!defined('BASEPATH'))	exit('No direct script access allowed');
 
 class ComplaintModel extends CI_Model
-{
-    
+{  
     public function complaint_add($data_arr)
-    {
-        $required_fields = array('complaint_source'=>0,'registered_by_user'=>0,'complainant_id_fk'=>0,'complaint_category_id_fk'=>0,'district_id_fk'=>0,'complaint_detail'=>0,'complaint_status'=>0);
+    { 
+        $required_fields = array(
+                                    'complaint_source'        =>0,
+                                    'registered_by_user'      =>0,
+                                    'complainant_id_fk'       =>0,
+                                    'complaint_category_id_fk'=>0,
+                                    'district_id_fk'          =>0,
+                                    'complaint_detail'        =>0,
+                                    'complaint_status'        =>0
+                                );
         $missing = array_diff_key($required_fields,$data_arr);
-
+       
         if(count($missing) > 0)
-        {
+        { 
             return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
         }
         
@@ -113,11 +120,22 @@ class ComplaintModel extends CI_Model
         // check duplication 
         //======================================================================
         
-        $find_complaint = $this->db->query('select * from complaints 
-                                            where 
-                                            complainant_id_fk = ? and district_id_fk = ? and complaint_category_id_fk = ? and complaint_detail = ?',
-                                            array($data_arr['complainant_id_fk'],$data_arr['district_id_fk'],$data_arr['complaint_category_id_fk'],$data_arr['complaint_detail']))->result_array();
-        
+        // $find_complaint = $this->db->query('
+        //                                    select * from complaints 
+        //                                     where 
+        //                                     complainant_id_fk = ? 
+        //                                     and district_id_fk = ? 
+        //                                     and complaint_category_id_fk = ? 
+        //                                     and complaint_detail = ?',
+        //                                     array($data_arr['complainant_id_fk'],$data_arr['district_id_fk'],$data_arr['complaint_category_id_fk'],$data_arr['complaint_detail']))->result_array();
+       $find_complaint=    $this->db->select('*')
+                                    ->from('complaints')
+                                    ->where('complainant_id_fk',$data_arr['complainant_id_fk'])
+                                    ->where('district_id_fk',$data_arr['district_id_fk'])
+                                    ->where('complaint_category_id_fk',$data_arr['complaint_category_id_fk'])
+                                    ->where('complaint_detail',$data_arr['complaint_detail'])
+                                    ->get()
+                                    ->result_array();
         if(count($find_complaint) > 0)
         {
             return array('response'=>0,'response_msg'=>'This complaint is already registered');
@@ -137,9 +155,9 @@ class ComplaintModel extends CI_Model
                 //==============================================================
                 // insert attachments
                 //==============================================================
-                
+               
                 if (!empty($_FILES['attachments']['name'][0])) 
-                {
+                { 
                     //==========================================================
                     // check if directory exists
                     //==========================================================
@@ -217,7 +235,7 @@ class ComplaintModel extends CI_Model
             
             $image_name = str_replace(str_split('\\/:*?"<>|_-'), '', $image);
             
-            $fileName = $title.$user_id.'_'.str_shuffle(time()).'.'.$file_extension;
+            $fileName = $title.'_'.str_shuffle(time()).'.'.$file_extension;
             $file_path =  $path.''.$fileName;
             
             $config['file_name'] = $fileName;
@@ -231,11 +249,8 @@ class ComplaintModel extends CI_Model
                 $file_path_formatted = substr($file_path, 2); // remove ./ from start of the path string
                 
                 $this->upload->data();
-                
-                $this->db->insert("INSERT INTO complaint_attachments (complaint_id_fk, user_id_fk, remarks_id_fk, complaint_attachment_type, complaint_attachment_file_path, complaint_attachment_status) VALUES (?, ?, ?, ?, ?, ?)", 
-                                  array($data_arr['complaint_id_fk'],$data_arr['user_id_fk'],$data_arr['remarks_id_fk'],$file_extension,$file_path_formatted,'1')
-                                );
-                                
+                $complaint_attachments_array = array('complaint_id_fk'=>$data_arr['complaint_id_fk'],'user_id_fk'=>$data_arr['user_id_fk'],'remarks_id_fk'=>$data_arr['remarks_id_fk'],'complaint_attachment_type'=>$file_extension,'complaint_attachment_file_path'=>$file_path_formatted,'complaint_attachment_status'=>1);                
+                $this->db->insert('complaint_attachments',$complaint_attachments_array);            
                 $attachment_ids[] = $this->db->insert_id();
             }
             else 

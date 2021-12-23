@@ -31,43 +31,16 @@
                 </a>
             </li>
             <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown">
+                <a href="admin/complaint_categories" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaint Categories</span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="admin/complaint_categories">View All</a></li>
-                    <!-- <li><a class="nav-link" href="categories_add">Add New Category</a></li> -->
-                </ul>
-            </li>
+            </li> 
             
             <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown">
-                  <i data-feather="briefcase"></i><span>IT Staff</span>
+                <a href="admin/users" class="nav-link">
+                  <i data-feather="briefcase"></i><span>Users</span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="admin/IT_staff">View All</a></li>
-                </ul>
-            </li>
-            
-            <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown">
-                  <i data-feather="briefcase"></i><span>District Admins</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="admin/district_admin">View All</a></li>
-                    <li><a class="nav-link" href="distrcit_admin_add">Add New District Admin</a></li>
-                </ul>
-            </li>            
-            
-            <!-- <li class="dropdown">
-                <a href="#" class="menu-toggle nav-link has-dropdown">
-                  <i data-feather="briefcase"></i><span>Complainants</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="complainants">View All</a></li>
-                    <li><a class="nav-link" href="complainant_add">Add New Complainant</a></li>
-                </ul>
-            </li> -->
+            </li>   
                         
             
             <li class="dropdown">

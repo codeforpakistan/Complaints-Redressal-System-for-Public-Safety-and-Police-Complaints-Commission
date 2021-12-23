@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="assets/bundles/chocolat/dist/css/chocolat.css">
   <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
   <link rel="stylesheet" href="assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+  
+  <link rel="stylesheet" href="assets/css/app.min.css">
+  <link rel="stylesheet" href="assets/bundles/dropzonejs/dropzone.css">
      <!-- select 2 lib -->
   <link rel="stylesheet" href="assets/bundles/select2/dist/css/select2.min.css">
   <!----breadcrumb----->

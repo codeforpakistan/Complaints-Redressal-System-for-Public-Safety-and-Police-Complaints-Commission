@@ -46,7 +46,25 @@ class AdminModel extends CI_Model
     {
       return  $this->db->where('user_role_id_fk',$user_role_id_fk)->where('user_status',1)->count_all_results('users');
     }
-    
+    function IT_district_admins()
+    {
+        return $this->db->from('users')
+                        ->where('user_role_id_fk !=',1)
+                        ->where('user_role_id_fk !=',4)
+                        ->join('districts d','d.district_id=users.user_district_id_fk','left')
+                        ->join('user_roles r','r.user_role_id=users.user_role_id_fk','left')
+                         ->get()->result();
+    }
+    public function getComplainant($complainant_cnic)
+    {
+      //return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->get('complainants')->row();
+      return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->where('complainant_status',1)->get('complainants')->row();
+    }
+    function insert_with_last_insert_id($table_name,$array)
+    {
+        $this->db->insert($table_name, $array);
+        return $this->db->insert_id();
+    }
     public function district_add()
     {
         

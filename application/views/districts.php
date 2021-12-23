@@ -9,13 +9,13 @@
                     <h4><?= $title ?></h4>
                   </div>
                   <div class="card-body">
-                  <!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;">Add IT-staff</button> -->
+                  <button type="button" class="btn btn-primary pull-right fa fa-plus" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;"></button>
                       <!-- start messages --->
                       <div style="text-align: center">
                               <?php if($feedback =$this->session->flashdata('feedback')){
                                 $feedback_class =$this->session->flashdata('feedbase_class');  ?>
                                     <div class="row">
-                                      <div class="col-lg-12 col-lg-offset-2">
+                                      <div class="col-md-6 offset-3">
                                       <div class="alert alert-dismissible <?=  $feedback_class;?>">
                                       <?= $feedback ?>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -31,7 +31,7 @@
                             </div>
                     <!-- end of messages  --->
                     <div class="table-responsive">
-                      <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
+                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
                             <th>District Name</th>
@@ -103,7 +103,12 @@
                             </div>
                             </div>
                             <input type="hidden" name="district_id" id="edit_district_id" >
-                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                            <div class="row">
+                                    <div class="col-md-12 text-center">
+                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                                    </div>
+                                </div>
+                            
                         </form>
                     </div>
                 </div>
@@ -114,7 +119,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="formModaladd">Add IT-staff </h5>
+                    <h5 class="modal-title text-white" id="formModaladd">Add District</h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -123,28 +128,21 @@
                     <!-- body-->
                         <form class="" method="post" action="<?= base_url("admin/districts_insert") ?>">
                                 <div class="form-group">
-                                <label>Username</label>
+                                <label>District Name</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <i class="fas fa-user"></i>
                                     </div>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Username" name="district_name" required>
+                                    <input type="text" class="form-control" placeholder="district name" name="district_name" required>
                                 </div>
                                 </div>
-                                <div class="form-group">
-                                <label>Password</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-lock"></i>
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                     </div>
-                                    </div>
-                                    <input type="password" class="form-control" placeholder="Password" name="user_password" requored >
                                 </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
                         </form>
                     </div>
                 </div>
