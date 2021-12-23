@@ -449,6 +449,129 @@ class Api extends CI_Controller {
     }
     
     //==========================================================================
+    // Phone.no Validation
+    //==========================================================================
+    
+    public function phone_validation()
+    {
+        if(!$this->input->post('complainant_contact'))
+        {
+            $this->format_response('error','Complainant\'s contact is required',[]);
+        }
+        
+        $complainant_contact = $this->input->post('complainant_contact');
+        
+        if($complainant_contact != null && trim($complainant_contact) != '' && $complainant_contact != '0')
+        {
+            
+            if(strlen($complainant_contact) == 11)
+            {
+                $user_data = $this->AuthModel->users_get(array('user_contact'=>trim($complainant_contact)));
+                
+                if(count($user_data) == 0)
+                {
+                    $this->format_response('error','No user found with this contact detail',[]);
+                }
+                else
+                {
+                    $complainant_data = $this->ComplainantModel->complainants_get(array('complainant_contact'=>trim($complainant_contact),'user_id_fk'=>$user_data[0]['user_contact']));
+        
+                    if(count($complainant_data) == 0)
+                    {
+                       $this->format_response('error','Provided contact is not linked',[]);
+                    }
+                    else
+                    {
+                        $this->format_response('success','Phone.no Verified',['complainant_id'=>$complainant_data[0]['complainant_id'],'user_id'=>$user_data[0]['user_contact']]);
+                    }
+                }
+            }
+            else
+            {
+                $this->format_response('error','Complainant\'s contact required format eg; 03331234567',[]);
+            }
+        }
+        else
+        {
+            $this->format_response('error','Complainant\'s contact can not be empty',[]);
+        }
+    }
+    
+    //==========================================================================
+    // Reset Password
+    //==========================================================================
+    
+    public function reset_password()
+    {
+        $session_info = $this->check_session();
+        $session_user_id = $session_info->user_id;
+        $session_complainant_id = $session_info->complainant_id;
+        
+        //======================================================================
+        // current password validation 
+        //======================================================================
+        
+        if(!$this->input->post('user_password'))
+        {
+            $this->format_response('error','Current Password is required',[]);
+        }
+        
+        $user_password = trim($this->input->post('user_password'));
+        
+        $user_data = $this->AuthModel->users_get(array('user_id'=>$session_user_id,'user_password'=>$user_password),1);
+        
+        if(count($user_data) == 0)
+        {
+            $this->format_response('error','Incorrect current password',[]);
+        }
+        
+        if($user_data[0]['user_role_id_fk'] != '4')
+        {
+            $this->format_response('error','This user has not registered as complainant',[]);
+        }
+        
+        //======================================================================
+        // new password validation 
+        //======================================================================
+        
+        if(!$this->input->post('new_password'))
+        {
+            $this->format_response('error','New password is required',[]);
+        }
+        
+        $new_password = trim($this->input->post('new_password'));
+        
+        if(strlen($new_password) < 5)
+        {
+            $this->format_response('error','New password length should not be less than five letters' ,[]);
+        }
+        
+        //======================================================================
+        // new password and old password comparison 
+        //======================================================================
+        
+        if(md5($new_password) == md5($user_password))
+        {
+             $this->format_response('error','New-password & old-Password can not be same' ,[]);
+        }
+        
+        //======================================================================
+        // proceed to update
+        //======================================================================
+        
+        $update_complainant = $this->AuthModel->user_edit(array('user_id'=>$session_user_id,'user_password'=>trim($new_password)));
+        
+        if($update_complainant['response'] == 0)
+        {
+            $this->format_response('error','Failed to reset password',[]);
+        }
+        else
+        {
+            $this->format_response('success','Password updated successfully',[]);
+        }
+    }
+    
+    //==========================================================================
     // Complainant Feedback on Complaint
     //==========================================================================
     
