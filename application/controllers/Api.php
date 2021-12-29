@@ -325,6 +325,8 @@ class Api extends CI_Controller {
     
     public function districts_get()
     {
+        // updated this function on 29-dec-2021
+
         $this->check_session();
         
         //======================================================================
@@ -405,6 +407,8 @@ class Api extends CI_Controller {
     
     public function district_councils_get()
     {
+        // updated this function on 29-dec-2021
+      
         $this->check_session();  
         
         //======================================================================
@@ -492,6 +496,8 @@ class Api extends CI_Controller {
     
     public function complaint_categories_get()
     {
+        // updated this function on 29-dec-2021
+  
         $this->check_session();  
         
         //======================================================================
@@ -813,6 +819,8 @@ class Api extends CI_Controller {
     
     public function complaint_feedback()
     {
+        // added this function on 29-dec-2021
+  
         $session_info = $this->check_session();
         $session_user_id = $session_info->user_id;
         $session_complainant_id = $session_info->complainant_id;

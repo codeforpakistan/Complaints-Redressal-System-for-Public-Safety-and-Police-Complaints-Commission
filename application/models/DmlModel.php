@@ -10,6 +10,8 @@ class DmlModel extends CI_Model
    
   public function get($table, $joins = [], $conditions = [], $orderBy = false, $limit = false)
   {
+      // added this function on 29-dec-2021
+
       $array_data     = [];
       $sub_clause     = ' 1=1 ';
       $select_columns = $table.'.* ';

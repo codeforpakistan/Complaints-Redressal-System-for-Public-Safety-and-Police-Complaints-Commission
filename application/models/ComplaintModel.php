@@ -264,6 +264,8 @@ class ComplaintModel extends CI_Model
     
     public function complaints_get($data_arr)
     {
+        // updated this function on 29-dec-2021
+
         //======================================================================
         // joins
         //======================================================================
