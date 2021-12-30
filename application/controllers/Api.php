@@ -13,6 +13,7 @@ class Api extends CI_Controller {
     
     public function __construct()
 	{
+        // updated
 		parent::__construct();
 		$this->load->model('AuthModel');
 		$this->load->model('ComplainantModel');
