@@ -45,7 +45,7 @@
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title"><?= $this->session->userdata('user_role_name')?></div>
               <a href="profile.html" class="dropdown-item has-icon"> <i class="far
-										fa-user"></i> Profile
+										fa-user"></i> Profile updated
               </a> 
               <!-- <a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
                 Settings
