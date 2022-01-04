@@ -48,7 +48,7 @@ class AuthModel extends CI_Model
         $this->db->join('user_roles','user_roles.user_role_id=users.user_role_id_fk');
         $this->db->where('user_name',trim($data_arr['user_name']));
         $this->db->where('user_password',md5(trim($data_arr['user_password'])));
-        $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
+        // $this->db->where('user_role_id_fk',trim($data_arr['user_role_id_fk']));
         $this->db->where('user_status',1);
         
         //======================================================================

@@ -44,8 +44,8 @@
                 class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title"><?= $this->session->userdata('user_role_name')?></div>
-              <a href="profile.html" class="dropdown-item has-icon"> <i class="far
-										fa-user"></i> Profile khan 
+              <a href="profile.html" class="dropdown-item has-icon" data-toggle="modal" data-target="#updateAmdinPasswordModel"> <i class="far
+										fa-user"></i> Profile
               </a> 
               <!-- <a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
                 Settings
@@ -58,3 +58,38 @@
           </li>
         </ul>
       </nav>
+
+      <!-- add form -->
+        <div class="modal fade" id="updateAmdinPasswordModel" tabindex="-1" role="dialog" aria-labelledby="formModaladd" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" id="formModaladd">Update Password</h5>
+                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- body-->
+                        <form class="" method="post" action="<?= base_url("admin/updatePassword") ?>">
+                                <div class="form-group">
+                                <label>User Password</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    </div>
+                                    <input type="password" class="form-control" placeholder="Enter Your Password" name="user_password" required>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

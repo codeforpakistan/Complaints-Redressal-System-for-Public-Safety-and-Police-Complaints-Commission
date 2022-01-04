@@ -46,6 +46,30 @@ class AdminModel extends CI_Model
     {
       return  $this->db->where('user_role_id_fk',$user_role_id_fk)->where('user_status',1)->count_all_results('users');
     }
+    function countAll($table_name,$talbe_column_name,$value)
+    {
+      return  $this->db->where($talbe_column_name,$value)->count_all_results($table_name);
+    }
+    function thisDay()
+    {
+        $thisDay = date('Y-m-d');
+        $this->db->where('DATE(complaint_entry_timestamp) >= now()');
+        $this->db->where('DATE(complaint_entry_timestamp) <= now()');
+        $this->db->count_all_results('complaints'); 
+        // echo $this->db->last_query(); exit;
+    }
+    function thisMonth()
+    {
+        $this->db->where('MONTH(complaint_entry_timestamp)', date('m'));
+        $this->db->where('YEAR(complaint_entry_timestamp)', date('Y'));
+       return $this->db->count_all_results('complaints'); 
+       
+    }
+    function thisYear()
+    {
+        $this->db->where('DATE(complaint_entry_timestamp)',date('Y'));
+       return $this->db->count_all_results('complaints'); 
+    }
     function IT_district_admins()
     {
         return $this->db->from('users')

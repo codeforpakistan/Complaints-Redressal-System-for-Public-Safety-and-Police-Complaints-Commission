@@ -15,7 +15,7 @@
                               <?php if($feedback =$this->session->flashdata('feedback')){
                                 $feedback_class =$this->session->flashdata('feedbase_class');  ?>
                                     <div class="row">
-                                      <div class="col-md-6 offset-3">
+                                      <div class="col-md-6 offset-3 msg">
                                       <div class="alert alert-dismissible <?=  $feedback_class;?>">
                                       <?= $feedback ?>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -130,11 +130,19 @@
 
                             <div class="row">
 
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <div class="form-group">
                                         <label>Full Address:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="<?= $oneByOne->complainant_address?>" readonly>
+                                        </div>
+                                    </div>
+                                </div> <!-- end of col-md-12 -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Complaint Source:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="<?= $oneByOne->complaint_source?>" readonly>
                                         </div>
                                     </div>
                                 </div> <!-- end of col-md-12 -->

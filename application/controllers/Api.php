@@ -13,7 +13,6 @@ class Api extends CI_Controller {
     
     public function __construct()
 	{
-        // updated
 		parent::__construct();
 		$this->load->model('AuthModel');
 		$this->load->model('ComplainantModel');
@@ -326,8 +325,6 @@ class Api extends CI_Controller {
     
     public function districts_get()
     {
-        // updated this function on 29-dec-2021
-
         $this->check_session();
         
         //======================================================================
@@ -408,8 +405,6 @@ class Api extends CI_Controller {
     
     public function district_councils_get()
     {
-        // updated this function on 29-dec-2021
-      
         $this->check_session();  
         
         //======================================================================
@@ -497,8 +492,6 @@ class Api extends CI_Controller {
     
     public function complaint_categories_get()
     {
-        // updated this function on 29-dec-2021
-  
         $this->check_session();  
         
         //======================================================================
@@ -820,8 +813,6 @@ class Api extends CI_Controller {
     
     public function complaint_feedback()
     {
-        // added this function on 29-dec-2021
-  
         $session_info = $this->check_session();
         $session_user_id = $session_info->user_id;
         $session_complainant_id = $session_info->complainant_id;
@@ -830,7 +821,7 @@ class Api extends CI_Controller {
         // Required Data Validation
         //======================================================================
         
-        $check_required_values = array('complaint_id_fk','respondent_id_fk','complaint_remarks_detail','complaint_remarks_timestamp','complaint_remarks_status');
+        $check_required_values = array('complaint_id_fk','complaint_remarks_detail');
     
         foreach($check_required_values as $key=>$value)
         {
@@ -845,22 +836,46 @@ class Api extends CI_Controller {
         }
         
         $data_arr['user_id_fk'] = $session_user_id;
-        $data_arr['complaint_status_id_fk'] = 7;
+        $data_arr['respondent_id_fk'] = 0;
+        $data_arr['complaint_status_id_fk'] = 7; // from datatable -> complaint_statuses (7 => complainant feedback)
+        $data_arr['complaint_remarks_timestamp'] = date('Y-m-d',time()).' 00:00:00'; // 2021-12-28 00:00:00;
+        $data_arr['complaint_remarks_status'] = 1;
+        
+        //======================================================================
+        // Validate Complaint_id
+        //======================================================================
+        
+        if($data_arr['complaint_id_fk'] == 0 || $data_arr['complaint_id_fk'] == null || trim($data_arr['complaint_id_fk']) == '')
+        {
+            $this->format_response('error','Kindly provide complaint-id',[]);
+        }
+        else
+        {
+            $complaint_data = $this->ComplaintModel->complaints_get(array('complaint_id'=>$data_arr['complaint_id_fk'],'complainant_id_fk'=>$session_complainant_id));
+        
+            if(count($complaint_data) == 0)
+            {
+                $this->format_response('error','This complaint has not been registered under your account.',[]);
+            }
+        }
+        
     
         //======================================================================
         // Call Function
         //======================================================================
         
-        // $this->
+        $remarks_add_response = $this->ComplaintModel->complaint_remarks_add($data_arr);
         
-        // complaint_remarks_add($data_arr)
-        // {
-        //     $required_fields = array();
-        //     $missing = array_diff_key($required_fields,$data_arr);
-    
-        // }
-
-}
+        if($remarks_add_response['response'] == 1)
+        {
+            $this->format_response('success','Your feedback submitted successfully',['complaint-remarks_id'=>$remarks_add_response['complaint_remarks_id']]);
+        }
+        else
+        {
+            $this->format_response('error',$remarks_add_response['response_msg'],[]);
+        }
+        
+    }
 
 }
 
