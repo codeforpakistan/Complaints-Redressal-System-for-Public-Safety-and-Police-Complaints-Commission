@@ -686,7 +686,7 @@ class Admin extends CI_Controller {
     
     public function complaint_register()
     {
-        $data['title'] = 'Complaint Detail';
+        $data['title'] = 'Regsiter Complaint';
         $data['page']  = 'complaint'; 
         
         //get active districts
