@@ -9,7 +9,6 @@ class Admin extends CI_Controller {
     
     public function __construct()
 	{   
-        #1
 		parent::__construct();
         $this->load->model('AdminModel','model');
         $this->load->model('ComplaintModel','complaint');
@@ -686,7 +685,7 @@ class Admin extends CI_Controller {
     
     public function complaint_register()
     {
-        // $data['title'] = 'Complaint Detail';
+        $data['title'] = 'Regsiter Complaint';
         $data['page']  = 'complaint'; 
         
         //get active districts
