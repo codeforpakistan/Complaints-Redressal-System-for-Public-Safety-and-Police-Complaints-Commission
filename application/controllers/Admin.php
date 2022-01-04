@@ -8,7 +8,7 @@ class Admin extends CI_Controller {
     
     
     public function __construct()
-	{   // dummy code
+	{   // dummy code by sadam
 		parent::__construct();
         $this->load->model('AdminModel','model');
         $this->load->model('ComplaintModel','complaint');
