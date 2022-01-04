@@ -39,8 +39,9 @@
                                 <h4>Complainant Personal Information</h4>
                             </div>
                             <div class="card-body" bis_skin_checked="1">
+                                <div class="row">
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="test">Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
@@ -49,7 +50,7 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Father/Husband Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
@@ -58,17 +59,20 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Contact No <span class="asterisk">*</span></label>
+                                            <label>Gender <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
+                                                <select class="form-control" name="complainant_gender" id="complainant_gender" required>
+                                                    <option selected value="0">Select Gender</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
 
-
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>CNIC <span class="asterisk">*</span></label>
                                             <div class="input-group">
@@ -77,20 +81,22 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Gender <span class="asterisk">*</span></label>
-                                                <div class="input-group">
-                                                    <select class="form-control" name="complainant_gender" id="complainant_gender" required>
-                                                        <option selected value="0">Select Gender</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                    </select>
-                                                </div>
+                                </div>
+                                <!-- end of row -->
+
+                                <!-- second row -->
+                                <div class="row"> 
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Contact No <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
                                             </div>
+                                        </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Email:</label>
                                                 <div class="input-group">
@@ -99,11 +105,11 @@
                                             </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Home District <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="home_district_id" name="home_district_id" style="width:90%" required>
+                                                <select class="form-control select2" id="home_district_id" name="home_district_id" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select District</option>
                                                     <?php if($district){ foreach($district as $dist){?>
                                                 <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
@@ -113,12 +119,12 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
                                                 <!-- <input type="text" class="form-control"  name="complainant_union_council" id="complainant_union_council" required > -->
-                                                <select class="form-control select2" id="complainant_union_council" name="complainant_union_council" style="width:90%" required>
+                                                <select class="form-control select2" id="complainant_union_council" name="complainant_union_council" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select Union-concil</option>
                                                     <?php if($district_councils){ foreach($district_councils as $union_dist){?>
                                                 <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
@@ -128,6 +134,11 @@
                                         </div>
                                     </div> 
 
+                                </div> 
+                                <!-- end of row -->
+
+                                 <!-- third row -->
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Full Address <span class="asterisk">*</span></label>
@@ -136,6 +147,9 @@
                                             </div>
                                         </div>
                                     </div> 
+                                </div> 
+                                <!-- end row -->
+
                             </div>
                         </div>
 
@@ -146,11 +160,11 @@
                             <div class="card-body" bis_skin_checked="1">
                                 <div class="row">
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Complaint Type <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="complaint_category_id" name="complaint_category_id" style="width:90%" required>
+                                                <select class="form-control select2" id="complaint_category_id" name="complaint_category_id" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select Complaint Type</option>
                                                     <?php if($complaint_categories){ foreach($complaint_categories as $type){?>
                                                 <option value="<?= $type->complaint_category_id?>"><?= $type->complaint_category_name?></option>
@@ -160,11 +174,11 @@
                                         </div>
                                     </div> 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Complaint Against District <span class="asterisk">*</span></label>
+                                            <label>District <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="district_id_fk" name="district_id_fk" style="width:90%" required>
+                                                <select class="form-control select2" id="district_id_fk" name="district_id_fk" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select District</option>
                                                     <?php if($district){ foreach($district as $dist){?>
                                                 <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
@@ -174,11 +188,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Complaint Against Police Station <span class="asterisk">*</span></label>
+                                            <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="district_id_fk" name="police_station_id_fk" style="width:90%" required>
+                                                <select class="form-control select2" id="district_id_fk" name="district_council_id_fk" style="width:100%" required>
+                                                <!-- add code to fetch union councils from datatable  -->
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Police Station <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="district_id_fk" name="police_station_id_fk" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select Police Station</option>
                                                 <!-- add code to fetch police stations from datatable -->
                                             </select>
@@ -206,17 +231,14 @@
                                         </div>
                                     </div> 
 
+                                    <div class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-success p-r-15 waves-effect" style="font-size:16px;">Submit Complaint</button>
+                                    </div>
+
                                 </div> <!-- end of row -->
                             </div>
                         </div>
 
-
-                        <div class="row">
-                            <div class="col-md-12 text-right">
-                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
-                            </div>
-                        </div>
-                            
                     </form>
                     
               </div>
