@@ -47,7 +47,7 @@
                                     <td><?= ($onByOne->district_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
                                        <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel"  href="javascript:void(0)" onclick="districts_update(<?= $onByOne->district_id?>)"></a>
-                                        <!-- <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/districts_delete/'.$onByOne->district_id) ?>"></a> -->
+                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/district_delete/'.$onByOne->district_id) ?>"></a>
                                     </td>
                                 </tr>
                             <?php endforeach;?>
