@@ -9,31 +9,29 @@
           <div class="section-body">
             <div class="row">
               <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4><?= $title ?></h4>
-                  </div>
-                  <div class="card-body">
-                      <!-- start messages --->
-                      <div style="text-align: center">
-                              <?php if($feedback =$this->session->flashdata('feedback')){
+
+                    <!-- start messages --->
+                        <div style="text-align: center">
+                            <?php 
+                            if($feedback =$this->session->flashdata('feedback'))
+                            {
                                 $feedback_class =$this->session->flashdata('feedbase_class');  ?>
-                                    <div class="row">
-                                      <div class="col-md-6 offset-3">
-                                      <div class="alert alert-dismissible <?=  $feedback_class;?>">
-                                      <?= $feedback ?>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                      </div>
-                                      </div>
-                                  </div>
 
-                              
-                                <?php }?>
+                                <div class="row">
+                                    <div class="col-md-6 offset-3">
+                                        <div class="alert alert-dismissible <?=  $feedback_class;?>">
+                                            <?= $feedback ?>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            </div>
+                            <?php }?>
+                        </div>
                     <!-- end of messages  --->
+
                     <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data">
                      
                         <div class="card card-success" bis_skin_checked="1">
@@ -223,15 +221,14 @@
                         </div>
 
 
-                            <div class="row">
-                                    <div class="col-md-12 text-right">
-                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                            </div>
+                        </div>
                             
-                        </form>
-                  </div>
-                </div>
+                    </form>
+                    
               </div>
             </div>
           </div>
