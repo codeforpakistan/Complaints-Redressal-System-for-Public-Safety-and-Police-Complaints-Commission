@@ -35,7 +35,7 @@
                             </div>
                     <!-- end of messages  --->
                     <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data">
-                        <h4>Complainant Personal Info</h4>
+                        <h4>Complainant Personal Information</h4>
                         <div class="row">
                         <div class="col-md-4">
                                 <div class="form-group">
