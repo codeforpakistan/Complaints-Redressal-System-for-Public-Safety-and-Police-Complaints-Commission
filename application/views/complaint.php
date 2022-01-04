@@ -147,65 +147,80 @@
                                         </div> <!-- end of col-md-12 -->
 
                                 </div>  <!-- end row -->
-                                
+
                             </div>
                         </div>
 
+                        <div class="card card-success" bis_skin_checked="1">
+                            <div class="card-header" bis_skin_checked="1">
+                                <h4>Complaint Detail</h4>
+                            </div>
+                            <div class="card-body" bis_skin_checked="1">
+                                <div class="row">
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Complaint Type <span class="asterisk">*</span></label>
-                                        <div class="input-group">
-                                            <select class="form-control select2" id="complaint_category_id" name="complaint_category_id" style="width:90%" required>
-                                              <option disabled value="" selected hidden>Please Select Complaint Type</option>
-                                                  <?php if($complaint_categories){ foreach($complaint_categories as $type){?>
-                                               <option value="<?= $type->complaint_category_id?>"><?= $type->complaint_category_name?></option>
-                                                 <?php } }?>
-                                           </select>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Complaint Type <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="complaint_category_id" name="complaint_category_id" style="width:90%" required>
+                                                <option disabled value="" selected hidden>Please Select Complaint Type</option>
+                                                    <?php if($complaint_categories){ foreach($complaint_categories as $type){?>
+                                                <option value="<?= $type->complaint_category_id?>"><?= $type->complaint_category_name?></option>
+                                                    <?php } }?>
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Complaint Against District <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="district_id_fk" name="district_id_fk" style="width:90%" required>
+                                                <option disabled value="" selected hidden>Please Select District</option>
+                                                    <?php if($district){ foreach($district as $dist){?>
+                                                <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
+                                                    <?php } }?>
+                                            </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> <!-- end of col-md-6 -->
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Complaint Against District <span class="asterisk">*</span></label>
-                                        <div class="input-group">
-                                            <select class="form-control select2" id="district_id_fk" name="district_id_fk" style="width:90%" required>
-                                              <option disabled value="" selected hidden>Please Select District</option>
-                                                  <?php if($district){ foreach($district as $dist){?>
-                                               <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
-                                                 <?php } }?>
-                                           </select>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Complaint Against Police Station <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="district_id_fk" name="police_station_id_fk" style="width:90%" required>
+                                                <option disabled value="" selected hidden>Please Select Police Station</option>
+                                                <!-- add code to fetch police stations from datatable -->
+                                            </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> <!-- end of col-md-6 -->
 
-                            </div> <!-- end of row -->
-
-                                                 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Complaint Details <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required></textarea>
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-12 -->                         
-                        </div>  <!-- end row --> 
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Attachments: </label>
-                                    <div class="input-group dropzone" id="mydropzone">
-                                        <div class="">
-                                            <input name="attachments[]" type="file" id="attachment_input" multiple style="display:none;"  />
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Complaint Details <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-12 -->                         
-                        </div>  <!-- end row --> 
+                                    </div> 
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Attachments: </label>
+                                            <div class="input-group dropzone" id="mydropzone">
+                                                <div class="">
+                                                    <input name="attachments[]" type="file" id="attachment_input" multiple style="display:none;"  />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                </div> <!-- end of row -->
+                            </div>
+                        </div>
 
 
                             <div class="row">
