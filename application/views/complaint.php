@@ -35,121 +35,122 @@
                             </div>
                     <!-- end of messages  --->
                     <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data">
-                        <h4>Complainant Personal Information</h4>
-                        <div class="row">
-                        <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="test">Name <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
+                     
+                        <div class="card card-success" bis_skin_checked="1">
+                            <div class="card-header" bis_skin_checked="1">
+                                <h4>Complainant Personal Information</h4>
+                            </div>
+                            <div class="card-body" bis_skin_checked="1">
+                                <div class="row">
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Father/Husband Name <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="test">Name <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                            </div>
+                                        </div>
+                                    </div> <!-- end of col-md-4 -->
 
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Contact No <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
-                            
-                        </div> <!-- end of row -->
-                        
-                        <div class="row"> <!-- second row -->
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>CNIC <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required >
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Father/Husband Name <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                            </div>
+                                        </div>
+                                    </div> <!-- end of col-md-4 -->
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Gender <span class="asterisk">*</span></label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="complainant_gender" id="complainant_gender" required>
-                                                <option selected value="0">Select Gender</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Contact No <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
+                                            </div>
+                                        </div>
+                                    </div> <!-- end of col-md-4 -->
+
+                                </div> <!-- end of row -->
+
+                                <div class="row"> <!-- second row -->
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>CNIC <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required >
+                                            </div>
+                                        </div>
+                                    </div> <!-- end of col-md-4 -->
+
+                                    <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Gender <span class="asterisk">*</span></label>
+                                                <div class="input-group">
+                                                    <select class="form-control" name="complainant_gender" id="complainant_gender" required>
+                                                        <option selected value="0">Select Gender</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div> <!-- end of col-md-4 -->
+
+                                    <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control"  name="complainant_email" id="complainant_email" >
+                                                </div>
+                                            </div>
+                                    </div> <!-- end of col-md-4 -->
+                                </div> <!-- end of row -->
+
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Home District <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" id="home_district_id" name="home_district_id" style="width:90%" required>
+                                                <option disabled value="" selected hidden>Please Select District</option>
+                                                    <?php if($district){ foreach($district as $dist){?>
+                                                <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
+                                                    <?php } }?>
                                             </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> <!-- end of col-md-4 -->
+                                    </div> <!-- end of col-md-4 -->
 
-                                <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Email:</label>
-                                    <div class="input-group">
-                                        <input type="email" class="form-control"  name="complainant_email" id="complainant_email" >
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
-                        </div> <!-- end of row -->
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Home District <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="home_district_id" name="home_district_id" style="width:90%" required>
-                                          <option disabled value="" selected hidden>Please Select District</option>
-                                              <?php if($district){ foreach($district as $dist){?>
-                                           <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
-                                             <?php } }?>
-                                       </select>
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Union Council <span class="asterisk">*</span></label>
-                                    <div class="input-group">
-                                        <!-- <input type="text" class="form-control"  name="complainant_union_council" id="complainant_union_council" required > -->
-                                        <select class="form-control select2" id="complainant_union_council" name="complainant_union_council" style="width:90%" required>
-                                          <option disabled value="" selected hidden>Please Select Union-concil</option>
-                                              <?php if($district_councils){ foreach($district_councils as $union_dist){?>
-                                           <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
-                                             <?php } }?>
-                                       </select>
-                                    </div>
-                                </div>
-                            </div> <!-- end of col-md-4 -->
-
-                             <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>City <span class="asterisk">*</span></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control"  name="complainant_city" id="complainant_city" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Union Council <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <!-- <input type="text" class="form-control"  name="complainant_union_council" id="complainant_union_council" required > -->
+                                                <select class="form-control select2" id="complainant_union_council" name="complainant_union_council" style="width:90%" required>
+                                                <option disabled value="" selected hidden>Please Select Union-concil</option>
+                                                    <?php if($district_councils){ foreach($district_councils as $union_dist){?>
+                                                <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
+                                                    <?php } }?>
+                                            </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> <!-- end of col-md-4 -->
-                            </div>  <!-- end row -->
+                                    </div> <!-- end of col-md-4 -->
 
-                            <div class="row">
+                                    <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Full Address <span class="asterisk">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                </div>
+                                            </div>
+                                        </div> <!-- end of col-md-12 -->
 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Full Address <span class="asterisk">*</span></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                        </div>
-                                    </div>
-                                </div> <!-- end of col-md-12 -->
+                                </div>  <!-- end row -->
+                                
+                            </div>
+                        </div>
 
-                            </div>  <!-- end row -->
 
                             <div class="row">
                                 <div class="col-md-6">
