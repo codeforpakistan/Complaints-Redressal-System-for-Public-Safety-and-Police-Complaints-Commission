@@ -9,6 +9,7 @@ class Admin extends CI_Controller {
     
     public function __construct()
 	{   // dummy code by sadam
+        $variable_test_by_Sadam = null;
 		parent::__construct();
         $this->load->model('AdminModel','model');
         $this->load->model('ComplaintModel','complaint');
