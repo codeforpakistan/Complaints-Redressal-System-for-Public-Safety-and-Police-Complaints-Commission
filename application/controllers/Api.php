@@ -17,6 +17,7 @@ class Api extends CI_Controller {
     
     public function __construct()
 	{
+        $var_contructor_noreena = 0;
 		parent::__construct();
 		$this->load->model('AuthModel');
 		$this->load->model('ComplainantModel');
