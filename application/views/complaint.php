@@ -39,7 +39,6 @@
                                 <h4>Complainant Personal Information</h4>
                             </div>
                             <div class="card-body" bis_skin_checked="1">
-                                <div class="row">
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -48,7 +47,7 @@
                                                 <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -57,7 +56,7 @@
                                                 <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -66,11 +65,8 @@
                                                 <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
-                                </div> <!-- end of row -->
-
-                                <div class="row"> <!-- second row -->
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -79,7 +75,7 @@
                                                 <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required >
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-4">
                                             <div class="form-group">
@@ -92,7 +88,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-4">
                                             <div class="form-group">
@@ -101,10 +97,7 @@
                                                     <input type="email" class="form-control"  name="complainant_email" id="complainant_email" >
                                                 </div>
                                             </div>
-                                    </div> <!-- end of col-md-4 -->
-                                </div> <!-- end of row -->
-
-                                <div class="row">
+                                    </div> 
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -118,7 +111,7 @@
                                             </select>
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -133,19 +126,16 @@
                                             </select>
                                             </div>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
+                                    </div> 
 
                                     <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Full Address <span class="asterisk">*</span></label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                                </div>
+                                        <div class="form-group">
+                                            <label>Full Address <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
-                                        </div> <!-- end of col-md-12 -->
-
-                                </div>  <!-- end row -->
-
+                                        </div>
+                                    </div> 
                             </div>
                         </div>
 
