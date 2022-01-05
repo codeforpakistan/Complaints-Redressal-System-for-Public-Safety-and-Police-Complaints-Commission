@@ -634,12 +634,12 @@ class Admin extends CI_Controller {
             $complainant_contact        = $this->input->post('complainant_contact');
             $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
             $complainant_council_id_fk  = $this->input->post('complainant_council_id_fk');
+            $complaint_council_id_fk    = $this->input->post('complaint_council_id_fk');
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
             $complainant_cnic           = $this->input->post('complainant_cnic');
             $complaint_category_id      = $this->input->post('complaint_category_id');
             $complainant_address        = $this->input->post('complainant_address');
-            $district_id_fk             = $this->input->post('district_id_fk');
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
             $registered_by_user         = $this->session->userdata('user_id'); //echo $registered_by_user; exit;
@@ -662,7 +662,6 @@ class Admin extends CI_Controller {
                     'complainant_cnic'           => $complainant_cnic,
                     'complainant_gender'         => $complainant_gender,
                     'complainant_email'          => $complainant_email,
-                    'complainant_council_id_fk'  => $complainant_council_id_fk,
                     'complainant_address'        => $complainant_address,
                     'complainant_status'         =>1
                 ); //print_r($inert_complainant_array); exit;
@@ -676,9 +675,8 @@ class Admin extends CI_Controller {
                                         'complaint_category_id_fk'  => $complaint_category_id,
                                         'complaint_council_id_fk'   => $complaint_council_id_fk,
                                         'complaint_detail'          => $complaint_detail,
-                                        'complaint_status_id_fk'    => 1,
-                                        'complaint_source'          => 1,
-                                        'complaint_status'          => 1
+                                        'complaint_status_id_fk'    => 1, //  1= pending, will make it global in next update
+                                        'complaint_source'          => 'complaint_source'
                                     );
 
                 $this->load->model('ComplaintModel');

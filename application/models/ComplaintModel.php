@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))	exit('No direct script access allowed');
 class ComplaintModel extends CI_Model
 {  
     public function complaint_add($data_arr)
-    { 
+    {
         $required_fields = array(
                                     'complaint_source'        => 0,
                                     'registered_by_user'      => 0,
@@ -89,7 +89,7 @@ class ComplaintModel extends CI_Model
         // district validation
         //======================================================================
         
-        $find_district = $this->db->query('select * from district_councils where district_id_fk = ?',array($data_arr['district_council_id_fk']))->result_array();
+        $find_district = $this->db->query('select * from district_councils where district_id_fk = ?',array($data_arr['complaint_council_id_fk']))->result_array();
         
         if(count($find_district) == 0)
         {
