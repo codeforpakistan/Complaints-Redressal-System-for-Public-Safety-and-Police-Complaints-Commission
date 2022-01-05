@@ -146,7 +146,7 @@ class Admin extends CI_Controller {
         
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
-        $data['complaints']     = $this->model->countAll('complaints','complaint_status',1);
+        $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
         $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
@@ -642,40 +642,47 @@ class Admin extends CI_Controller {
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
-            $registered_by_user         = $this->session->userdata('user_id'); //echo $registered_by_user; exit;
             $complainant_id             = $this->input->post('home_district_id');
+
             //print_r($this->input->post('attachments')); exit;
             // complaintant checking
+            
             $complainant_response = $this->model->getComplainant($complainant_cnic);
+
             if(is_object($complainant_response))  
             {   
-                $complainant_id = $complainant_response->complainant_id;
+                $complainant_id     = $complainant_response->complainant_id;
+                $registered_by_user = $complainant_response->user_id_fk; 
+                echo 'from old complainant: '.$registered_by_user;
             }
             else
             {
                 $inert_complainant_array   = array(
-                    'user_id_fk'                 => 0,
-                    'complainant_council_id_fk'  => $complainant_council_id_fk,
-                    'complainant_name'           =>$complainant_name,
-                    'complainant_guardian_name'  => $complainant_guardian_name,
-                    'complainant_contact'        => $complainant_contact,
-                    'complainant_cnic'           => $complainant_cnic,
-                    'complainant_gender'         => $complainant_gender,
-                    'complainant_email'          => $complainant_email,
-                    'complainant_address'        => $complainant_address,
-                    'complainant_status'         =>1
-                ); //print_r($inert_complainant_array); exit;
-                $complainant_id = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
+                                                    'user_id_fk'                 => 0,
+                                                    'complainant_council_id_fk'  => $complainant_council_id_fk,
+                                                    'complainant_name'           => $complainant_name,
+                                                    'complainant_guardian_name'  => $complainant_guardian_name,
+                                                    'complainant_contact'        => $complainant_contact,
+                                                    'complainant_cnic'           => $complainant_cnic,
+                                                    'complainant_gender'         => $complainant_gender,
+                                                    'complainant_email'          => $complainant_email,
+                                                    'complainant_address'        => $complainant_address,
+                                                    'complainant_status'         => 1
+                                                ); 
+
+                $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
+                $registered_by_user = $this->session->userdata('user_id'); 
+
+                echo 'from admin: '.$registered_by_user;
             }
-            // echo  $complainant_id;
-            //  exit;
+            
             $inert_it_array   = array(
                                         'registered_by_user'        => $registered_by_user,
                                         'complainant_id_fk'         => $complainant_id,
                                         'complaint_category_id_fk'  => $complaint_category_id,
                                         'complaint_council_id_fk'   => $complaint_council_id_fk,
                                         'complaint_detail'          => $complaint_detail,
-                                        'complaint_status_id_fk'    => 1, //  1= pending, will make it global in next update
+                                        'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
                                         'complaint_source'          => 'complaint_source'
                                     );
 

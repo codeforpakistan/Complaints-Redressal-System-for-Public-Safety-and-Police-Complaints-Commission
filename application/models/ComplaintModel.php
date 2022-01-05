@@ -13,7 +13,7 @@ class ComplaintModel extends CI_Model
                                     'complaint_category_id_fk' => 0,
                                     'complaint_council_id_fk'  => 0,
                                     'complaint_detail'         => 0,
-                                    'complaint_status'         => 0
+                                    'complaint_status_id_fk'   => 0
                                 );
         $missing = array_diff_key($required_fields,$data_arr);
        
