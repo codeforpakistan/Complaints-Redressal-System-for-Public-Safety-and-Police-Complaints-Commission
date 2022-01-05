@@ -825,10 +825,10 @@ class Admin extends CI_Controller {
        // $this->load->view('template',$data);
 
     }
-    function status_respondant_rsponse($complaint_id)
+    function complaint_detail($complaint_id)
     {
         $data['title'] = 'Complaint Detail';
-        $data['page']  = 'status_respondant_view'; 
+        $data['page']  = 'complaint_detail'; 
         
         $data['complaint_detail']     = $this->complaint->get_complaint_by_id($complaint_id); // complinat detailed 
         $data['complaint_attachment'] = $this->complaint->get_attachment_complaint_by_id($complaint_id); // complinat attachments 
@@ -862,7 +862,7 @@ class Admin extends CI_Controller {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
             $this->messages('alert-danger',$message);
-            return redirect('admin/status_respondant_rsponse');
+            return redirect('admin/complaint_detail');
             
         }
         else
@@ -891,12 +891,12 @@ class Admin extends CI_Controller {
                 if($response == true)
                 {
                     $this->messages('alert-success','Successfully Added');
-                    return redirect('admin/status_respondant_rsponse/'.$complaint_id); 
+                    return redirect('admin/complaint_detail/'.$complaint_id); 
                 }
                 else
                 {
                     $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/status_respondant_rsponse/'.$complaint_id);
+                    return redirect('admin/complaint_detail/'.$complaint_id);
                 }
 
         }
