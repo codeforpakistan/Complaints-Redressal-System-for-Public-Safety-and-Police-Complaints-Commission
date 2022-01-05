@@ -585,13 +585,12 @@ class Admin extends CI_Controller {
     // complaint
     //==========================================================================
     
-    public function complaint_register_form() 
+    public function complaint_register_ajax() 
     {
         // $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
         // $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
         // $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
-        // $this->form_validation->set_rules('complainant_city', 'Complainant City', 'required|trim');
-        // $this->form_validation->set_rules('complainant_union_council', 'Complainant Union Council', 'required|trim');
+        // $this->form_validation->set_rules('complainant_council_id_fk', 'Complainant Union Council', 'required|trim');
         // $this->form_validation->set_rules('complainant_email', 'Complainant Email', 'required|trim');
         // $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
         // $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
@@ -613,9 +612,8 @@ class Admin extends CI_Controller {
             $attachments = array();
             $complainant_name           = $this->input->post('complainant_name');
             $complainant_contact        = $this->input->post('complainant_contact');
-            $complainant_guardian_name  = $this->input->post('complainant_guardian_name');
-            $complainant_city           = $this->input->post('complainant_city');
-            $complainant_union_council  = $this->input->post('complainant_union_council');
+            $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
+            $complainant_council_id_fk  = $this->input->post('complainant_council_id_fk');
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
             $complainant_cnic           = $this->input->post('complainant_cnic');
@@ -637,16 +635,15 @@ class Admin extends CI_Controller {
             {
                 $inert_complainant_array   = array(
                     'user_id_fk'                 => 0,
-                    'complainant_district_council_id_fk' =>$district_id_fk,
+                    'complainant_council_id_fk'  => $complainant_council_id_fk,
                     'complainant_name'           =>$complainant_name,
                     'complainant_guardian_name'  => $complainant_guardian_name,
                     'complainant_contact'        => $complainant_contact,
                     'complainant_cnic'           => $complainant_cnic,
                     'complainant_gender'         => $complainant_gender,
                     'complainant_email'          => $complainant_email,
-                    'complainant_union_council'  => $complainant_union_council,
+                    'complainant_council_id_fk'  => $complainant_council_id_fk,
                     'complainant_address'        => $complainant_address,
-                    'complainant_city'           => $complainant_city,
                     'complainant_status'         =>1
                 ); //print_r($inert_complainant_array); exit;
                 $complainant_id = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
@@ -666,9 +663,11 @@ class Admin extends CI_Controller {
 
                 $this->load->model('ComplaintModel');
                 $response = $this->ComplaintModel->complaint_add($inert_it_array); 
-              // print_r($response); exit;
-               $response_message =  $response['response_msg'];
-               $response_status  = $response['response'];
+
+                // print_r($response); exit;
+                $response_message =  $response['response_msg'];
+                $response_status  = $response['response'];
+
                     if($response_status == 0)
                     {
                         $this->messages('alert-danger',$response_message);
@@ -686,7 +685,7 @@ class Admin extends CI_Controller {
     public function complaint_register()
     {
         $data['title'] = 'Regsiter Complaint';
-        $data['page']  = 'complaint'; 
+        $data['page']  = 'complaint_register'; 
         
         //get active districts
         $table_name                = 'districts';
@@ -708,6 +707,7 @@ class Admin extends CI_Controller {
         
         $this->load->view('template',$data);
     }
+
     public function complaints()
     { 
         $data = array();

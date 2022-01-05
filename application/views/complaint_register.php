@@ -32,7 +32,7 @@
                         </div>
                     <!-- end of messages  --->
 
-                    <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data">
+                    <form class="" method="post" action="<?= base_url("admin/complaint_register_ajax") ?>" enctype="multipart/form-data">
                      
                         <div class="card card-success" bis_skin_checked="1">
                             <div class="card-header" bis_skin_checked="1">
@@ -123,8 +123,7 @@
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <!-- <input type="text" class="form-control"  name="complainant_union_council" id="complainant_union_council" required > -->
-                                                <select class="form-control select2" id="complainant_union_council" name="complainant_union_council" style="width:100%" required>
+                                                <select class="form-control select2" id="complainant_council_id_fk" name="complainant_council_id_fk" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select Union-concil</option>
                                                     <?php if($district_councils){ foreach($district_councils as $union_dist){?>
                                                 <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>

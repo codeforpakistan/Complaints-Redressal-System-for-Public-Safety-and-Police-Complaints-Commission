@@ -233,7 +233,7 @@ class Api extends CI_Controller {
                                       'complainant_cnic'           => 0,
                                       'complainant_gender'         => 0,
                                       'complainant_email'          => 0,
-                                      'complainant_union_council'  => 0,
+                                      'complainant_council_id_fk'  => 0,
                                       'complainant_address'        => 0,
                                       'complainant_status'         => 1
                                       );
@@ -290,7 +290,7 @@ class Api extends CI_Controller {
         // 2. pass only those columns to function which are sent by android 
         //======================================================================
         
-        $allowed_columns = array('complainant_district_id_fk','complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_union_council','complainant_address');
+        $allowed_columns = array('complainant_district_id_fk','complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_council_id_fk','complainant_address');
         
         foreach($allowed_columns as $key=>$value)
         {

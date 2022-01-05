@@ -99,7 +99,7 @@
                                     <div class="input-group">
                                         <select class="form-control" style="width:90%" readonly disabled>
                                                   <?php if($district){ foreach($district as $home_dist){?>
-                                               <option <?= ($home_dist->district_id == $oneByOne->complainant_district_council_id_fk)?'selected' :''?> ><?= $home_dist->district_name?></option>
+                                               <option <?= ($home_dist->district_id == $oneByOne->complainant_council_id_fk)?'selected' :''?> ><?= $home_dist->district_name?></option>
                                                  <?php } }?>
                                            </select>
                                     </div>
@@ -111,22 +111,12 @@
                                     <div class="input-group">
                                         <select class="form-control" style="width:90%" readonly disabled>
                                                   <?php if($district_councils){ foreach($district_councils as $district_councils){?>
-                                               <option <?= ($district_councils->district_council_id == $oneByOne->complainant_union_council)?'selected' :''?> ><?= $district_councils->district_council_name?></option>
+                                               <option <?= ($district_councils->district_council_id == $oneByOne->complainant_council_id_fk)?'selected' :''?> ><?= $district_councils->district_council_name?></option>
                                                  <?php } }?>
                                            </select>
                                     </div>
                                 </div>
                             </div> <!-- end of col-md-4 -->
-
-                             <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>City:</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" value="<?= $oneByOne->complainant_city?>" readonly>
-                                        </div>
-                                    </div>
-                                </div> <!-- end of col-md-4 -->
-                            </div>  <!-- end row -->
 
                             <div class="row">
 
