@@ -449,7 +449,7 @@ class Admin extends CI_Controller {
         $table_name = 'complaint_categories';
         $data['complaint_categories'] = $this->model->get_all_records($table_name);
         $data['title']    = 'Complaint Categories';
-        $data['page']     = 'complaint_category';
+        $data['page']     = 'complaint_categories';
         $this->load->view('template',$data);
     }
 
