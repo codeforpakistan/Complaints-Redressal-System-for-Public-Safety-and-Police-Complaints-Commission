@@ -16,6 +16,23 @@ class Admin extends CI_Controller {
         $this->load->library('form_validation');
         
 	} 
+
+    public function check_role_privileges($page_name,$role_id)
+    {
+        // query
+
+        // if ( not exist | 0)
+        // {
+            // redirect to prev_page
+        // }
+        // else
+        // {
+            // retun true
+        // }
+
+    }
+
+
     //==========================================================================
     // Auth
     //==========================================================================
@@ -123,7 +140,10 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function dashboard()
-    {   
+    {  
+        $user_role_id = 0; // take from session
+        $this->check_role_privileges('dashboard',$user_role_id);
+        
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
         $data['complaints']     = $this->model->countAll('complaints','complaint_status',1);
@@ -825,7 +845,7 @@ class Admin extends CI_Controller {
             
         $this->load->view('template/common_header');
         $this->load->view('template/navigation');   
-        $this->load->view('complaint_view',$data);
+        $this->load->view('complaints',$data);
         $this->load->view('template/common_footer');
         
        // $this->load->view('template',$data);
