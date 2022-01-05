@@ -683,7 +683,7 @@ class Admin extends CI_Controller {
                                         'complaint_council_id_fk'   => $complaint_council_id_fk,
                                         'complaint_detail'          => $complaint_detail,
                                         'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
-                                        'complaint_source'          => 'complaint_source'
+                                        'complaint_source'          => 'admin'
                                     );
 
                 $this->load->model('ComplaintModel');
