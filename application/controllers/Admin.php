@@ -653,12 +653,12 @@ class Admin extends CI_Controller {
             $inert_it_array   = array(
                                         'registered_by_user'        => $registered_by_user,
                                         'complainant_id_fk'         => $complainant_id,
-                                        'complaint_category_id_fk'  =>$complaint_category_id,
-                                        'district_council_id_fk'    =>$district_id_fk,
-                                        'complaint_detail'          =>$complaint_detail,
-                                        'complaint_status_id_fk'          =>1,
-                                        'complaint_source'          =>1,
-                                        'complaint_status'          =>1
+                                        'complaint_category_id_fk'  => $complaint_category_id,
+                                        'complaint_council_id_fk'   => $complaint_council_id_fk,
+                                        'complaint_detail'          => $complaint_detail,
+                                        'complaint_status_id_fk'    => 1,
+                                        'complaint_source'          => 1,
+                                        'complaint_status'          => 1
                                     );
 
                 $this->load->model('ComplaintModel');
@@ -698,12 +698,18 @@ class Admin extends CI_Controller {
         $table_status_column_name2    = 'complaint_category_status';
         $table_status_column_value2    = 1;
         $data['complaint_categories'] = $this->model->status_active_record($table_name2,$table_status_column_name2,$table_status_column_value2);
+        
         // get active district_councils 
         $table_name3                   = 'district_councils';
         $table_status_column_name3    = 'district_council_status';
         $table_status_column_value3    = 1;
         $data['district_councils'] = $this->model->status_active_record($table_name3,$table_status_column_name3,$table_status_column_value3);
 
+        // get active police_stations 
+        $table_name4                   = 'police_stations';
+        $table_status_column_name4     = 'police_station_status';
+        $table_status_column_value4    = 1;
+        $data['police_stations'] = $this->model->status_active_record($table_name4,$table_status_column_name4,$table_status_column_value4);        
         
         $this->load->view('template',$data);
     }

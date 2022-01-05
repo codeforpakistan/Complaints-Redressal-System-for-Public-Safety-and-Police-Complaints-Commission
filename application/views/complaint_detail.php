@@ -154,7 +154,7 @@
                                         <div class="input-group">
                                             <select class="form-control" style="width:90%" readonly disabled>
                                                   <?php if($district){ foreach($district as $home_dist){?>
-                                               <option <?= ($home_dist->district_id == $oneByOne->district_council_id_fk)?'selected' :''?> ><?= $home_dist->district_name?></option>
+                                               <option <?= ($home_dist->district_id == $oneByOne->complaint_council_id_fk)?'selected' :''?> ><?= $home_dist->district_name?></option>
                                                  <?php } }?>
                                            </select>
                                         </div>

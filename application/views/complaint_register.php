@@ -124,11 +124,11 @@
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
                                                 <select class="form-control select2" id="complainant_council_id_fk" name="complainant_council_id_fk" style="width:100%" required>
-                                                <option disabled value="" selected hidden>Please Select Union-concil</option>
-                                                    <?php if($district_councils){ foreach($district_councils as $union_dist){?>
-                                                <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
-                                                    <?php } }?>
-                                            </select>
+                                                    <option disabled value="" selected hidden>Please Select Union-concil</option>
+                                                        <?php if($district_councils){ foreach($district_councils as $union_dist){?>
+                                                    <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
+                                                        <?php } }?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div> 
@@ -191,9 +191,12 @@
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="district_id_fk" name="district_council_id_fk" style="width:100%" required>
-                                                <!-- add code to fetch union councils from datatable  -->
-                                            </select>
+                                                <select class="form-control select2" id="complaint_council_id_fk" name="complaint_council_id_fk" style="width:100%" required>
+                                                    <option disabled value="" selected hidden>Please Select Union-concil</option>
+                                                        <?php if($district_councils){ foreach($district_councils as $union_dist){?>
+                                                    <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
+                                                        <?php } }?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -203,8 +206,10 @@
                                             <label>Police Station <span class="asterisk">*</span></label>
                                             <div class="input-group">
                                                 <select class="form-control select2" id="district_id_fk" name="police_station_id_fk" style="width:100%" required>
-                                                <option disabled value="" selected hidden>Please Select Police Station</option>
-                                                <!-- add code to fetch police stations from datatable -->
+                                                    <option disabled value="" selected hidden>Please Select Police Station</option>
+                                                    <?php if($police_stations){ foreach($police_stations as $row){?>
+                                                    <option value="<?= $row->police_station_id?>"><?= $row->police_station_name?></option>
+                                                        <?php } }?>
                                             </select>
                                             </div>
                                         </div>

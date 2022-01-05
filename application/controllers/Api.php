@@ -671,10 +671,10 @@ class Api extends CI_Controller {
             $cond_arr['complaint_category_id_fk'] = $complaint_category_id_fk;
         }
         
-        if($this->input->post('district_council_id_fk'))
+        if($this->input->post('complaint_council_id_fk'))
         {
-            $district_council_id_fk = $this->input->post('district_council_id_fk');
-            $cond_arr['district_council_id_fk'] = $district_council_id_fk;
+            $complaint_council_id_fk = $this->input->post('complaint_council_id_fk');
+            $cond_arr['complaint_council_id_fk'] = $complaint_council_id_fk;
         }
         
         //======================================================================
