@@ -32,7 +32,8 @@
                         </div>
                     <!-- end of messages  --->
 
-                    <form class="" method="post" action="<?= base_url("admin/complaint_register_ajax") ?>" enctype="multipart/form-data">
+                    <!-- <form class="register_complaint_form" method="post" action="<?= base_url("admin/complaint_register_ajax") ?>" enctype="multipart/form-data"> -->
+                     <form class="register_complaint_form" id="register_complaint_form" method="post" enctype="multipart/form-data">
                      
                         <div class="card card-success" bis_skin_checked="1">
                             <div class="card-header" bis_skin_checked="1">
@@ -258,4 +259,29 @@
         
     }); 
     $(":input").inputmask();
+
+
+
+    // add record script
+    $(document).ready(function(){
+        $('#register_complaint_form').submit(function(e){
+            e.preventDefault(); 
+            var formData = new FormData( $("#register_complaint_form")[0] );
+            console.log(formData);
+            $.ajax({
+                 url:"<?php echo base_url(); ?>admin/complaint_register_ajax",
+                 type:"post",
+                 data:formData,
+                 processData:false,
+                 contentType:false,
+                 cache:false,
+                 async:false,
+                 success: function(response){ alert(response);
+                //    if(data == 'Record Add Successfully'){
+                //        $("#register_complaint_form")[0].reset();
+                //      }
+                 }
+            });
+        });
+    });
 </script>>

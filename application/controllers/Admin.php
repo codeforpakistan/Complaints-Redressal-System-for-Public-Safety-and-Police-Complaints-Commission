@@ -618,29 +618,30 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function complaint_register_ajax() 
-    {
-        // $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
-        // $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
-        // $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
-        // $this->form_validation->set_rules('complainant_council_id_fk', 'Complainant Union Council', 'required|trim');
-        // $this->form_validation->set_rules('complainant_email', 'Complainant Email', 'required|trim');
-        // $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
-        // $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
-        // $this->form_validation->set_rules('complaint_category_id', 'Complaint Category_id', 'required|trim');
-        // $this->form_validation->set_rules('complainant_address', 'Complainant Address', 'required|trim');
-        // $this->form_validation->set_rules('district_id_fk', 'District', 'required|trim');
-        // $this->form_validation->set_rules('complaint_detail', 'Complaint Detail', 'required|trim');
+    {  
+        $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
+        $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
+        $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
+        $this->form_validation->set_rules('complainant_council_id_fk', 'Complainant Union Council', 'required|trim');
+        $this->form_validation->set_rules('complainant_email', 'Complainant Email', 'required|trim');
+        $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
+        $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
+        $this->form_validation->set_rules('complaint_category_id', 'Complaint Category_id', 'required|trim');
+        $this->form_validation->set_rules('complainant_address', 'Complainant Address', 'required|trim');
+        $this->form_validation->set_rules('district_id_fk', 'District', 'required|trim');
+        $this->form_validation->set_rules('complaint_detail', 'Complaint Detail', 'required|trim');
 
-        // if ($this->form_validation->run() == FALSE)
-        // {
-        //     $error   = array('error' => validation_errors());
-        //     $message = implode(" ",$error);
-        //     $this->messages('alert-danger',$message);
-        //     return redirect('admin/complaint_register');
+        if ($this->form_validation->run() == FALSE)
+        {
+            $error   = array('error' => validation_errors());
+            $message = implode(" ",$error);
+            echo $message;
+            // $this->messages('alert-danger',$message);
+            // return redirect('admin/complaint_register');
             
-        // }
-        // else
-        // {  // get form data
+        }
+        else
+        {  // get form data
             $attachments = array();
             $complainant_name           = $this->input->post('complainant_name');
             $complainant_contact        = $this->input->post('complainant_contact');
@@ -654,17 +655,17 @@ class Admin extends CI_Controller {
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
-            $complainant_id             = $this->input->post('home_district_id');
+            $complainant_id             = $this->input->post('home_district_id'); 
             //print_r($this->input->post('attachments')); exit;
             // complaintant checking
+            $registered_by_user = $this->session->userdata('user_id'); 
+            //echo 'from admin: '.$registered_by_user;
+           // exit();
             
             $complainant_response = $this->model->getComplainant($complainant_cnic);
-
             if(is_object($complainant_response))  
             {   
-                $complainant_id     = $complainant_response->complainant_id;
-                $registered_by_user = $complainant_response->user_id_fk; 
-                echo 'from old complainant: '.$registered_by_user;
+                $complainant_id     = $complainant_response->complainant_id; 
             }
             else
             {
@@ -682,9 +683,6 @@ class Admin extends CI_Controller {
                                                 ); 
 
                 $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
-                $registered_by_user = $this->session->userdata('user_id'); 
-
-                echo 'from admin: '.$registered_by_user;
             }
             
             $inert_it_array   = array(
@@ -703,19 +701,19 @@ class Admin extends CI_Controller {
                 // print_r($response); exit;
                 $response_message =  $response['response_msg'];
                 $response_status  = $response['response'];
-
-                    if($response_status == 0)
-                    {
-                        $this->messages('alert-danger',$response_message);
-                        return redirect('admin/complaints'); 
-                    }
-                    else
-                    {
-                        $this->messages('alert-success',$response_message);
-                        return redirect('admin/complaints');
+                $response_message.'message'; exit;
+                    // if($response_status == 0)
+                    // {
+                    //     $this->messages('alert-danger',$response_message);
+                    //     return redirect('admin/complaints'); 
+                    // }
+                    // else
+                    // {
+                    //     $this->messages('alert-success',$response_message);
+                    //     return redirect('admin/complaints');
                            
-                    }
-        // }
+                    // }
+        }
     }
     
     public function complaint_register()
