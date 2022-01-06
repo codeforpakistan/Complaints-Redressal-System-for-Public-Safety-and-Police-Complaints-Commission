@@ -160,7 +160,6 @@ class Api extends CI_Controller {
     
     public function complainant_registration()
     {
-        
         $user_name     = $this->input->post('user_name');
         $user_contact  = $this->input->post('user_contact');
         $user_password = $this->input->post('user_password');
