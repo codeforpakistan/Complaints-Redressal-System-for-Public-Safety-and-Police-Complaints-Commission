@@ -28,7 +28,8 @@ class Admin extends CI_Controller {
         if(is_object($pages_data))
         {
           $response = $this->model->check_role_privileges($pages_data->page_id,$role_id);
-           if($response == TRUE)
+           
+          if($response == TRUE)
            {
               return true; exit;
            }
