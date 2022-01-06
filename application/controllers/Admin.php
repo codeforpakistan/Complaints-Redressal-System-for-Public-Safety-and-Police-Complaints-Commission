@@ -14,10 +14,12 @@ class Admin extends CI_Controller {
         $this->load->model('ComplaintModel','complaint');
         $this->load->library('auto_no.php','zend');
         $this->load->library('form_validation');
+
         if(empty($this->session->userdata('user_role_id_fk')))
-        {
-            $this->messages('alert-danger','Your session is expired please loing');
-           // return redirect(base_url() );
+        {   
+            $this->logout_user();
+            // $this->messages('alert-danger','Your session is expired please loing');
+            // return redirect(base_url() );
         }
 	} 
 
