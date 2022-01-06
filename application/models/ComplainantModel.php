@@ -7,6 +7,7 @@ class ComplainantModel extends CI_Model
     
     public function complainant_add($data_arr)
     {
+
         $required_fields = array('user_id_fk'=>0,'complainant_council_id_fk'=>0,'complainant_name'=>0,'complainant_guardian_name'=>0,'complainant_contact'=>0,'complainant_cnic'=>0,'complainant_gender'=>0,'complainant_email'=>0,'complainant_address'=>0,'complainant_status'=>0);
         $missing = array_diff_key($required_fields,$data_arr);
 
