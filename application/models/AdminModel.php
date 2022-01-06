@@ -82,7 +82,7 @@ class AdminModel extends CI_Model
     public function getComplainant($complainant_cnic)
     {
       //return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->get('complainants')->row();
-      return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->where('complainant_status',1)->get('complainants')->row();
+      return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->where('complainant_status_id_fk',1)->get('complainants')->row();
     }
     function insert_with_last_insert_id($table_name,$array)
     {
@@ -96,8 +96,9 @@ class AdminModel extends CI_Model
     }
     function check_role_privileges($page_id,$role_id)
     {
-        $query = $this->db->where('page_id_fk',$page_id)->where('user_role_id_fk',$role_id)->get('page_privileges');
-        if ($query->num_rows() > 0)
+        $query = $this->db->where('page_id_fk',$page_id)->where('user_role_id_fk',$role_id)->where('access','1')->get('page_privileges');
+        
+        if ($query->num_rows() > 0) 
         {
             return true;
         }

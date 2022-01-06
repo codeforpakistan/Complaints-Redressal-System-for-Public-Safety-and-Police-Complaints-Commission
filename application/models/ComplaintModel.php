@@ -32,14 +32,14 @@ class ComplaintModel extends CI_Model
         {
             case 'admin':
                 
-                $this->load->model('AuthModel');
+                // $this->load->model('AuthModel');
     
-                $find_admin = $this->AuthModel->users_get(array('user_id'=>$data_arr['registered_by_user']));
+                // $find_admin = $this->AuthModel->users_get(array('user_id'=>$data_arr['registered_by_user']));
         
-                if(count($find_admin) == 0)
-                {
-                   return array('response'=>0,'response_msg'=>'Admin not authorized');
-                }
+                // if(count($find_admin) == 0)
+                // {
+                //    return array('response'=>0,'response_msg'=>'Admin not authorized');
+                // }
                 
             break;
             
@@ -389,13 +389,16 @@ class ComplaintModel extends CI_Model
     }
 
 
+    // $pagination = array('url'=>'','total_ressults'=>0,'starting_id_offset'=>0,'display_limit'=>0,'no_of_pages'=>0);
+    // $filter_arr_1 = array('from_date'=>0,'to_date'=>0,'source'=>0,'status'=>0,'district_id'=>0);
+    // $filter_arr_2 = array('complaint_status_id_fk'=>0,'complain');
 
 
     //::::::::::::::::::::::::::::::::::: sadam ::::::::::::::::::::::::::::::::::::::
     
     function get_complaints($limit=20,$offset=0)
     { 
-       $displayLimit = "10";
+        $displayLimit = "10";
 
         $district_council_id = "";
         $complaint_status_id = "";
