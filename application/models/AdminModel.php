@@ -96,11 +96,10 @@ class AdminModel extends CI_Model
     }
     function check_role_privileges($page_id,$role_id)
     {
-        $query = $this->db->where('page_id_fk',$page_id)->where('user_role_id_fk',$role_id)->get('page_privileges');
+        $query = $this->db->where('page_id_fk',$page_id)->where('user_role_id_fk',$role_id)>where('access','1')->get('page_privileges');
         
         if ($query->num_rows() > 0) 
         {
-            // here check -> if access == 1 then return true else false
             return true;
         }
         else
