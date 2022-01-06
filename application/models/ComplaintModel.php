@@ -221,7 +221,7 @@ class ComplaintModel extends CI_Model
 
         $attachments = array();
         $attachment_ids = array();
-
+       
         foreach ($files['name'] as $key => $image) 
         {
             $file_path = '';

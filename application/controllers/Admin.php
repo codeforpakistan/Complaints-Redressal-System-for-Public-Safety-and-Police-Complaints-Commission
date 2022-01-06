@@ -658,8 +658,9 @@ class Admin extends CI_Controller {
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
-            $complainant_id             = $this->input->post('home_district_id'); 
-            //print_r($this->input->post('attachments')); exit;
+            $complainant_id             = $this->input->post('home_district_id');
+            // print_r($_FILES['attachments']['name']); exit;
+           // print_r($this->input->post('attachments')); exit;
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
             //echo 'from admin: '.$registered_by_user;
@@ -702,9 +703,9 @@ class Admin extends CI_Controller {
                 $response = $this->ComplaintModel->complaint_add($inert_it_array); 
 
                 // print_r($response); exit;
-                $response_message =  $response['response_msg'];
-                $response_status  = $response['response'];
-                $response_message.'message'; exit;
+                // $response_message =  $response['response_msg'];
+                // $response_status  = $response['response'];
+                echo $response['response_msg']; exit;
                     // if($response_status == 0)
                     // {
                     //     $this->messages('alert-danger',$response_message);

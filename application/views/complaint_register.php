@@ -255,7 +255,7 @@
 <<script>
 
     $('#mydropzone').click(function(){
-        $('#attachment_input').trigger('');
+       $('#attachment_input').trigger('click');
         
     }); 
     $(":input").inputmask();
