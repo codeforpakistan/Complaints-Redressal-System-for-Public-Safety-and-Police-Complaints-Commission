@@ -7,9 +7,9 @@ class ComplaintModel extends CI_Model
     public function complaint_add($data_arr)
     { 
         $required_fields = array(
-                                    'complaint_source'        => 0,
-                                    'registered_by_user'      => 0,
-                                    'complainant_id_fk'       => 0,
+                                    'complaint_source'         => 0,
+                                    'registered_by_user'       => 0,
+                                    'complainant_id_fk'        => 0,
                                     'complaint_category_id_fk' => 0,
                                     'complaint_council_id_fk'  => 0,
                                     'complaint_detail'         => 0,

@@ -89,29 +89,22 @@ class AdminModel extends CI_Model
         $this->db->insert($table_name, $array);
         return $this->db->insert_id();
     }
-    public function district_add()
+    // sadam 
+    function check_page($page_name)
     {
-        
+        return $this->db->where('page_name',$page_name)->get('pages')->row();
     }
-    
-    public function districts_view()
+    function check_role_privileges($page_id,$role_id)
     {
-        
-    }
-    
-    public function respondents_view()
-    {
-        
-    }
-    
-    public function complaint_categories_view()
-    {
-        
-    }
-    
-    public function complaint_category_add()
-    {
-        
+        $query = $this->db->where('page_id_fk',$page_id)->where('user_role_id_fk',$role_id)->get('page_privileges');
+        if ($query->num_rows() > 0)
+        {
+            return true;
+        }
+        else
+        { 
+            return false;
+        }
     }
 				
 }

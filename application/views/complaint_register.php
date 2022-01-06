@@ -64,7 +64,7 @@
                                             <label>Gender <span class="asterisk">*</span></label>
                                             <div class="input-group">
                                                 <select class="form-control" name="complainant_gender" id="complainant_gender" required>
-                                                    <option selected value="0">Select Gender</option>
+                                                    <option disabled value="" selected hidden>Select Gender</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                 </select>
@@ -250,11 +250,12 @@
           </div>
         </section>
       </div>
-      <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+      <script src="assets/js/jquery.inputmask.bundle.js"></script>
 <<script>
 
     $('#mydropzone').click(function(){
-        $('#attachment_input').trigger('click');
+        $('#attachment_input').trigger('');
+        
     }); 
     $(":input").inputmask();
 </script>>

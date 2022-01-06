@@ -23,6 +23,7 @@
                   <i data-feather="briefcase"></i><span>Respondents</span>
                 </a>
             </li> -->
+            <?php if($this->session->userdata('user_role_id_fk') == 1) {?>
             <li class="dropdown">
                 <a href="admin/complaint_categories" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaint Categories</span>
@@ -41,7 +42,7 @@
                   <i data-feather="briefcase"></i><span>Districts</span>
                 </a>
             </li>
-            
+            <?php } ?>
             <li class="dropdown">
               <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="image"></i><span>Reports</span></a>
               <ul class="dropdown-menu">

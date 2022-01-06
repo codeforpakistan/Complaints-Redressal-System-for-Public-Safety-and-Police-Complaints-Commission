@@ -14,21 +14,29 @@ class Admin extends CI_Controller {
         $this->load->model('ComplaintModel','complaint');
         $this->load->library('auto_no.php','zend');
         $this->load->library('form_validation');
-        
+        if(empty($this->session->userdata('user_role_id_fk')))
+        {
+            $this->messages('alert-danger','Your session is expired please loing');
+           // return redirect(base_url() );
+        }
 	} 
 
     public function check_role_privileges($page_name,$role_id)
     {
-        // query
-
-        // if ( not exist | 0)
-        // {
-            // redirect to prev_page
-        // }
-        // else
-        // {
-            // retun true
-        // }
+        $pages_data = $this->model->check_page($page_name);  
+        
+        if(is_object($pages_data))
+        {
+          $response = $this->model->check_role_privileges($pages_data->page_id,$role_id);
+           if($response == TRUE)
+           {
+              return true; exit;
+           }
+           else
+           {
+             return redirect(base_url());
+           }
+        } 
 
     }
 
@@ -39,6 +47,7 @@ class Admin extends CI_Controller {
     
     public function index()
     { 
+        
         if($this->session->userdata('user_role_id_fk'))
         {
             $this->dashboard();
@@ -51,7 +60,7 @@ class Admin extends CI_Controller {
     }
     
     public function login_user()
-    {
+    {   
         $this->form_validation->set_rules('user_name', 'Username', 'required|trim');
         $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
         if ($this->form_validation->run() == FALSE)
@@ -74,9 +83,10 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_name',$response->user_name);
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
                 $this->session->set_userdata('user_role_name',$response->user_role_name);
-
-					if($response->user_role_id_fk == '1')
-					{						
+                redirect('/admin/dashboard'); exit();
+				/*	if($response->user_role_id_fk == '1')
+					{	
+                        					
 					    redirect('/admin/dashboard'); exit();
 					}
 					
@@ -91,7 +101,7 @@ class Admin extends CI_Controller {
                     elseif($response->user_role_id_fk == '4')
 					{	
 						echo "Complainant"; exit();
-					}
+					} */
 				} // end is user name and passsword valid
                 else // not match ue name and pass
 	             {
@@ -140,9 +150,8 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function dashboard()
-    {  
-        $user_role_id = 0; // take from session
-        $this->check_role_privileges('dashboard',$user_role_id);
+    {   
+        //$this->check_role_privileges('dashboard',$this->session->userdata('user_role_id_fk'));
         
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
@@ -176,7 +185,7 @@ class Admin extends CI_Controller {
 
     function users()
     { 
-        // $this->check_privileges($page_name);
+        $this->check_role_privileges('users',$this->session->userdata('user_role_id_fk'));
         
         $table_name                 = 'users';
         $table_name2                = 'districts';
@@ -343,7 +352,8 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function districts()
-    {
+    {   
+        $this->check_role_privileges('districts',$this->session->userdata('user_role_id_fk'));
         $table_name = 'districts';
         $data['districts'] = $this->model->get_all_records($table_name);
         $data['title']    = 'Districts';
@@ -466,6 +476,8 @@ class Admin extends CI_Controller {
 
     public function complaint_categories()
     {
+        $this->check_role_privileges('complaint_categories',$this->session->userdata('user_role_id_fk'));
+
         $table_name = 'complaint_categories';
         $data['complaint_categories'] = $this->model->get_all_records($table_name);
         $data['title']    = 'Complaint Categories';
@@ -644,6 +656,7 @@ class Admin extends CI_Controller {
             $attachments                = $this->input->post('attachments');
             $registered_by_user         = $this->session->userdata('user_id'); //echo $registered_by_user; exit;
             $complainant_id             = $this->input->post('home_district_id');
+            $complaint_council_id_fk    = $this->input->post('complaint_council_id_fk');
             //print_r($this->input->post('attachments')); exit;
             // complaintant checking
             $complainant_response = $this->model->getComplainant($complainant_cnic);
@@ -704,6 +717,8 @@ class Admin extends CI_Controller {
     
     public function complaint_register()
     {
+        $this->check_role_privileges('complaint_register',$this->session->userdata('user_role_id_fk'));
+
         $data['title'] = 'Regsiter Complaint';
         $data['page']  = 'complaint_register'; 
         
@@ -736,6 +751,8 @@ class Admin extends CI_Controller {
 
     public function complaints()
     { 
+        $this->check_role_privileges('complaints',$this->session->userdata('user_role_id_fk'));
+
         $data = array();
         $displayLimit = "10";
 
@@ -853,6 +870,8 @@ class Admin extends CI_Controller {
     }
     function complaint_detail($complaint_id)
     {
+        $this->check_role_privileges('complaint_detail',$this->session->userdata('user_role_id_fk'));
+
         $data['title'] = 'Complaint Detail';
         $data['page']  = 'complaint_detail'; 
         
