@@ -226,7 +226,7 @@ class Api extends CI_Controller {
         $complainant_data_arr = array(
                                       'user_id_fk'                 => $user_id,
                                       'complainant_name'           => $user_name,
-                                      'complainant_guardian_name'  => 0,
+                                      'complainant_guardian_name'  => '',
                                       'complainant_contact'        => $user_contact,
                                       'complainant_cnic'           => 0,
                                       'complainant_gender'         => 0,
