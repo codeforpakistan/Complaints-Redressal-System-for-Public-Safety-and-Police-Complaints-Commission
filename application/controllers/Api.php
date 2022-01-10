@@ -166,7 +166,7 @@ class Api extends CI_Controller {
         
         if($user_name == '' || $user_contact == '' || $user_password == '')
         {
-            $this->format_response('error','User name,contact & password are required fields',[]);
+            $this->format_response('error','user_name, user_contact & user_password are required fields',[]);
         }
         
         //======================================================================
