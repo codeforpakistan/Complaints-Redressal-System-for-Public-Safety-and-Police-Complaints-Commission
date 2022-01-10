@@ -76,7 +76,7 @@ class AuthModel extends CI_Model
         
         if(count($find_user) > 0)
         {
-            return array('response'=>0,'response_msg'=>'This user_name or user_password already exists');
+            return array('response'=>0,'response_msg'=>'This user_name or user_contact already exists');
         }
         else
         {
