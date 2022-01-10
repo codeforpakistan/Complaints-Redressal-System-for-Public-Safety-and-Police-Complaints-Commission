@@ -212,7 +212,7 @@ class Api extends CI_Controller {
         
         if($insert_user['response'] == 0)
         {
-            $this->format_response('error','Failed to add user',[]);
+            $this->format_response('error',$insert_user['response_msg'],[]);
         }
         else
         {
