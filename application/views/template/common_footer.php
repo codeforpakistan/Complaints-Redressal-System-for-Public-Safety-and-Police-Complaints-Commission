@@ -1,10 +1,11 @@
-<footer class="main-footer">
+    <footer class="main-footer" style="display:none">
         <div class="footer-left">
           <a href="">Code For Pakistan</a></a>
         </div>
         <div class="footer-right">
         </div>
-      </footer>
+    </footer>
+
     </div>
   </div>
   <!-- General JS Scripts -->

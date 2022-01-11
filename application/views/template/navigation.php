@@ -1,7 +1,8 @@
 <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="<?= base_url()?>"> <img alt="image" src="assets/img/logo/logo-full.png" class="header-logo" /> 
+            <a href="<?= base_url()?>">
+              <img alt="image" src="assets/img/logo/logo-full.png" class="header-logo" /> 
             </a>
           </div>
           <ul class="sidebar-menu">
