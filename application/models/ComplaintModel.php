@@ -213,7 +213,8 @@ class ComplaintModel extends CI_Model
        
         $config = array(
                         'upload_path'   => $path,
-                        'allowed_types' => 'jpg|jpeg|png|pdf|doc|docx|xls|xlsx|csv|txt|rtf|zip|mp3|wma|flv|mpg|avi',
+                        // 'allowed_types' => 'jpg|jpeg|png|pdf|doc|docx|xls|xlsx|csv|txt|rtf|zip|mp3|wma|flv|mpg|avi',
+                        'allowed_types' => '*',
                         'overwrite'     => 1,                       
                         );
 

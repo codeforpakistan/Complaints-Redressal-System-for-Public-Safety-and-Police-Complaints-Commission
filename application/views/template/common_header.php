@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='assets/img/logo/logo-icon.png' />
   <script src="assets/js/jquery.min.js"></script>
+  
 </head>
 
 <body>

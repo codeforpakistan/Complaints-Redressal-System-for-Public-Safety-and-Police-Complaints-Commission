@@ -33,16 +33,6 @@
                        <!-- :::::::::::::::::::::::::::::::::::: list of complaint start :::: -->
 								<form id="reset_form" method="post" action="admin/complaints"> 
 										<div class="row">
-											<!-- <div class="col-md-2">
-												<label>limit</label>
-												<select name="display_record" id="display_record" class="form-control">
-													<option <?php if($displayLimit=="10"){ ?> selected="selected"  <?php } ?> value="10">10</option>
-													<option <?php if($displayLimit=="15"){ ?> selected="selected"  <?php } ?> value="15">15</option>
-													<option <?php if($displayLimit=="25"){ ?> selected="selected"  <?php } ?> value="25">25</option>
-													<option <?php if($displayLimit=="50"){ ?> selected="selected"  <?php } ?> value="50">50</option>
-													<option <?php if($displayLimit=="100"){ ?> selected="selected"  <?php } ?> value="100">100</option>
-												</select>
-											</div> -->
 											<div class="col-md-2" style="padding:0">
 												<label>Union Council</label>
 												<select class="form-control select2" name="district_council_id" id="district_council_id">
@@ -90,6 +80,7 @@
 							<table id="example2lol" class="table table-striped" >
 								<thead>
 									<tr class="bg-success">
+										<th>Complaint Date</th>
 										<th>Citizen Name</th>
 										<th>District</th>
                                         <th>Source</th>
@@ -101,6 +92,7 @@
         								<?php if(!empty($complaints)) { foreach($complaints as $oneByOne){  ?>             
 								
 					                        <tr>
+											  <td><?= $oneByOne['complaint_entry_timestamp']?></td>
 					                          <td><?= $oneByOne['complainant_name']?></td> 
 					                          <td><?= $oneByOne['district_name']?></td> 
 					                          <td><?= $oneByOne['complaint_source']?></td>

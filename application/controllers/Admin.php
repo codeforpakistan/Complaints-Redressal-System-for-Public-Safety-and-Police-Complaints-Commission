@@ -175,16 +175,10 @@ class Admin extends CI_Controller {
     // view user
     //==========================================================================
 
-    function check_privileges($page_name)
-    {
-        $user_role_id = 1; // get active user's ROLE
-        
-        // select privilege_value from page_priviliges where user_role_id = ? and page_name = ?
-        // if (privilege_value == 0)
-        // {
-            // 
-        // }
-    }
+    // function check_privileges($page_name)
+    // {
+    //     $user_role_id = 1; // get active user's ROLE
+    // }
 
     function users()
     { 
@@ -626,7 +620,6 @@ class Admin extends CI_Controller {
         $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
         $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
         $this->form_validation->set_rules('complainant_council_id_fk', 'Complainant Union Council', 'required|trim');
-        $this->form_validation->set_rules('complainant_email', 'Complainant Email', 'required|trim');
         $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
         $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
         $this->form_validation->set_rules('complaint_category_id', 'Complaint Category_id', 'required|trim');
@@ -659,8 +652,8 @@ class Admin extends CI_Controller {
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
             $complainant_id             = $this->input->post('home_district_id');
-            // print_r($_FILES['attachments']['name']); exit;
-           // print_r($this->input->post('attachments')); exit;
+            //print_r($_FILES); exit; 
+           //print_r($this->input->post('attachments')); exit;
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
             //echo 'from admin: '.$registered_by_user;
@@ -979,6 +972,12 @@ class Admin extends CI_Controller {
             return redirect(base_url());
         }
        
+    }
+
+    function get_home_district_union_ajax($district_id_fk)
+    {
+     echo json_encode($this->model->get_by_id('district_councils','district_id_fk',$district_id_fk));
+     
     }
 
 }

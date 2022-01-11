@@ -27,7 +27,8 @@
   <!-- Custom JS File -->
   <script src="assets/js/custom.js"></script>
   <script src="breadcrumb_assets/script.js"></script>
- 
+  <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 </body>
 
 

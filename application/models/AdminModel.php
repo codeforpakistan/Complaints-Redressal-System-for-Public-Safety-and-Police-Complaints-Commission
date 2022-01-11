@@ -107,6 +107,10 @@ class AdminModel extends CI_Model
             return false;
         }
     }
+    function get_by_id($table,$coloumn_name,$id)
+    {
+        return $this->db->where($coloumn_name,$id)->get($table)->result();
+    }
 				
 }
 
