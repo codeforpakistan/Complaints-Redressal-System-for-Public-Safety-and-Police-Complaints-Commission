@@ -171,6 +171,27 @@ class Admin extends CI_Controller {
         $data['complainant']    = $this->model->countUsersByRoleId(4);
         $this->load->view('template',$data);
     }
+
+    public function dashboard1()
+    {   
+        //$this->check_role_privileges('dashboard',$this->session->userdata('user_role_id_fk'));
+        
+        $data['title']          = 'Dashboard';
+        $data['page']           = 'dashboard1';
+        $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
+        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
+        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
+        $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
+        $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
+        $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
+        $data['thisDay']        = $this->model->thisDay(); 
+        $data['thisMonth']      = $this->model->thisMonth();
+        $data['thisYear']       = $this->model->thisYear(); 
+        $data['users']          = $this->model->countUsersByRoleId(3); 
+        $data['complainant']    = $this->model->countUsersByRoleId(4);
+        $this->load->view('template',$data);
+    }
+
     //==========================================================================
     // view user
     //==========================================================================
