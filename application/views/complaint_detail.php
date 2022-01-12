@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                             </div> <!-- end of col-md-4 -->
-
+                        </div>
                             <div class="row">
 
                                 <div class="col-md-9">
