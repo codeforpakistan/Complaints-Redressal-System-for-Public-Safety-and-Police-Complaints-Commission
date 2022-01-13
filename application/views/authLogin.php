@@ -79,6 +79,17 @@
                     </div>
                   </div> -->
                   <div class="form-group">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p id="captImg"><?php echo $captchaImg; ?></p>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="text" name="captcha" class="form-control" value="" required/>
+                      </div>
+                    </div>
+                    <p>Can't read the image? click <a href="javascript:void(0);" class="refreshCaptcha">here</a> to refresh.</p>
+                  </div>
+                  <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                       Login
                     </button>
@@ -122,3 +133,14 @@
 
 <!-- auth-login.html  21 Nov 2019 03:49:32 GMT -->
 </html>
+
+<!-- captcha refresh code -->
+<script>
+$(document).ready(function(){
+    $('.refreshCaptcha').on('click', function(){
+        $.get('<?= base_url().'admin/refreshCaptcha'; ?>', function(data){
+            $('#captImg').html(data);
+        });
+    });
+});
+</script>

@@ -144,6 +144,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Home District <span class="asterisk">*</span></label>
                                             <div class="input-group">
+                                            <!-- <input type="text" class="form-control"  name="home_district" id="home_district" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');"> -->
                                                 <select class="form-control select2 home_district_id" id="home_district_id" name="home_district_id" style="width:100%" required>
                                                 <option disabled value="" selected hidden>Please Select District</option>
                                                     <?php if($district){ foreach($district as $dist){?>
@@ -158,12 +159,13 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="complainant_council_id_fk" name="complainant_council_id_fk" style="width:100%" required>
+                                            <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <!-- <select class="form-control select2" id="complainant_council" name="complainant_council" style="width:100%" required>
                                                     <option disabled value="" selected hidden>Please Select Union-concil</option>
                                                         <?php if($district_councils){ foreach($district_councils as $union_dist){?>
                                                     <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
                                                         <?php } }?>
-                                                </select>
+                                                </select> -->
                                             </div>
                                         </div>
                                     </div> 
@@ -226,12 +228,13 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="complaint_council_id_fk" name="complaint_council_id_fk" style="width:100%" required>
+                                            <input type="text" class="form-control"  name="complaint_council" id="complaint_council" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <!-- <select class="form-control select2" id="complaint_council_id_fk" name="complaint_council_id_fk" style="width:100%" required>
                                                     <option disabled value="" selected hidden>Please Select Union-concil</option>
                                                         <?php if($district_councils){ foreach($district_councils as $union_dist){?>
                                                     <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
                                                         <?php } }?>
-                                                </select>
+                                                </select> -->
                                             </div>
                                         </div>
                                     </div>
@@ -349,45 +352,45 @@ Dropzone.autoDiscover = false;
                     });
         });
         // ::::::::::::::::: Selection union againt home district 
-        $("#home_district_id").change(function(home_district_id)
-        {
-            var home_district_id = $(this).val(); 
+        // $("#home_district_id").change(function(home_district_id)
+        // {
+        //     var home_district_id = $(this).val(); 
 
-            $.ajax({
-                url: 'admin/get_home_district_union_ajax/'+home_district_id,
-                dataType: 'json',
-                success: function(response)
-                { 
-                    $('#complainant_council_id_fk').empty();
+        //     $.ajax({
+        //         url: 'admin/get_home_district_union_ajax/'+home_district_id,
+        //         dataType: 'json',
+        //         success: function(response)
+        //         { 
+        //             $('#complainant_council').empty();
 
-                    $.each(response, function(key, value) 
-                    {
-                        $('#complainant_council_id_fk').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
-                        $('#complainant_council_id_fk option[value='+value.district_council_id+']').attr('selected','selected'); 
-                    });
-                }
-            });
-        });
+        //             $.each(response, function(key, value) 
+        //             {
+        //                 $('#complainant_council').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
+        //                 $('#complainant_council option[value='+value.district_council_id+']').attr('selected','selected'); 
+        //             });
+        //         }
+        //     });
+        // });
     
     // ::::::::::::::::: Selection union againt complaint  
-    $("#district_id_fk").change(function(district_id_fk)
-        {
-            var district_id_fk = $(this).val(); 
+    // $("#district_id_fk").change(function(district_id_fk)
+    //     {
+    //         var district_id_fk = $(this).val(); 
 
-            $.ajax({
-                url: 'admin/get_home_district_union_ajax/'+district_id_fk,
-                dataType: 'json',
-                success: function(response)
-                { 
-                    $('#complaint_council_id_fk').empty();
-                    $.each(response, function(key, value) 
-                    {
-                        $('#complaint_council_id_fk').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
-                        $('#complaint_council_id_fk option[value='+value.district_council_id+']').attr('selected','selected'); 
-                    });
-                }
-            });
-        });
+    //         $.ajax({
+    //             url: 'admin/get_home_district_union_ajax/'+district_id_fk,
+    //             dataType: 'json',
+    //             success: function(response)
+    //             { 
+    //                 $('#complaint_council_id_fk').empty();
+    //                 $.each(response, function(key, value) 
+    //                 {
+    //                     $('#complaint_council_id_fk').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
+    //                     $('#complaint_council_id_fk option[value='+value.district_council_id+']').attr('selected','selected'); 
+    //                 });
+    //             }
+    //         });
+    //     });
     });
 </script>> 
 
