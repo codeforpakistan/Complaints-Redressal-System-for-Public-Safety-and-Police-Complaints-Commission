@@ -31,7 +31,7 @@
                             </div>
                     <!-- end of messages  --->
                     <!-- <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data"> -->
-                     <?php if($complaint_detail) foreach($complaint_detail as $oneByOne) //print_r($complaint_detail); ?>
+                     <?php if($complaint_detail) foreach($complaint_detail as $oneByOne) print_r($complaint_detail); ?>
 
                         <div class="row">
                         <div class="col-md-4">

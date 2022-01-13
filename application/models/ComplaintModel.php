@@ -11,9 +11,10 @@ class ComplaintModel extends CI_Model
                                     'registered_by_user'       => 0,
                                     'complainant_id_fk'        => 0,
                                     'complaint_category_id_fk' => 0,
-                                    'complaint_council'  => 0,
+                                    'complaint_council'        => 0,
                                     'complaint_detail'         => 0,
-                                    'complaint_status_id_fk'   => 0
+                                    'complaint_status_id_fk'   => 0,
+                                    'district_id_fk'           => 0
                                 );
         $missing = array_diff_key($required_fields,$data_arr);
        
@@ -512,7 +513,7 @@ class ComplaintModel extends CI_Model
 
         $this->db->select('*')->from('complaints');
         $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
-        $this->db->join('district_councils', 'district_councils.district_council_id=complaints.complaint_council','left');
+        $this->db->join('districts', 'districts.district_id=complaints.district_id_fk','left');
         $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
 
         if(trim($district_council_id)!="")
