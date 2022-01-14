@@ -265,8 +265,7 @@ class ComplaintModel extends CI_Model
         
         $join_arr = [];
         array_push($join_arr,array('j_table'=>'complainants','t_table'=>'complaints','select_columns'=>array('complainant_name'=>0),'t_column'=>'complainant_id_fk','j_column'=>'complainant_id'));
-
-        array_push($join_arr,array('j_table'=>'districts','t_table'=>'district_councils','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
+        array_push($join_arr,array('j_table'=>'districts','t_table'=>'complaints','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
         
         //======================================================================
         // set condition arr
@@ -346,30 +345,44 @@ class ComplaintModel extends CI_Model
         //======================================================================
         // check duplication 
         //======================================================================
-         
-        $find_complaint_remarks = $this->db->query('select * from complaint_remarks where complaint_id_fk = ? and complaint_remarks_detail = ?',array($data_arr['complaint_id_fk'],$data_arr['complaint_remarks_detail']))->result_array();
         
-        if(count($find_complaint_remarks) > 0)
+        $this->load->model('AuthModel');
+    
+        $find_user_role = $this->AuthModel->users_get(array('user_id'=>$data_arr['user_id_fk']));
+        
+        if(count($find_user_role) == 0)
         {
-            return array('response'=>0,'response_msg'=>'These remarks have already submitted for this complaint');
+            return array('response'=>0,'response_msg'=>'User not authorized');
         }
         else
         {
-            //==================================================================
-            // insert remarks
-            //==================================================================
+            $user_role_id = $find_user_role[0]['user_role_id_fk'];
             
-            $insert_remarks = $this->db->insert('complaint_remarks',$data_arr);
+            if($user_role_id == '4')
+            {
+                $find_complaint_remarks = $this->db->query('select * from complaint_remarks where user_id_fk = ? and complaint_id_fk = ?',array($data_arr['user_id_fk'],$data_arr['complaint_id_fk']))->result_array();
+        
+                if(count($find_complaint_remarks) > 0)
+                {
+                    return array('response'=>0,'response_msg'=>'These remarks have already submitted for this complaint');
+                }
+            }
+        }
+        
+        //==================================================================
+        // insert remarks
+        //==================================================================
             
-            if($insert_remarks != false)
-            {
-                $remarks_id = $this->db->insert_id();
-                return array('response'=>1,'response_msg'=>'Remarks Submitted Successfully','complaint_remarks_id'=>$remarks_id);
-            }
-            else
-            {
-                return array('response'=>0,'response_msg'=>'Failed to insert remarks');
-            }
+        $insert_remarks = $this->db->insert('complaint_remarks',$data_arr);
+            
+        if($insert_remarks != false)
+        {
+            $remarks_id = $this->db->insert_id();
+            return array('response'=>1,'response_msg'=>'Remarks Submitted Successfully','complaint_remarks_id'=>$remarks_id);
+        }
+        else
+        {
+            return array('response'=>0,'response_msg'=>'Failed to insert remarks');
         }
     }
     

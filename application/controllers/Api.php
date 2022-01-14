@@ -268,9 +268,10 @@ class Api extends CI_Controller {
                                       'complainant_contact'        => $user_contact,
                                       'complainant_cnic'           => 0,
                                       'complainant_gender'         => 0,
-                                      'complainant_email'          => 0,
+                                      'complainant_email'          => '',
                                       'complainant_district_id_fk' => 0,
-                                      'complainant_address'        => 0,
+                                      'complainant_council'        => '',
+                                      'complainant_address'        => '',
                                       'complainant_status'         => 1
                                       );
         
@@ -645,8 +646,9 @@ class Api extends CI_Controller {
         $data_arr['complainant_id_fk']        = $session_complainant_id;
         $data_arr['registered_by_user']       = $session_user_id;
         $data_arr['district_id_fk']           = $this->input->post('district_id_fk');
+        $data_arr['complaint_council']        = $this->input->post('complaint_council');
         $data_arr['complaint_category_id_fk'] = $this->input->post('complaint_category_id_fk');
-        $data_arr['complaint_detail']         = $this->input->post('complaint_detail');
+        $data_arr['complaint_detail']         = $this->input->post('complaint_detail'); 
         $data_arr['complaint_status_id_fk']   = '1';
         
         //======================================================================
@@ -671,7 +673,7 @@ class Api extends CI_Controller {
         
         if($complaint_add_response['response'] == '1')
         {
-            $this->format_response('success','Complainant Registered Successfully',array('complaint_id'=>$complaint_add_response['complaint_id']));
+            $this->format_response_2('success','Complaint Registered Successfully',array('complaint_id'=>$complaint_add_response['complaint_id']));
         }
         else
         {
@@ -761,7 +763,7 @@ class Api extends CI_Controller {
                     }
                     else
                     {
-                        $this->format_response('success','Phone.no Verified',['complainant_id'=>$complainant_data[0]['complainant_id'],'user_id'=>$user_data[0]['user_contact']]);
+                        $this->format_response_2('success','Phone.no Verified',['complainant_id'=>$complainant_data[0]['complainant_id'],'user_id'=>$user_data[0]['user_contact']]);
                     }
                 }
             }
@@ -792,7 +794,7 @@ class Api extends CI_Controller {
         
         if(!$this->input->post('user_password'))
         {
-            $this->format_response('error','Current Password is required',[]);
+            $this->format_response('error','Current Password is required i-e; user_password',[]);
         }
         
         $user_password = trim($this->input->post('user_password'));
@@ -815,7 +817,7 @@ class Api extends CI_Controller {
         
         if(!$this->input->post('new_password'))
         {
-            $this->format_response('error','New password is required',[]);
+            $this->format_response('error','New password is required i-e; new_password',[]);
         }
         
         $new_password = trim($this->input->post('new_password'));
@@ -911,7 +913,7 @@ class Api extends CI_Controller {
         
         if($remarks_add_response['response'] == 1)
         {
-            $this->format_response('success','Your feedback submitted successfully',['complaint-remarks_id'=>$remarks_add_response['complaint_remarks_id']]);
+            $this->format_response_2('success','Your feedback submitted successfully',['complaint_remarks_id'=>$remarks_add_response['complaint_remarks_id']]);
         }
         else
         {
