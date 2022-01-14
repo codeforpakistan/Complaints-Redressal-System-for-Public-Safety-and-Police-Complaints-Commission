@@ -11,9 +11,10 @@ class ComplaintModel extends CI_Model
                                     'registered_by_user'       => 0,
                                     'complainant_id_fk'        => 0,
                                     'complaint_category_id_fk' => 0,
-                                    'complaint_council_id_fk'  => 0,
+                                    'complaint_council'        => 0,
                                     'complaint_detail'         => 0,
-                                    'complaint_status_id_fk'   => 0
+                                    'complaint_status_id_fk'   => 0,
+                                    'district_id_fk'           => 0
                                 );
         $missing = array_diff_key($required_fields,$data_arr);
        
@@ -89,12 +90,12 @@ class ComplaintModel extends CI_Model
         // district validation
         //======================================================================
         
-        $find_district = $this->db->query('select * from district_councils where district_id_fk = ?',array($data_arr['complaint_council_id_fk']))->result_array();
+        // $find_district = $this->db->query('select * from district_councils where district_id_fk = ?',array($data_arr['complaint_council']))->result_array();
         
-        if(count($find_district) == 0)
-        {
-            return array('response'=>0,'response_msg'=>'Selected council is not valid');
-        }
+        // if(count($find_district) == 0)
+        // {
+        //     return array('response'=>0,'response_msg'=>'Selected council is not valid');
+        // }
         
         //======================================================================
         // category validation
@@ -124,15 +125,15 @@ class ComplaintModel extends CI_Model
         //                                    select * from complaints 
         //                                     where 
         //                                     complainant_id_fk = ? 
-        //                                     and complaint_council_id_fk = ? 
+        //                                     and complaint_council = ? 
         //                                     and complaint_category_id_fk = ? 
         //                                     and complaint_detail = ?',
-        //                                     array($data_arr['complainant_id_fk'],$data_arr['complaint_council_id_fk'],$data_arr['complaint_category_id_fk'],$data_arr['complaint_detail']))->result_array();
+        //                                     array($data_arr['complainant_id_fk'],$data_arr['complaint_council'],$data_arr['complaint_category_id_fk'],$data_arr['complaint_detail']))->result_array();
        
         $find_complaint=    $this->db->select('*')
                                     ->from('complaints')
                                     ->where('complainant_id_fk',$data_arr['complainant_id_fk'])
-                                    ->where('complaint_council_id_fk',$data_arr['complaint_council_id_fk'])
+                                    ->where('complaint_council',$data_arr['complaint_council'])
                                     ->where('complaint_category_id_fk',$data_arr['complaint_category_id_fk'])
                                     ->where('complaint_detail',$data_arr['complaint_detail'])
                                     ->get()
@@ -272,7 +273,7 @@ class ComplaintModel extends CI_Model
         
         $join_arr = [];
         array_push($join_arr,array('j_table'=>'complainants','t_table'=>'complaints','select_columns'=>array('complainant_name'=>0),'t_column'=>'complainant_id_fk','j_column'=>'complainant_id'));
-        array_push($join_arr,array('j_table'=>'district_councils','t_table'=>'complaints','select_columns'=>array('district_council_name'=>0),'t_column'=>'complaint_council_id_fk','j_column'=>'district_council_id'));
+        array_push($join_arr,array('j_table'=>'district_councils','t_table'=>'complaints','select_columns'=>array('district_council_name'=>0),'t_column'=>'complaint_council','j_column'=>'district_council_id'));
         array_push($join_arr,array('j_table'=>'districts','t_table'=>'district_councils','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
         
         //======================================================================
@@ -281,7 +282,7 @@ class ComplaintModel extends CI_Model
         
         $cond_arr = array('cond'=>[],'search'=>[]);
         
-        $optional_cond_arr = array('complaint_id','complainant_id_fk','registered_by_user','complaint_council_id_fk','complaint_category_id_fk','complaint_status_id_fk');
+        $optional_cond_arr = array('complaint_id','complainant_id_fk','registered_by_user','complaint_council','complaint_category_id_fk','complaint_status_id_fk');
         
         foreach($optional_cond_arr as $key=>$value)
         {
@@ -434,14 +435,14 @@ class ComplaintModel extends CI_Model
 
       $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title')->from('complaints');
       $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
-      $this->db->join('district_councils', 'district_councils.district_council_id = complaints.complaint_council_id_fk','left');
+      $this->db->join('district_councils', 'district_councils.district_council_id = complaints.complaint_council','left');
       $this->db->join('districts', 'districts.district_id = district_councils.district_id_fk','left');
       $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
       $this->db->join('complaint_statuses','complaint_statuses.complaint_status_id=complaints.complaint_status_id_fk','left');
 
             if(trim($district_council_id)!="")
             {
-                $this->db->where('complaint_council_id_fk',$district_council_id);
+                $this->db->where('complaint_council',$district_council_id);
             }
             if(trim($complaint_status_id)!="")
             {
@@ -512,12 +513,12 @@ class ComplaintModel extends CI_Model
 
         $this->db->select('*')->from('complaints');
         $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
-        $this->db->join('district_councils', 'district_councils.district_council_id=complaints.complaint_council_id_fk','left');
+        $this->db->join('districts', 'districts.district_id=complaints.district_id_fk','left');
         $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
 
         if(trim($district_council_id)!="")
             {
-                $this->db->where('complaint_council_id_fk',$district_council_id);
+                $this->db->where('complaint_council',$district_council_id);
             }
             if(trim($complaint_status_id)!="")
             {
@@ -550,7 +551,7 @@ class ComplaintModel extends CI_Model
         $this->db->select('*')->from('complaints');
         $this->db->where('complaint_id',$complaint_id);
         $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
-        $this->db->join('district_councils', 'district_councils.district_council_id=complaints.complaint_council_id_fk','left');
+        $this->db->join('district_councils', 'district_councils.district_council_id=complaints.complaint_council','left');
         $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
      return $this->db->get()->result();
     }
@@ -568,7 +569,7 @@ class ComplaintModel extends CI_Model
         $this->db->from('complaint_remarks');
         $this->db->where('complaint_id_fk',$complaint_id);
         $this->db->join('complaints', 'complaints.complaint_id=complaint_remarks.complaint_id_fk','left');
-        $this->db->join('districts', 'districts.district_id=complaints.complaint_council_id_fk','left');
+        $this->db->join('districts', 'districts.district_id=complaints.complaint_council','left');
         $this->db->join('complaint_statuses', 'complaint_statuses.complaint_status_id=complaint_remarks.complaint_status_id_fk','left');
         $this->db->join('respondents','respondents.respondent_id=complaint_remarks.respondent_id_fk','left');
      return $this->db->get()->result();

@@ -14,6 +14,8 @@ class Admin extends CI_Controller {
         $this->load->model('ComplaintModel','complaint');
         $this->load->library('auto_no.php','zend');
         $this->load->library('form_validation');
+        // Load the captcha helper
+        $this->load->helper('captcha');
 
         // if(empty($this->session->userdata('user_role_id_fk')))
         // {   
@@ -57,15 +59,55 @@ class Admin extends CI_Controller {
         }
         else
         {
-           $this->load->view('authLogin'); 
+         // Captcha configuration
+         $config = array(
+                        'img_path'      => 'captcha_images/',
+                        'img_url'       => base_url().'captcha_images/',
+                        'img_width'     => '156',
+                        'img_height'    => '41',
+                        'word_length'   => 8,
+                        'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
+                        'font_size'     => 16
+                    ); 
+            $captcha = create_captcha($config);
+
+            // Unset previous captcha and set new captcha word
+            $this->session->unset_userdata('captchaCode');
+            $this->session->set_userdata('captchaCode', $captcha['word']);
+            
+            // Pass captcha image to view
+            $data['captchaImg'] = $captcha['image'];
+            $this->load->view('authLogin',$data); 
         }
         
+    }
+    public function refreshCaptcha(){
+        // Captcha configuration
+        $config = array(
+            'img_path'      => 'captcha_images/',
+            'img_url'       => base_url().'captcha_images/',
+            'img_width'     => '156',
+            'img_height'    => '41',
+            'word_length'   => 8,
+            'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
+            'font_size'     => 16
+        );
+        $captcha = create_captcha($config);
+        
+        // Unset previous captcha and set new captcha word
+        $this->session->unset_userdata('captchaCode');
+        $this->session->set_userdata('captchaCode',$captcha['word']);
+        
+        // Display captcha image
+        echo $captcha['image'];
     }
     
     public function login_user()
     {   
+       
         $this->form_validation->set_rules('user_name', 'Username', 'required|trim');
         $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
+        $this->form_validation->set_rules('captcha', 'Captcha', 'required|trim');
         if ($this->form_validation->run() == FALSE)
         {
             $error   = array('error' => validation_errors());
@@ -76,6 +118,15 @@ class Admin extends CI_Controller {
         }
         else
         {
+            $inputCaptcha = $this->input->post('captcha');
+            $sessCaptcha = $this->session->userdata('captchaCode');
+            if($inputCaptcha !== $sessCaptcha)
+            {
+                //echo 'Captcha code matched.';
+                $this->messages('alert-danger','Captcha code does not match, please try again.');
+                return redirect(base_url());
+            }
+
             $username = $this->input->post('user_name');
             $password = $this->input->post('user_password');
             $array    = array('user_name'=>$username,'user_password'=>$password,'user_status'=>1);
@@ -636,11 +687,11 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function complaint_register_ajax() 
-    {  
+    {   
         $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
         $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
         $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
-        $this->form_validation->set_rules('complainant_council_id_fk', 'Complainant Union Council', 'required|trim');
+        $this->form_validation->set_rules('complainant_council', 'Complainant Union Council', 'required|trim');
         $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
         $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
         $this->form_validation->set_rules('complaint_category_id', 'Complaint Category_id', 'required|trim');
@@ -663,8 +714,8 @@ class Admin extends CI_Controller {
             $complainant_name           = $this->input->post('complainant_name');
             $complainant_contact        = $this->input->post('complainant_contact');
             $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
-            $complainant_council_id_fk  = $this->input->post('complainant_council_id_fk');
-            $complaint_council_id_fk    = $this->input->post('complaint_council_id_fk');
+            $complainant_council        = $this->input->post('complainant_council');
+            $complaint_council          = $this->input->post('complaint_council');
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
             $complainant_cnic           = $this->input->post('complainant_cnic');
@@ -672,7 +723,8 @@ class Admin extends CI_Controller {
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
             $attachments                = $this->input->post('attachments');
-            $complainant_id             = $this->input->post('home_district_id');
+            $complainant_district_id_fk  = $this->input->post('home_district_id'); 
+            $district_id_fk             = $this->input->post('district_id_fk');
             //print_r($_FILES); exit; 
            //print_r($this->input->post('attachments')); exit;
             // complaintant checking
@@ -689,7 +741,7 @@ class Admin extends CI_Controller {
             {
                 $inert_complainant_array   = array(
                                                     'user_id_fk'                 => 0,
-                                                    'complainant_council_id_fk'  => $complainant_council_id_fk,
+                                                    'complainant_council'        => $complainant_council,
                                                     'complainant_name'           => $complainant_name,
                                                     'complainant_guardian_name'  => $complainant_guardian_name,
                                                     'complainant_contact'        => $complainant_contact,
@@ -697,24 +749,26 @@ class Admin extends CI_Controller {
                                                     'complainant_gender'         => $complainant_gender,
                                                     'complainant_email'          => $complainant_email,
                                                     'complainant_address'        => $complainant_address,
-                                                    'complainant_status'         => 1
+                                                    'complainant_status'         => 1,
+                                                    'district_id_fk'              => $complainant_district_id_fk
                                                 ); 
-
+                // print_r($inert_complainant_array); exit;
                 $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
             }
             
-            $inert_it_array   = array(
+            $insert_complaint_array   = array(
                                         'registered_by_user'        => $registered_by_user,
                                         'complainant_id_fk'         => $complainant_id,
                                         'complaint_category_id_fk'  => $complaint_category_id,
-                                        'complaint_council_id_fk'   => $complaint_council_id_fk,
+                                        'complaint_council'         => $complaint_council,
                                         'complaint_detail'          => $complaint_detail,
                                         'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
-                                        'complaint_source'          => 'admin'
+                                        'complaint_source'          => 'admin',
+                                        'district_id_fk'            => $district_id_fk
                                     );
-
+               // print_r($insert_complaint_array); exit;
                 $this->load->model('ComplaintModel');
-                $response = $this->ComplaintModel->complaint_add($inert_it_array); 
+                $response = $this->ComplaintModel->complaint_add($insert_complaint_array); 
 
                 // print_r($response); exit;
                 // $response_message =  $response['response_msg'];
