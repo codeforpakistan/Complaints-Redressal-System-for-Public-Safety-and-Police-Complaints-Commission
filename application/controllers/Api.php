@@ -83,6 +83,44 @@ class Api extends CI_Controller {
         echo json_encode($return_arr);
         exit();
 	}
+	
+	
+	public function format_response_2($response_type,$response_msg,$data_arr)
+	{
+	    $return_arr = [];
+	    
+	    switch($response_type)
+	    {
+	        case 'success':
+	            $return_arr['response'] = 1;
+	            $return_arr['response_msg'] = $response_msg;
+	            
+	            if(count($data_arr) != 0)
+	            {
+	                foreach($data_arr as $key => $key_data)
+	                {
+	                    $return_arr[$key] = $key_data;
+	                }
+	            }
+	            
+	        break;
+	        
+	        case 'error':
+	            $return_arr['response'] = 0;
+	            $return_arr['response_msg'] = $response_msg;
+	            
+	            if(count($data_arr) != 0)
+	            {
+	                array_push($return_arr,$data_arr);
+	            }
+	             
+	        break;
+	    }
+	    
+	    header('Content-Type: application/json');
+        echo json_encode($return_arr);
+        exit();
+	}
     
     //==========================================================================
     // Auth
@@ -231,7 +269,7 @@ class Api extends CI_Controller {
                                       'complainant_cnic'           => 0,
                                       'complainant_gender'         => 0,
                                       'complainant_email'          => 0,
-                                      'complainant_council_id_fk'  => 0,
+                                      'complainant_district_id_fk' => 0,
                                       'complainant_address'        => 0,
                                       'complainant_status'         => 1
                                       );
@@ -288,7 +326,7 @@ class Api extends CI_Controller {
         // 2. pass only those columns to function which are sent by android 
         //======================================================================
         
-        $allowed_columns = array('complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_council_id_fk','complainant_address');
+        $allowed_columns = array('complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_district_id_fk','complainant_address');
         
         foreach($allowed_columns as $key=>$value)
         {
@@ -400,7 +438,7 @@ class Api extends CI_Controller {
         }
         else
         {
-            $this->format_response('success','Districts Fetched Successfully',array('districts'=>$data));
+            $this->format_response_2('success','Districts Fetched Successfully',array('districts'=>$data));
         }
     }
     
@@ -408,88 +446,88 @@ class Api extends CI_Controller {
     // Get District-Councils
     //==========================================================================
     
-    public function district_councils_get()
-    {
-        $this->check_session();  
+    // public function district_councils_get()
+    // {
+    //     $this->check_session();  
         
-        //======================================================================
-        // joins
-        //======================================================================
+    //     //======================================================================
+    //     // joins
+    //     //======================================================================
         
-        $join_arr = [];
-        array_push($join_arr,array('j_table'=>'districts','t_table'=>'district_councils','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
+    //     $join_arr = [];
+    //     array_push($join_arr,array('j_table'=>'districts','t_table'=>'district_councils','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
         
-        //======================================================================
-        // cond
-        //======================================================================
+    //     //======================================================================
+    //     // cond
+    //     //======================================================================
         
-        $cond_arr = array('cond'=>[],'search'=>[]);
+    //     $cond_arr = array('cond'=>[],'search'=>[]);
         
-        if($this->input->post('district_id_fk'))
-        {
-            $district_id_fk = $this->input->post('district_id_fk');
-            $cond_arr['cond']['district_id_fk'] = array($district_id_fk,'E');
-        }
+    //     if($this->input->post('district_id_fk'))
+    //     {
+    //         $district_id_fk = $this->input->post('district_id_fk');
+    //         $cond_arr['cond']['district_id_fk'] = array($district_id_fk,'E');
+    //     }
         
-        if($this->input->post('district_council_id'))
-        {
-            $district_council_id = $this->input->post('district_council_id');
-            $cond_arr['cond']['district_council_id'] = array($district_council_id,'E');
-        }
+    //     if($this->input->post('district_council_id'))
+    //     {
+    //         $district_council_id = $this->input->post('district_council_id');
+    //         $cond_arr['cond']['district_council_id'] = array($district_council_id,'E');
+    //     }
         
-        if($this->input->post('district_council_status'))
-        {
-            $district_council_status = $this->input->post('district_council_status');
-            $cond_arr['cond']['district_council_status'] = array($district_council_status,'E');
-        }
+    //     if($this->input->post('district_council_status'))
+    //     {
+    //         $district_council_status = $this->input->post('district_council_status');
+    //         $cond_arr['cond']['district_council_status'] = array($district_council_status,'E');
+    //     }
         
-        if($this->input->post('district_council_name'))
-        {
-            $district_council_name = $this->input->post('district_council_name');
-            $cond_arr['search']['district_council_name'] = array($district_council_name,'L','district_councils');
-        }
+    //     if($this->input->post('district_council_name'))
+    //     {
+    //         $district_council_name = $this->input->post('district_council_name');
+    //         $cond_arr['search']['district_council_name'] = array($district_council_name,'L','district_councils');
+    //     }
         
-        //======================================================================
-        // order by
-        //======================================================================
+    //     //======================================================================
+    //     // order by
+    //     //======================================================================
         
-        $order_by_arr = [];
+    //     $order_by_arr = [];
         
-        if($this->input->post('order_by'))
-        {
-            $order_by = $this->input->post('order_by');
-            $order_by_exploded = explode(':',$order_by);
-            $order_by_column = $order_by_exploded[0];
-            $order_by_value = $order_by_exploded[1];
-            $order_by_arr = array('column'=>$order_by_column,'sequence'=>$order_by_value);
-        }
+    //     if($this->input->post('order_by'))
+    //     {
+    //         $order_by = $this->input->post('order_by');
+    //         $order_by_exploded = explode(':',$order_by);
+    //         $order_by_column = $order_by_exploded[0];
+    //         $order_by_value = $order_by_exploded[1];
+    //         $order_by_arr = array('column'=>$order_by_column,'sequence'=>$order_by_value);
+    //     }
         
-        //======================================================================
-        // limit
-        //======================================================================
+    //     //======================================================================
+    //     // limit
+    //     //======================================================================
         
-        $limit = false;
+    //     $limit = false;
         
-        if($this->input->post('limit'))
-        {
-            $limit = $this->input->post('limit');
-        }
+    //     if($this->input->post('limit'))
+    //     {
+    //         $limit = $this->input->post('limit');
+    //     }
         
-        //======================================================================
-        // call function
-        //======================================================================
+    //     //======================================================================
+    //     // call function
+    //     //======================================================================
         
-        $data = $this->DmlModel->get('district_councils', $join_arr, $cond_arr, $order_by_arr, $limit);
+    //     $data = $this->DmlModel->get('district_councils', $join_arr, $cond_arr, $order_by_arr, $limit);
         
-        if(count($data) == 0)
-        {
-            $this->format_response('error','No district-councils found',[]);
-        }
-        else
-        {
-            $this->format_response('success','District-Councils Fetched Successfully',array('district_councils'=>$data));
-        }
-    }
+    //     if(count($data) == 0)
+    //     {
+    //         $this->format_response('error','No district-councils found',[]);
+    //     }
+    //     else
+    //     {
+    //         $this->format_response_2('success','District-Councils Fetched Successfully',array('district_councils'=>$data));
+    //     }
+    // }
     
     //==========================================================================
     // Get Complaint categories
@@ -567,7 +605,7 @@ class Api extends CI_Controller {
         }
         else
         {
-            $this->format_response('success','Complaint-Categories fetched successfully',array('complaint_categories'=>$data));
+            $this->format_response_2('success','Complaint-Categories fetched successfully',array('complaint_categories'=>$data));
         }
     }
     
@@ -617,12 +655,12 @@ class Api extends CI_Controller {
         
         if(trim($data_arr['complaint_category_id_fk']) == '' || trim($data_arr['complaint_category_id_fk']) == '0')
         {
-            $this->format_response('error','Complaint-Category Required',[]);
+            $this->format_response('error','complaint_category_id_fk is required',[]);
         }
         
         if(trim($data_arr['complaint_detail']) == '')
         {
-            $this->format_response('error','Complaint-Detail Required',[]);
+            $this->format_response('error','complaint_detail is required',[]);
         }
         
         //======================================================================
@@ -669,10 +707,10 @@ class Api extends CI_Controller {
             $cond_arr['complaint_category_id_fk'] = $complaint_category_id_fk;
         }
         
-        if($this->input->post('complaint_council_id_fk'))
+        if($this->input->post('district_id_fk'))
         {
-            $complaint_council_id_fk = $this->input->post('complaint_council_id_fk');
-            $cond_arr['complaint_council_id_fk'] = $complaint_council_id_fk;
+            $district_id_fk = $this->input->post('district_id_fk');
+            $cond_arr['district_id_fk'] = $district_id_fk;
         }
         
         //======================================================================
@@ -685,7 +723,7 @@ class Api extends CI_Controller {
         }
         else
         {
-            $this->format_response('success','Complaints Fetched Successfully',array('complaints'=>$complaint_data));
+            $this->format_response_2('success','Complaints Fetched Successfully',array('complaints'=>$complaint_data));
         }
     }
     
