@@ -34,6 +34,7 @@
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
+                            <th>District Id</th>
                             <th>District Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -43,6 +44,7 @@
                             <tbody>
                             <?php foreach($districts as $onByOne):?>
                                 <tr>
+                                    <td><?= $onByOne->district_id?></td>
                                     <td><?= $onByOne->district_name?></td>
                                     <td><?= ($onByOne->district_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
