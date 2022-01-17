@@ -42,7 +42,8 @@ $("#table-2").dataTable({
 });
 $('#save-stage').DataTable({
   "scrollX": true,
-  stateSave: true
+  stateSave: true,
+  "ordering": false
 });
 $('#tableExport').DataTable({
   dom: 'Bfrtip',

@@ -31,7 +31,7 @@
                             </div>
                     <!-- end of messages  --->
                     <div class="table-responsive">
-                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
+                      <table class="table table-striped table-hover myTable1" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
                             <th>District Name</th>
@@ -134,15 +134,16 @@
             </div>
         </div>
       <script>
-          function districts_update(district_id)		{
-			$.ajax({
-				url: 'admin/districts_edit_model/'+district_id,
-				dataType: 'json',
-				success: function(response){ 
-					$('#edit_district_name').val(response.district_name);
-          $('#edit_district_id').val(response.district_id); 
-          $('#edit_district_status option[value="' + response.district_status + '"]').prop('selected', true);
-				}
-			});
-		}
+        
+            function districts_update(district_id)		{
+              $.ajax({
+                url: 'admin/districts_edit_model/'+district_id,
+                dataType: 'json',
+                success: function(response){ 
+                  $('#edit_district_name').val(response.district_name);
+                  $('#edit_district_id').val(response.district_id); 
+                  $('#edit_district_status option[value="' + response.district_status + '"]').prop('selected', true);
+                }
+              });
+            }
       </script>

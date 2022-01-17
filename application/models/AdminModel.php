@@ -38,9 +38,16 @@ class AdminModel extends CI_Model
     {
         return $this->db->insert($table_name,$inert_array);
     }
-    function get_all_records($table_name)
+    function get_all_records($table_name,$order_by = NULL,$order = NULL) // order_by and order is optional
     {
+
+        if(!is_null($order_by) && !is_null($order) )
+        { 
+            $this->db->order_by($order_by,$order); 
+        }
         return $this->db->get($table_name)->result();
+    //  echo $this->db->last_query(); exit;
+        
     }
     function countUsersByRoleId($user_role_id_fk)
     {
@@ -81,7 +88,6 @@ class AdminModel extends CI_Model
     }
     public function getComplainant($complainant_cnic)
     {
-      //return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->get('complainants')->row();
       return $this->db->select('complainant_id')->where('complainant_cnic',$complainant_cnic)->where('complainant_status',1)->get('complainants')->row();
     }
     function insert_with_last_insert_id($table_name,$array)

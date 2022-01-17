@@ -67,7 +67,6 @@ class Admin extends CI_Controller {
                         'img_height'    => '41',
                         'word_length'   => 6,
                         // 'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
-                        // 'pool'          => 1234567890,
                         'font_size'     => 20
                     ); 
             $captcha = create_captcha($config);
@@ -91,7 +90,6 @@ class Admin extends CI_Controller {
             'img_height'    => '41',
             'word_length'   => 6,
             // 'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
-            // 'pool'          => 1234567890,
             'font_size'     => 20
         );
         $captcha = create_captcha($config);
@@ -140,24 +138,6 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
                 $this->session->set_userdata('user_role_name',$response->user_role_name);
                 redirect('/admin/dashboard'); exit();
-				/*	if($response->user_role_id_fk == '1')
-					{	
-                        					
-					    redirect('/admin/dashboard'); exit();
-					}
-					
-					elseif($response->user_role_id_fk == '2')
-					{	
-						echo "IT Staff"; exit();
-					}
-                    elseif($response->user_role_id_fk == '3')
-					{	
-						echo "District Admin"; exit();
-					}
-                    elseif($response->user_role_id_fk == '4')
-					{	
-						echo "Complainant"; exit();
-					} */
 				} // end is user name and passsword valid
                 else // not match ue name and pass
 	             {
@@ -248,11 +228,6 @@ class Admin extends CI_Controller {
     //==========================================================================
     // view user
     //==========================================================================
-
-    // function check_privileges($page_name)
-    // {
-    //     $user_role_id = 1; // get active user's ROLE
-    // }
 
     function users()
     { 
@@ -426,7 +401,9 @@ class Admin extends CI_Controller {
     {   
         $this->check_role_privileges('districts',$this->session->userdata('user_role_id_fk'));
         $table_name = 'districts';
-        $data['districts'] = $this->model->get_all_records($table_name);
+        $order_by = 'district_id';
+        $order    = 'DESC';
+        $data['districts'] = $this->model->get_all_records($table_name,$order_by,$order);
         $data['title']    = 'Districts';
         $data['page']     = 'districts';
         $this->load->view('template',$data);
@@ -706,8 +683,6 @@ class Admin extends CI_Controller {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
             echo $message;
-            // $this->messages('alert-danger',$message);
-            // return redirect('admin/complaint_register');
             
         }
         else
@@ -727,12 +702,9 @@ class Admin extends CI_Controller {
             $attachments                = $this->input->post('attachments');
             $complainant_district_id_fk  = $this->input->post('home_district_id'); 
             $district_id_fk             = $this->input->post('district_id_fk');
-            //print_r($_FILES); exit; 
-           //print_r($this->input->post('attachments')); exit;
+            
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
-            //echo 'from admin: '.$registered_by_user;
-           // exit();
             
             $complainant_response = $this->model->getComplainant($complainant_cnic);
             if(is_object($complainant_response))  
@@ -754,7 +726,6 @@ class Admin extends CI_Controller {
                                                     'complainant_status'         => 1,
                                                     'district_id_fk'              => $complainant_district_id_fk
                                                 ); 
-               // print_r($inert_complainant_array); exit;
                 $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
             }
             
@@ -768,25 +739,9 @@ class Admin extends CI_Controller {
                                         'complaint_source'          => 'admin',
                                         'district_id_fk'            => $district_id_fk
                                     );
-               // print_r($insert_complaint_array); exit;
                 $this->load->model('ComplaintModel');
                 $response = $this->ComplaintModel->complaint_add($insert_complaint_array); 
-
-                // print_r($response); exit;
-                // $response_message =  $response['response_msg'];
-                // $response_status  = $response['response'];
                 echo $response['response_msg']; exit;
-                    // if($response_status == 0)
-                    // {
-                    //     $this->messages('alert-danger',$response_message);
-                    //     return redirect('admin/complaints'); 
-                    // }
-                    // else
-                    // {
-                    //     $this->messages('alert-success',$response_message);
-                    //     return redirect('admin/complaints');
-                           
-                    // }
         }
     }
     
@@ -1052,9 +1007,8 @@ class Admin extends CI_Controller {
         $data['page']     = 'district_reports';
         $this->load->view('template',$data);
     }
-    public function exportIntoExcel() {
-		// create file name
-			//$fileName = 'data-'.time().'.xlsx';  
+    public function exportIntoExcel() 
+    {
 		// load excel library
 			$this->load->library('excel');
 			$uri_segment = 3;
@@ -1067,7 +1021,6 @@ class Admin extends CI_Controller {
 			}
 			
 		    $offset      = $this->uri->segment($uri_segment);
-			// $empInfo = $this->attendance->getAttendanceList($displayLimit,$offset);
             $empInfo    = $this->complaint->get_complaints($displayLimit,$offset); 
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->setActiveSheetIndex(0);
