@@ -46,7 +46,6 @@ class AdminModel extends CI_Model
             $this->db->order_by($order_by,$order); 
         }
         return $this->db->get($table_name)->result();
-    //  echo $this->db->last_query(); exit;
         
     }
     function countUsersByRoleId($user_role_id_fk)
@@ -84,6 +83,7 @@ class AdminModel extends CI_Model
                         ->where('user_role_id_fk !=',4)
                         ->join('districts d','d.district_id=users.user_district_id_fk','left')
                         ->join('user_roles r','r.user_role_id=users.user_role_id_fk','left')
+                        ->order_by('user_id','desc')
                          ->get()->result();
     }
     public function getComplainant($complainant_cnic)

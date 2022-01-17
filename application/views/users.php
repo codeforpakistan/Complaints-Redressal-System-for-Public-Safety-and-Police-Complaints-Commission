@@ -31,7 +31,7 @@
                             </div>
                     <!-- end of messages  --->
                     <div class="table-responsive">
-                      <table class="table table-striped table-hover" id="table-1" style="width:100%;">
+                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
                             <th>Staff Name</th>

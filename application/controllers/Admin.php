@@ -527,7 +527,9 @@ class Admin extends CI_Controller {
         $this->check_role_privileges('complaint_categories',$this->session->userdata('user_role_id_fk'));
 
         $table_name = 'complaint_categories';
-        $data['complaint_categories'] = $this->model->get_all_records($table_name);
+        $order_by = 'complaint_category_id';
+        $order    = 'DESC';
+        $data['complaint_categories'] = $this->model->get_all_records($table_name,$order_by,$order);
         $data['title']    = 'Complaint Categories';
         $data['page']     = 'complaint_categories';
         $this->load->view('template',$data);
