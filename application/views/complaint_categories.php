@@ -34,6 +34,7 @@
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
+                            <th>Complaint Category Id</th>
                             <th>Complaint Category Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -43,6 +44,7 @@
                             <tbody>
                             <?php foreach($complaint_categories as $onByOne):?>
                                 <tr>
+                                    <td><?= $onByOne->complaint_category_id?></td>
                                     <td><?= $onByOne->complaint_category_name?></td>
                                     <td><?= ($onByOne->complaint_category_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
