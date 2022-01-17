@@ -85,7 +85,7 @@
 											<th>District</th>
 											<th>Source</th>
 											<th>Status </th>
-											<th>Actions</th>
+											<th>Actions</th> 
 										</tr>
 									</thead>
 									<tbody>
