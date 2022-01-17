@@ -6,7 +6,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Complaint List</h4>
+                    <h4>Complaints</h4>
                   </div>
                   <div class="card-body">
                   <a type="button" class="btn btn-primary pull-right fa fa-plus" href="admin/complaint_register" style="margin-top:-5%;"> Register New Complaint</a>
@@ -32,8 +32,8 @@
                     <!-- end of messages  --->
                        <!-- :::::::::::::::::::::::::::::::::::: list of complaint start :::: -->
 								<form id="reset_form" method="post" action="admin/complaints"> 
-										<div class="row">
-											<div class="col-md-2" style="padding:0">
+										<div class="row" style="padding-left:15px;">
+											<div class="col-md-2" style="padding-left:0px;">
 												<label>District</label>
 												<select class="form-control select2" name="district_id" id="district_id">
 													<option disabled value="" selected hidden>Please Select</option>
@@ -42,7 +42,7 @@
 													<?php } }?>
 												</select>
 											</div>
-											<div class="col-md-2" style="padding:0">
+											<div class="col-md-2" style="padding-left:0px;">
 												<label>Status</label>
 												<select class="form-control select2" name="complaint_status_id" id="complaint_status_id">
 													<option disabled value="" selected hidden>Please Select</option>
@@ -51,15 +51,15 @@
 													<?php } }?>
 												</select>
 											</div>
-											<div class="col-md-2" style="padding:0">
+											<div class="col-md-2" style="padding-left:0px;">
 												<label>From</label>
 												<input type="date" name="from_date" class="form-control" value="<?= $from_date ?>" />
 											</div>
-											<div class="col-md-2" style="padding:0">
+											<div class="col-md-2" style="padding-left:0px;">
 												<label>To</label>
 												<input type="date" name="to_date" class="form-control" value="<?= $to_date ?>" />
 											</div>
-											<div class="col-md-2" style="padding:0">
+											<div class="col-md-2" style="padding-left:0px;">
 												<label>Source</label>
 												<select class="form-control" name="complaint_source" id="complaint_source">
 													<option value="All" <?= ($complaint_source == "All")? 'selected': '' ?> >ALL</option>
@@ -67,10 +67,10 @@
 													<option value="complainant" <?= ($complaint_source == "complainant")? 'selected': '' ?> >Complainant</option>
 												</select>
 											</div>
-											<div class="col-md-1" style="padding:0">
+											<div class="col-md-1" style="padding-left:0px;">
 												<button type="submit" class="btn btn-success form-control" style="margin-top: 33%;"><i class="fa fa-search" aria-hidden="true"></i></button> 
 											</div>
-											<div class="col-md-1" style="padding:0"> 
+											<div class="col-md-1" style="padding-left:0px;"> 
 											    <button type="button" onclick="reset_form()" class="btn btn-primary form-control" style="margin-top: 33%;"><i class="fas fa-sync"></i></button>
 											</div>
 									</div>
