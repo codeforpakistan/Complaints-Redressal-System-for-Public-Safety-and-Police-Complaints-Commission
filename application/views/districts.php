@@ -31,7 +31,7 @@
                             </div>
                     <!-- end of messages  --->
                     <div class="table-responsive">
-                      <table class="table table-striped table-hover myTable1" id="save-stage" style="width:100%;">
+                      <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
                             <th>District Name</th>
@@ -80,7 +80,7 @@
                             <div class="form-group">
                             <label>District Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="District Name" name="district_name" id="edit_district_name" required >
+                                <input type="text" class="form-control" placeholder="District Name" name="district_name" id="edit_district_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30" >
                             </div>
                             </div>
                             <div class="form-group">
@@ -120,7 +120,7 @@
                                 <div class="form-group">
                                 <label>District Name</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="district name" name="district_name" required>
+                                    <input type="text" class="form-control" placeholder="district name" name="district_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30">
                                 </div>
                                 </div>
                                 <div class="row">

@@ -80,7 +80,7 @@
                             <div class="form-group">
                             <label>Complaint Category Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" required id="edit_complaint_category_name">
+                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" id="edit_complaint_category_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="60">
                             </div>
                             </div>
                             <div class="form-group">
@@ -120,7 +120,7 @@
                             <div class="form-group">
                             <label>Complaint Category Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" required>
+                                <input type="text" class="form-control" placeholder="Complaint Category Name" name="complaint_category_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="60">
                             </div>
                             </div>
                             <div class="row">

@@ -104,7 +104,7 @@
                                 <div class="form-group">
                                   <label>Username</label>
                                   <div class="input-group">
-                                      <input type="text" class="form-control" placeholder="Username" id="edit_user_name" name="user_name" required>
+                                      <input type="text" class="form-control" placeholder="Username" id="edit_user_name" name="user_name" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" required maxlength="30">
                                   </div>
                                 </div>
                                 <div class="form-group">
@@ -169,7 +169,7 @@
                                 <div class="form-group">
                                   <label>Username</label>
                                   <div class="input-group">
-                                      <input type="text" class="form-control" placeholder="Username" name="user_name" required>
+                                      <input type="text" class="form-control" placeholder="Username" name="user_name" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" required maxlength="30">
                                   </div>
                                 </div>
                                 <div class="form-group">
