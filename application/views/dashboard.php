@@ -124,7 +124,7 @@
                       </div>
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" style="padding-top:25px;">
                         <div class="card-content">
-                          <h5 class="font-15">Rejected Complaints :  <?= ($reject != '') ? $reject : '0' ?></h5>
+                          <h5 class="font-15">Irrelevant Complaints :  <?= ($reject != '') ? $reject : '0' ?></h5>
                         </div>
                       </div>
                     </div>
