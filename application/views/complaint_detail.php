@@ -203,7 +203,7 @@
                         <!------ ::::::::::::::::::::::::: start Stats and respondant replay form --- :::::::::::::::::::::::::::-->
                         <div class="row col-12 bg-success text-white pt-2">
                             <div class="col-10">
-                              <h2>Change Status / Respondant Reply</h2>  
+                              <h3>Change Status / Respondent Reply</h3>  
                             </div>
                              <div class="col-2">
                                  <button class="show_hide_form btn btn-primary pull-right">Add</button>

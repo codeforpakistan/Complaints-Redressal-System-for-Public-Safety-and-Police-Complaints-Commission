@@ -32,7 +32,7 @@
                     <!-- end of messages  --->
                     <div class="table-responsive">
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
-                        <thead class="">
+                        <thead class="bg-success">
                           <tr>
                             <th>User Id</th>
                             <th>User Name</th>
