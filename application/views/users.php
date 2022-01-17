@@ -34,7 +34,8 @@
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
-                            <th>Staff Name</th>
+                            <th>User Id</th>
+                            <th>User Name</th>
                             <th>District</th>
                             <th>Role</th>
                             <th>Status</th>
@@ -45,6 +46,7 @@
                             <tbody>
                             <?php foreach($users as $onByOne):?>
                                 <tr>
+                                    <td><?= $onByOne->user_id?></td>
                                     <td><?= $onByOne->user_name?></td>
                                     <td><?= $onByOne->district_name?></td>
                                     <td><?= $onByOne->user_role_name?></td>
