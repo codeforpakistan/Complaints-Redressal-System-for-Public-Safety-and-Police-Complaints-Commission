@@ -98,7 +98,7 @@
 												<td><?= $oneByOne['complaint_source']?></td>
 												<td><?= $oneByOne['complaint_status_title']?></td>
 												<td>
-													<a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detailed
+													<a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detail
 													</a>
 												</td>
 												</tr>
