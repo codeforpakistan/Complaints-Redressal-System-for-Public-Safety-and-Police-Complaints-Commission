@@ -65,9 +65,10 @@ class Admin extends CI_Controller {
                         'img_url'       => base_url().'captcha_images/',
                         'img_width'     => '156',
                         'img_height'    => '41',
-                        'word_length'   => 8,
-                        'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
-                        'font_size'     => 16
+                        'word_length'   => 6,
+                        // 'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
+                        // 'pool'          => 1234567890,
+                        'font_size'     => 20
                     ); 
             $captcha = create_captcha($config);
 
@@ -88,9 +89,10 @@ class Admin extends CI_Controller {
             'img_url'       => base_url().'captcha_images/',
             'img_width'     => '156',
             'img_height'    => '41',
-            'word_length'   => 8,
-            'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
-            'font_size'     => 16
+            'word_length'   => 6,
+            // 'pool'          => abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,
+            // 'pool'          => 1234567890,
+            'font_size'     => 20
         );
         $captcha = create_captcha($config);
         
@@ -714,7 +716,7 @@ class Admin extends CI_Controller {
             $complainant_name           = $this->input->post('complainant_name');
             $complainant_contact        = $this->input->post('complainant_contact');
             $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
-            $complainant_council        = $this->input->post('complainant_council');
+            $complainant_council        = $this->input->post('complainant_council'); 
             $complaint_council          = $this->input->post('complaint_council');
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
@@ -752,7 +754,7 @@ class Admin extends CI_Controller {
                                                     'complainant_status'         => 1,
                                                     'district_id_fk'              => $complainant_district_id_fk
                                                 ); 
-                // print_r($inert_complainant_array); exit;
+               // print_r($inert_complainant_array); exit;
                 $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
             }
             
@@ -807,12 +809,6 @@ class Admin extends CI_Controller {
         $table_status_column_value2    = 1;
         $data['complaint_categories'] = $this->model->status_active_record($table_name2,$table_status_column_name2,$table_status_column_value2);
         
-        // get active district_councils 
-        $table_name3                   = 'district_councils';
-        $table_status_column_name3    = 'district_council_status';
-        $table_status_column_value3    = 1;
-        $data['district_councils'] = $this->model->status_active_record($table_name3,$table_status_column_name3,$table_status_column_value3);
-
         // get active police_stations 
         $table_name4                   = 'police_stations';
         $table_status_column_name4     = 'police_station_status';
@@ -829,7 +825,7 @@ class Admin extends CI_Controller {
         $data = array();
         $displayLimit = "10";
 
-        $district_council_id = "";
+        $district_id = "";
         $complaint_status_id = "";
         $from_date           = "";
         $to_date             = "";
@@ -839,9 +835,9 @@ class Admin extends CI_Controller {
         {
             $displayLimit = $this->session->userdata('displayLimit');
         }
-        if($this->session->userdata('district_council_id'))
+        if($this->session->userdata('district_id'))
         {
-            $district_council_id = $this->session->userdata('district_council_id');
+            $district_id = $this->session->userdata('district_id');
         }
         if($this->session->userdata('complaint_status_id'))
         {
@@ -864,8 +860,8 @@ class Admin extends CI_Controller {
         if($this->input->post())
         {
 
-            $district_council_id = $this->input->post('district_council_id');
-            $this->session->set_userdata('district_council_id',$district_council_id);
+            $district_id = $this->input->post('district_id');
+            $this->session->set_userdata('district_id',$district_id);
 
             $complaint_status_id = $this->input->post('complaint_status_id');
             $this->session->set_userdata('complaint_status_id',$complaint_status_id);
@@ -882,7 +878,7 @@ class Admin extends CI_Controller {
 
         // $data['district']=$district;
         $data['displayLimit']        = $displayLimit;
-        $data['district_council_id'] = $district_council_id;
+        $data['district_id']         = $district_id;
         $data['complaint_status_id'] = $complaint_status_id;
         $data['from_date']           = $from_date;
         $data['to_date']             = $to_date;
@@ -926,19 +922,17 @@ class Admin extends CI_Controller {
         $table_status_column_name   = 'status';
         $table_status_column_value  = 1;
         $data['complaint_statuses'] = $this->model->status_active_record($table_name,$table_status_column_name,$table_status_column_value);
-        // union councils
-        $table_name3                  = 'district_councils';
-        $table_status_column_name3    = 'district_council_status';
+        // Districts
+        $table_name3                  = 'districts';
+        $table_status_column_name3    = 'district_status';
         $table_status_column_value3   = 1;
-        $data['district_councils'] = $this->model->status_active_record($table_name3,$table_status_column_name3,$table_status_column_value3);
+        $data['districts'] = $this->model->status_active_record($table_name3,$table_status_column_name3,$table_status_column_value3);
     
             
         $this->load->view('template/common_header');
         $this->load->view('template/navigation');   
         $this->load->view('complaints',$data);
         $this->load->view('template/common_footer');
-        
-       // $this->load->view('template',$data);
 
     }
     function complaint_detail($complaint_id)
@@ -960,14 +954,10 @@ class Admin extends CI_Controller {
         $table_status_column_value  = 1;
         $data['district']           = $this->model->status_active_record($table_name,$table_status_column_name,$table_status_column_value);
 
-        // get active district_councils 
-        $table_name3                   = 'district_councils';
-        $table_status_column_name3    = 'district_council_status';
-        $table_status_column_value3    = 1;
-        $data['district_councils'] = $this->model->status_active_record($table_name3,$table_status_column_name3,$table_status_column_value3);
         
         $this->load->view('template',$data);
     }
+   
     function insert_comploaint_remarks()
     {
         $this->form_validation->set_rules('complaint_status_id_fk', 'Complainant Status', 'required|trim');
@@ -1049,11 +1039,69 @@ class Admin extends CI_Controller {
        
     }
 
-    function get_home_district_union_ajax($district_id_fk)
+    function get_police_station_ajax($district_id_fk)
     {
-     echo json_encode($this->model->get_by_id('district_councils','district_id_fk',$district_id_fk));
-     
+     echo json_encode($this->model->get_by_id('police_stations','district_id_fk',$district_id_fk));
     }
+
+    function district_reports()
+    { 
+        $this->check_role_privileges('district_reports',$this->session->userdata('user_role_id_fk'));
+        $data['district_reports'] = $this->complaint->district_reports();
+        $data['title']    = 'District Reports';
+        $data['page']     = 'district_reports';
+        $this->load->view('template',$data);
+    }
+    public function exportIntoExcel() {
+		// create file name
+			//$fileName = 'data-'.time().'.xlsx';  
+		// load excel library
+			$this->load->library('excel');
+			$uri_segment = 3;
+			$displayLimit = "10";
+		
+		
+			if($this->session->userdata('displayLimit'))
+			{
+				$displayLimit = $this->session->userdata('displayLimit');
+			}
+			
+		    $offset      = $this->uri->segment($uri_segment);
+			// $empInfo = $this->attendance->getAttendanceList($displayLimit,$offset);
+            $empInfo    = $this->complaint->get_complaints($displayLimit,$offset); 
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel->setActiveSheetIndex(0);
+			// set Header
+			$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Complaint Date');
+			$objPHPExcel->getActiveSheet()->SetCellValue('B1', 'Citizen Name');
+			$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Against District');
+			$objPHPExcel->getActiveSheet()->SetCellValue('D1', 'Source');
+			$objPHPExcel->getActiveSheet()->SetCellValue('E1', 'Status'); 
+			$objPHPExcel->getActiveSheet()->SetCellValue('F1', 'Complaint Category'); 
+            $objPHPExcel->getActiveSheet()->SetCellValue('G1', 'Complaint Council');
+			// set Row
+			$rowCount = 2;
+			foreach ($empInfo as $att) 
+			{
+				$objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $att['complaint_entry_timestamp']);
+				$objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $att['complainant_name']);
+				$objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $att['district_name']);
+				$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $att['complaint_source']);
+				$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $att['complaint_status_title']);
+				$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $att['complaint_category_name']); 
+                $objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, $att['complaint_council']);
+				$rowCount++;
+			}
+			
+			$filename = "complaint". date("m-d-Y-H-i-s").".CSV";
+			header('Content-Type: application/vnd.ms-excel'); 
+			header('Content-Disposition: attachment;filename="'.$filename.'"');
+			header('Cache-Control: max-age=0'); 
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV');  
+			$objWriter->save('php://output');       
+		}
+
+   
 
 }
 

@@ -34,11 +34,11 @@
 								<form id="reset_form" method="post" action="admin/complaints"> 
 										<div class="row">
 											<div class="col-md-2" style="padding:0">
-												<label>Union Council</label>
-												<select class="form-control select2" name="district_council_id" id="district_council_id">
+												<label>District</label>
+												<select class="form-control select2" name="district_id" id="district_id">
 													<option disabled value="" selected hidden>Please Select</option>
-													<?php if($district_councils){ foreach($district_councils as $dist){?>
-													<option value="<?= $dist->district_council_id?>" <?= ($district_council_id == $dist->district_council_id)? 'selected': '' ?> ><?= $dist->district_council_name?></option>
+													<?php if($districts){ foreach($districts as $dist){?>
+													<option value="<?= $dist->district_id?>" <?= ($district_id == $dist->district_id)? 'selected': '' ?> ><?= $dist->district_name?></option>
 													<?php } }?>
 												</select>
 											</div>
@@ -76,35 +76,35 @@
 									</div>
 								</form>
 						<hr>
-							
+						
 							<table id="example2lol" class="table table-striped" >
-								<thead>
-									<tr class="bg-success">
-										<th>Complaint Date</th>
-										<th>Citizen Name</th>
-										<th>District</th>
-                                        <th>Source</th>
-										<th>Status </th>
-										<th>Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-        								<?php if(!empty($complaints)) { foreach($complaints as $oneByOne){  ?>             
-								
-					                        <tr>
-											  <td><?= $oneByOne['complaint_entry_timestamp']?></td>
-					                          <td><?= $oneByOne['complainant_name']?></td> 
-					                          <td><?= $oneByOne['district_name']?></td> 
-					                          <td><?= $oneByOne['complaint_source']?></td>
-					                          <td><?= $oneByOne['complaint_status_title']?></td>
-					                          <td>
-					                              <a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detailed
-					                              </a>
-					                          </td>
-					                        </tr>
-								    <?php } } else{?>
-								
-								</tbody>
+									<thead>
+										<tr class="bg-success">
+											<th>Complaint Date</th>
+											<th>Citizen Name</th>
+											<th>District</th>
+											<th>Source</th>
+											<th>Status </th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+											<?php if(!empty($complaints)) { foreach($complaints as $oneByOne){  ?>             
+									
+												<tr>
+												<td><?= $oneByOne['complaint_entry_timestamp']?></td>
+												<td><?= $oneByOne['complainant_name']?></td> 
+												<td><?= $oneByOne['district_name']?></td> 
+												<td><?= $oneByOne['complaint_source']?></td>
+												<td><?= $oneByOne['complaint_status_title']?></td>
+												<td>
+													<a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detailed
+													</a>
+												</td>
+												</tr>
+										<?php } } else{?>
+									
+									</tbody>
 									<tfoot>
 										<tr>
 											<td colspan="5" class="text-center">No Record Found</td>
@@ -115,6 +115,7 @@
 								<div class="row show pagination here">
 									<div class="col-md-12">
 									   <?= $pagination; ?>
+									   <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right" style="margin-top: -48px;" ><i class="fas fa-cloud-download-alt"></i> Export</a>
 									</div>
 								</div>
               			
@@ -132,7 +133,7 @@
       	function reset_form()
       	{
       	    document.getElementById("reset_form").reset();
-      		$('#district_council_id').val("");
+      		$('#district_id').val("");
       		$('#complaint_status_id').val("");
       		$('#complaint_source').val("");
       		document.getElementById("reset_form").submit();

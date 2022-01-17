@@ -80,7 +80,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label class="test">Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -89,7 +89,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Father/Husband Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="30"  onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -102,6 +102,7 @@ Dropzone.autoDiscover = false;
                                                     <option disabled value="" selected hidden>Select Gender</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
+                                                    <option value="Custom">Custom</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -111,7 +112,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>CNIC <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required >
+                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required minlength="15" maxlength="15">
                                             </div>
                                         </div>
                                     </div> 
@@ -126,7 +127,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Contact No <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12">
+                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12">
                                             </div>
                                         </div>
                                     </div> 
@@ -144,12 +145,11 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Home District <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                            <!-- <input type="text" class="form-control"  name="home_district" id="home_district" required  maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');"> -->
                                                 <select class="form-control select2 home_district_id" id="home_district_id" name="home_district_id" style="width:100%" required>
-                                                <option disabled value="" selected hidden>Please Select District</option>
-                                                    <?php if($district){ foreach($district as $dist){?>
-                                                <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
-                                                    <?php } }?>
+                                                    <option disabled value="" selected hidden>Please Select District</option>
+                                                        <?php if($district){ foreach($district as $dist){?>
+                                                    <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
+                                                        <?php } }?>
                                             </select>
                                             </div>
                                         </div>
@@ -159,13 +159,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                            <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                                <!-- <select class="form-control select2" id="complainant_council" name="complainant_council" style="width:100%" required>
-                                                    <option disabled value="" selected hidden>Please Select Union-concil</option>
-                                                        <?php if($district_councils){ foreach($district_councils as $union_dist){?>
-                                                    <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
-                                                        <?php } }?>
-                                                </select> -->
+                                              <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -179,7 +173,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Full Address <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -228,13 +222,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                            <input type="text" class="form-control"  name="complaint_council" id="complaint_council" required maxlength="70" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
-                                                <!-- <select class="form-control select2" id="complaint_council_id_fk" name="complaint_council_id_fk" style="width:100%" required>
-                                                    <option disabled value="" selected hidden>Please Select Union-concil</option>
-                                                        <?php if($district_councils){ foreach($district_councils as $union_dist){?>
-                                                    <option value="<?= $union_dist->district_council_id?>"><?= $union_dist->district_council_name?></option>
-                                                        <?php } }?>
-                                                </select> -->
+                                               <input type="text" class="form-control"  name="complaint_council" id="complaint_council" required maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div>
@@ -243,7 +231,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Police Station <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2" id="district_id_fk" name="police_station_id_fk" style="width:100%" required>
+                                                <select class="form-control select2" id="police_station_id_fk" name="police_station_id_fk" style="width:100%" required>
                                                     <option disabled value="" selected hidden>Please Select Police Station</option>
                                                     <?php if($police_stations){ foreach($police_stations as $row){?>
                                                     <option value="<?= $row->police_station_id?>"><?= $row->police_station_name?></option>
@@ -257,7 +245,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Complaint Details <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required></textarea>
+                                                <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" required></textarea>
                                             </div>
                                         </div>
                                     </div> 
@@ -373,24 +361,24 @@ Dropzone.autoDiscover = false;
         // });
     
     // ::::::::::::::::: Selection union againt complaint  
-    // $("#district_id_fk").change(function(district_id_fk)
-    //     {
-    //         var district_id_fk = $(this).val(); 
+    $("#district_id_fk").change(function(district_id_fk)
+        {
+            var district_id_fk = $(this).val(); 
 
-    //         $.ajax({
-    //             url: 'admin/get_home_district_union_ajax/'+district_id_fk,
-    //             dataType: 'json',
-    //             success: function(response)
-    //             { 
-    //                 $('#complaint_council_id_fk').empty();
-    //                 $.each(response, function(key, value) 
-    //                 {
-    //                     $('#complaint_council_id_fk').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
-    //                     $('#complaint_council_id_fk option[value='+value.district_council_id+']').attr('selected','selected'); 
-    //                 });
-    //             }
-    //         });
-    //     });
+            $.ajax({
+                url: 'admin/get_police_station_ajax/'+district_id_fk,
+                dataType: 'json',
+                success: function(response)
+                { 
+                    $('#police_station_id_fk').empty();
+                    $.each(response, function(key, value) 
+                    {
+                        $('#police_station_id_fk').append('<option value="'+ value.police_station_id +'">'+value.police_station_name+'</option>');
+                        $('#police_station_id_fk option[value='+value.police_station_id+']').attr('selected','selected'); 
+                    });
+                }
+            });
+        });
     });
 </script>> 
 

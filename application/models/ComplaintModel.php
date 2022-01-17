@@ -446,7 +446,7 @@ class ComplaintModel extends CI_Model
 
             if(trim($district_id)!="")
             {
-                $this->db->where('complaint_council',$district_id);
+                $this->db->where('complaints.district_id_fk',$district_id);
             }
             if(trim($complaint_status_id)!="")
             {
@@ -461,8 +461,8 @@ class ComplaintModel extends CI_Model
             {
                 if($complaint_source == 'All')
                 {
-                  $this->db->like('complaint_source','admin');
-                  $this->db->like('complaint_source','complainant');
+                  $this->db->or_where('complaint_source','admin');
+                  $this->db->or_where('complaint_source',' complainant');
                 }
                 else
                 {
@@ -474,7 +474,7 @@ class ComplaintModel extends CI_Model
       $this->db->order_by('complaint_id','desc');
      $this->db->limit($limit,$offset);
       $query = $this->db->get(); 
-     // echo $this->db->last_query(); 
+    //  echo $this->db->last_query(); 
 
         if($query->num_rows() > 0) 
         {
@@ -522,7 +522,7 @@ class ComplaintModel extends CI_Model
 
         if(trim($district_id)!="")
             {
-                $this->db->where('district_id_fk',$district_id);
+                $this->db->where('complaints.district_id_fk',$district_id);
             }
             if(trim($complaint_status_id)!="")
             {
@@ -578,7 +578,15 @@ class ComplaintModel extends CI_Model
         $this->db->join('respondents','respondents.respondent_id=complaint_remarks.respondent_id_fk','left');
      return $this->db->get()->result();
     }
-				
+	
+    function district_reports()
+    {
+        $this->db->select('c.complaint_id,count(c.complaint_id) noofcomplaints,d.district_name');
+        $this->db->from('complaints c');
+        $this->db->join('districts d', 'd.district_id=c.district_id_fk','left');
+        $this->db->group_by('district_id_fk');
+        return $this->db->get()->result();
+    }
 }
 
 ?>
