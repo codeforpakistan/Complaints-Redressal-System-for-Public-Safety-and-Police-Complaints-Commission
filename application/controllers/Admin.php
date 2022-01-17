@@ -82,6 +82,7 @@ class Admin extends CI_Controller {
         
     }
     public function refreshCaptcha(){
+
         // Captcha configuration
         $config = array(
             'img_path'      => 'captcha_images/',
@@ -107,7 +108,8 @@ class Admin extends CI_Controller {
        
         $this->form_validation->set_rules('user_name', 'Username', 'required|trim');
         $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
-        $this->form_validation->set_rules('captcha', 'Captcha', 'required|trim');
+        // $this->form_validation->set_rules('captcha', 'Captcha', 'required|trim');
+
         if ($this->form_validation->run() == FALSE)
         {
             $error   = array('error' => validation_errors());
@@ -118,21 +120,23 @@ class Admin extends CI_Controller {
         }
         else
         {
-            $inputCaptcha = $this->input->post('captcha');
-            $sessCaptcha = $this->session->userdata('captchaCode');
-            if($inputCaptcha !== $sessCaptcha)
-            {
-                //echo 'Captcha code matched.';
-                $this->messages('alert-danger','Captcha code does not match, please try again.');
-                return redirect(base_url());
-            }
+            // $inputCaptcha = $this->input->post('captcha');
+            // $sessCaptcha = $this->session->userdata('captchaCode');
+
+            // if($inputCaptcha !== $sessCaptcha)
+            // {
+            //     //echo 'Captcha code matched.';
+            //     $this->messages('alert-danger','Captcha code does not match, please try again.');
+            //     return redirect(base_url());
+            // }
 
             $username = $this->input->post('user_name');
             $password = $this->input->post('user_password');
             $array    = array('user_name'=>$username,'user_password'=>$password,'user_status'=>1);
             $response = $this->AuthModel->user_login($array); 
+            
             if(!empty($response))// is user name and passsword valid
-			   {
+			{
                 $this->session->set_userdata('user_id',$response->user_id);
                 $this->session->set_userdata('user_name',$response->user_name);
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
@@ -480,6 +484,12 @@ class Admin extends CI_Controller {
             else
             {
                 $district_name   = $this->input->post('district_name');
+
+                if(strlen($district_name) > 35)
+                {
+                    $this->messages('alert-danger','District Name should be less than 35 letters');
+                    return redirect('admin/districts');
+                }
 
                 $update_it_array   = array('district_name'=>$district_name,'district_status'=>1);
                 $table_name        = 'districts';
@@ -997,8 +1007,9 @@ class Admin extends CI_Controller {
     }
 
     function get_police_station_ajax($district_id_fk)
-    {
-     echo json_encode($this->model->get_by_id('police_stations','district_id_fk',$district_id_fk));
+    { 
+       $data = json_encode($this->model->get_by_id('police_stations','district_id_fk',$district_id_fk));
+       echo $data;
     }
 
     function district_reports()
