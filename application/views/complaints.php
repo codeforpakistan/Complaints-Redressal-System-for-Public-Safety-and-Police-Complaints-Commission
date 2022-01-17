@@ -6,10 +6,10 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4>Complaints</h4>
+                    <div class="col-md-8" style="padding-left:0px;"><h4>Complaints</h4></div>
+					<div class="col-md-4" style="padding-right:0px;"><a type="button" class="btn btn-primary pull-right fa fa-plus" href="admin/complaint_register"> Register New Complaint</a></div>
                   </div>
                   <div class="card-body">
-                  <a type="button" class="btn btn-primary pull-right fa fa-plus" href="admin/complaint_register" style="margin-top:-5%;"> Register New Complaint</a>
                       <!-- start messages --->
                            <div style="text-align: center">
                                   <?php if($feedback =$this->session->flashdata('feedback')){

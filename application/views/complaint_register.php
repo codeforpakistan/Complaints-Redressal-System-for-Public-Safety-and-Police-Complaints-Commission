@@ -159,7 +159,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                              <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                              <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="30"> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" -->
                                             </div>
                                         </div>
                                     </div> 
@@ -173,7 +173,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Full Address <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');">
+                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" -->
                                             </div>
                                         </div>
                                     </div> 
@@ -222,7 +222,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                               <input type="text" class="form-control"  name="complaint_council" id="complaint_council" required maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                               <input type="text" class="form-control"  name="complaint_council" id="complaint_council" required maxlength="30"> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" -->
                                             </div>
                                         </div>
                                     </div>
