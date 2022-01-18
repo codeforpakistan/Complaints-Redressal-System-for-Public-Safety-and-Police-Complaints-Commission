@@ -78,7 +78,7 @@
                       <label class="custom-control-label" for="remember-me">Remember Me</label>
                     </div>
                   </div> -->
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <div class="row">
                       <div class="col-md-6">
                         <p id="captImg"><?php echo $captchaImg; ?></p>
@@ -88,7 +88,7 @@
                       </div>
                     </div>
                     <p>Can't read the image? click <a href="javascript:void(0);" class="refreshCaptcha">here</a> to refresh.</p>
-                  </div>
+                  </div> -->
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
                       Login
