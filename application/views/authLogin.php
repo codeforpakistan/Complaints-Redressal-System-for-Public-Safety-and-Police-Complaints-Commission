@@ -81,7 +81,7 @@
                   <!-- <div class="form-group">
                     <div class="row">
                       <div class="col-md-6">
-                        <p id="captImg"><?php echo $captchaImg; ?></p>
+                        <p id="captImg"><-?php echo $captchaImg; ?></p>
                       </div>
                       <div class="col-md-6">
                         <input type="text" name="captcha" class="form-control" value="" required/>
