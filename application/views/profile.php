@@ -85,70 +85,70 @@
               </div>
               <div class="col-12 col-md-12 col-lg-8">
                 <div class="card">
-                <form method="post" class="needs-validation">
-                          <div class="card-header">
-                            <h4>Edit Profile</h4>
-                          </div>
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="form-group col-md-6 col-12">
-                                <label>First Name</label>
-                                <input type="text" class="form-control" value="<?= $user_first_name ?> ">
-                                <div class="invalid-feedback">
-                                  Please fill in the first name
-                                </div>
-                              </div>
-                              <div class="form-group col-md-6 col-12">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control" value="<?= $user_last_name ?> ">
-                                <div class="invalid-feedback">
-                                  Please fill in the last name
-                                </div>
-                              </div>
+                  <form method="post" class="needs-validation" action="admin/update_profile">
+                            <div class="card-header">
+                              <h4>Edit Profile</h4>
                             </div>
-                            <div class="row">
-                              <div class="form-group col-md-7 col-12">
-                                <label>Email</label>
-                                <input type="email" class="form-control" value="<?= $user_email ?> ">
-                                <div class="invalid-feedback">
-                                  Please fill in the email
-                                </div>
-                              </div>
-                              <div class="form-group col-md-5 col-12">
-                                <label>Phone</label>
-                                <input type="tel" class="form-control" value="<?= $user_contact ?> ">
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="form-group col-12">
-                                <label>Address</label>
-                                <textarea
-                                  class="form-control summernote-simple"><?= $user_address ?></textarea>
-                              </div>
-                            </div>
-                            <div class="row">
+                            <div class="card-body">
+                              <div class="row">
                                 <div class="form-group col-md-6 col-12">
-                                  <label>Password</label>
-                                  <input type="password" class="form-control" name="password" onChange="onChange()" required>
+                                  <label>First Name</label>
+                                  <input type="text" class="form-control" name="user_first_name" value="<?= $user_first_name ?>" maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                  <div class="invalid-feedback">
+                                    Please fill in the first name
+                                  </div>
                                 </div>
                                 <div class="form-group col-md-6 col-12">
-                                  <label>Conform Password</label>
-                                  <input type="password" class="form-control" name="confirm" onChange="onChange()" required>
+                                  <label>Last Name</label>
+                                  <input type="text" class="form-control" name="user_last_name" value="<?= $user_last_name ?> " maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                  <div class="invalid-feedback">
+                                    Please fill in the last name
+                                  </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                              <div class="form-group mb-0 col-12">
-                                <div class="custom-control custom-checkbox">
-                                  <input type="checkbox" name="remember" class="custom-control-input" id="newsletter">
-                                  <label class="custom-control-label" for="newsletter">Logout after password change</label>
+                              </div>
+                              <div class="row">
+                                <div class="form-group col-md-7 col-12">
+                                  <label>Email</label>
+                                  <input type="email" class="form-control" name="user_email" value="<?= $user_email ?> ">
+                                  <div class="invalid-feedback">
+                                    Please fill in the email
+                                  </div>
+                                </div>
+                                <div class="form-group col-md-5 col-12">
+                                  <label>Phone</label>
+                                  <input type="tel" class="form-control" name="user_contact" value="<?= $user_contact ?> " data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12">
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="form-group col-12">
+                                  <label>Address</label>
+                                  <textarea
+                                    class="form-control summernote-simple" name="user_address"><?= $user_address ?></textarea>
+                                </div>
+                              </div>
+                              <div class="row">
+                                  <div class="form-group col-md-6 col-12">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" name="password" onChange="onChange()" required>
+                                  </div>
+                                  <div class="form-group col-md-6 col-12">
+                                    <label>Conform Password</label>
+                                    <input type="password" class="form-control" name="confirm" onChange="onChange()" required>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="form-group mb-0 col-12">
+                                  <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="remember" class="custom-control-input" id="newsletter">
+                                    <label class="custom-control-label" for="newsletter">Logout after password change</label>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="card-footer text-right">
-                            <button class="btn btn-primary">Save Changes</button>
-                          </div>
-                        </form>
+                            <div class="card-footer text-right">
+                              <button class="btn btn-primary">Save Changes</button>
+                            </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -157,8 +157,10 @@
       </div>
     </div>
   </div>
-
+  <script src="assets/js/jquery.inputmask.bundle.js"></script>
   <<script>
+    $(":input").inputmask();
+
         function onChange() 
         {
           const password = document.querySelector('input[name=password]');
