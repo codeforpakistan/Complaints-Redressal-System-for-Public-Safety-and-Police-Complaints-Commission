@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 // $config['base_url'] = 'http://ppsc.kp.gov.pk/';
-$config['base_url'] = 'http://localhost/PPSC/';
+$config['base_url'] = 'http://localhost/ppsc/';
 
 /*
 |--------------------------------------------------------------------------
