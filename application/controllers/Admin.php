@@ -237,9 +237,10 @@ class Admin extends CI_Controller {
     public function profile()
     {   
         //$this->check_role_privileges('dashboard',$this->session->userdata('user_role_id_fk'));
-        
-        $data['title']          = 'User Profile';
-        $data['page']           = 'profile';
+        $data['title']       = 'User Profile';
+        $data['page']        = 'profile';
+        $user_role_id_fk     = $this->session->userdata('user_role_id_fk'); 
+        $data['profile']     = $this->model->profile($user_role_id_fk);      
         $this->load->view('template',$data);
     }
 
