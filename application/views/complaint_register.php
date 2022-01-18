@@ -3,39 +3,7 @@
     {
         color: red;font-weight: bolder;
     }
-    /* file style */
-    /* .btn-file 
-    {
-    position: relative;
-    overflow: hidden;
-    }
-    .btn-file input[type=file] 
-    {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-    } */
 </style>
-<!-- <<script>
-Dropzone.autoDiscover = false;
-	jQuery(document).ready(function() {
-
-	  $(".dropzone").dropzone({
-	    parallelUploads:10,
-        uploadMultiple:true,
-	  });
-	});
-</script> -->
 
  <!-- Main Content -->
  <div class="main-content">
@@ -245,7 +213,7 @@ Dropzone.autoDiscover = false;
                                         <div class="form-group">
                                             <label>Complaint Details <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3" onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" required></textarea>
+                                                <textarea class="form-control" name="complaint_detail" id="complaint_detail" rows="3"  required></textarea>
                                             </div>
                                         </div>
                                     </div> 
@@ -268,7 +236,7 @@ Dropzone.autoDiscover = false;
                                     <div class="col-md-3">
                                         <div class="form-group ">
                                             <label>Attachments: <span class="add" style="cursor:pointer;color:blue;">Add More Attachments</span></label>
-                                            <input type="file" name="attachments[]"  class="form-control dropify" data-height="90" >
+                                            <input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="10M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
                                         </div> 
                                     </div> 
                                 </div> <!-- end of row-->
@@ -293,7 +261,7 @@ Dropzone.autoDiscover = false;
    
 
     $('.add').click(function() {
-        $('.optionBox:last').append('<div class="col-md-3 block"><label>Attachment:</label><div class="form-group"><input type="file" name="attachments[]"  class="form-control dropify" data-height="90" ><span class="remove" style="cursor:pointer;color:blue;">Remove</span> </div> </div>');
+        $('.optionBox:last').append('<div class="col-md-3 block"><label>Attachment:</label><div class="form-group"><input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="10M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" ><span class="remove" style="cursor:pointer;color:blue;">Remove</span> </div> </div>');
         $('.dropify').dropify();
     });
     $('.optionBox').on('click','.remove',function() { 
@@ -307,7 +275,15 @@ Dropzone.autoDiscover = false;
     // }); 
 
     $(document).ready(function(){
-        $('.dropify').dropify();
+        // $('.dropify').dropify();
+        $('.dropify').dropify({
+            messages: {
+                'default': 'Drag and drop a file here or click to select manually',
+                'replace': 'Drag and drop or click to replace',
+                'remove':  'Remove',
+                'error':   'Ooops, something went wrong'
+            }
+        });
     });
     $(":input").inputmask();
     
