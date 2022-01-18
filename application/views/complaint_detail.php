@@ -232,10 +232,10 @@
 
                                     <div class="col-md-4" style="display: none;" id="respondatsHideShow">
                                         <div class="form-group">
-                                            <label>Respondant:</label>
+                                            <label>Respondent:</label>
                                             <div class="input-group">
                                                 <select class="form-control" name="respondent_id_fk" id="respondent_id_fk">
-                                                    <option  selected value="0">Select Respondant</option>
+                                                    <option  selected value="0">Select Respondent</option>
                                                     <?php if($respondats){ foreach($respondats as $respondats){?>
                                                          <option value="<?= $respondats->respondent_id?>"><?= $respondats->respondent_title?></option>
                                                      <?php } }?>
