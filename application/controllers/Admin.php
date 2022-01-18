@@ -487,7 +487,7 @@ class Admin extends CI_Controller {
 
     public function districts_insert()
     {
-            $this->form_validation->set_rules('district_name', 'District Name', 'required|trim');
+            $this->form_validation->set_rules('district_name', 'District Name', 'required|trim|is_unique[districts.district_name]');
             if ($this->form_validation->run() == FALSE)
             {
                 $error   = array('error' => validation_errors());
@@ -623,7 +623,7 @@ class Admin extends CI_Controller {
 
     function complaint_category_insert()
     {
-        $this->form_validation->set_rules('complaint_category_name', 'Username', 'required|trim');
+        $this->form_validation->set_rules('complaint_category_name', 'Username', 'required|trim|is_unique[complaint_categories.complaint_category_name]');
         if ($this->form_validation->run() == FALSE)
         {
             $error   = array('error' => validation_errors());
