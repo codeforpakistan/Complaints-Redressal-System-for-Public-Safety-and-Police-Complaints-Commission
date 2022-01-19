@@ -141,7 +141,8 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_id',$response->user_id);
                 $this->session->set_userdata('user_name',$response->user_name);
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
-                $this->session->set_userdata('user_role_name',$response->user_role_name);
+                $this->session->set_userdata('user_role_name',$response->user_role_name); 
+                $this->session->set_userdata('user_district_id_fk',$response->user_district_id_fk);
                 redirect('/admin/dashboard'); exit();
 				} // end is user name and passsword valid
                 else // not match ue name and pass
@@ -239,7 +240,11 @@ class Admin extends CI_Controller {
         //$this->check_role_privileges('dashboard',$this->session->userdata('user_role_id_fk'));
         $data['title']       = 'User Profile';
         $data['page']        = 'profile';
-        $user_role_id_fk     = $this->session->userdata('user_role_id_fk'); 
+        $user_role_id_fk     = $this->session->userdata('user_role_id_fk');
+        if(empty($user_role_id_fk))
+        {
+            $this->logout_user();
+        } 
         $data['profile']     = $this->model->profile($user_role_id_fk);      
         $this->load->view('template',$data);
     }
@@ -732,6 +737,11 @@ class Admin extends CI_Controller {
             
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
+            if(empty($user_role_id_fk))
+            {
+                $this->messages('alert-danger','Your session is expired');
+                $this->logout_user();
+            } 
             
             $complainant_response = $this->model->getComplainant($complainant_cnic);
             if(is_object($complainant_response))  

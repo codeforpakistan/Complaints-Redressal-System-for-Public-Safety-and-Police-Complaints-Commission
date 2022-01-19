@@ -545,7 +545,12 @@ class ComplaintModel extends CI_Model
                     $this->db->like('complaint_source',$complaint_source);
                 }
             }
-        
+        $session_role_id     = $this->session->userdata('user_role_id_fk');
+        $session_district_id = $this->session->userdata('user_district_id_fk');
+        // if()
+        // {
+
+        // }
         $query = $this->db->get();
         return $query->num_rows();
     }
