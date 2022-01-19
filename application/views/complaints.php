@@ -115,7 +115,7 @@
 								<div class="row show pagination here">
 									<div class="col-md-12">
 									   <?= $pagination; ?>
-									   <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right" style="margin-top: -48px;" ><i class="fas fa-cloud-download-alt"></i> Export</a>
+									   <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right"><i class="fas fa-cloud-download-alt"></i> Export</a>
 									</div>
 								</div>
               			

@@ -469,9 +469,13 @@ class ComplaintModel extends CI_Model
                     $this->db->like('complaint_source',$complaint_source);
                 }
             }
-
-
-      $this->db->order_by('complaint_id','desc');
+        $session_role_id     = $this->session->userdata('user_role_id_fk');
+        $session_district_id = $this->session->userdata('user_district_id_fk');
+        if($session_role_id != 1 )
+        {
+            $this->db->where('complaints.district_id_fk',$session_district_id);
+        }
+     $this->db->order_by('complaint_id','desc');
      $this->db->limit($limit,$offset);
       $query = $this->db->get(); 
     //  echo $this->db->last_query(); 
@@ -547,10 +551,10 @@ class ComplaintModel extends CI_Model
             }
         $session_role_id     = $this->session->userdata('user_role_id_fk');
         $session_district_id = $this->session->userdata('user_district_id_fk');
-        // if()
-        // {
-
-        // }
+        if($session_role_id != 1 )
+        {
+          $this->db->where('complaints.district_id_fk',$session_district_id);
+        }
         $query = $this->db->get();
         return $query->num_rows();
     }
