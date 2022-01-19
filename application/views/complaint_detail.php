@@ -31,9 +31,9 @@
                             </div>
                     <!-- end of messages  --->
                     <!-- <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data"> -->
-                     <?php if($complaint_detail) foreach($complaint_detail as $oneByOne) print_r($complaint_detail); ?>
-
-                        <div class="row">
+                     <?php if($complaint_detail) foreach($complaint_detail as $oneByOne)  ?>
+                    <div id="pdf">
+                        <div class="row" >
                         <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Name:</label>
@@ -115,6 +115,14 @@
                                                <option <?= ($district_councils->district_council_id == $oneByOne->complainant_council_id_fk)?'selected' :''?> ><?= $district_councils->district_council_name?></option>
                                                  <?php } }?>
                                            </select> -->
+                                    </div>
+                                </div>
+                            </div> <!-- end of col-md-4 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Complaint ID:</label>
+                                    <div class="input-group">
+                                    <input type="text" class="form-control" value="<?= $oneByOne->complaint_id ?>" readonly>
                                     </div>
                                 </div>
                             </div> <!-- end of col-md-4 -->
@@ -206,7 +214,7 @@
                               <h3>Change Status / Respondent Reply</h3>  
                             </div>
                              <div class="col-2">
-                                 <button class="show_hide_form btn btn-primary pull-right">Add</button>
+                                 <button class="show_hide_form btn btn-primary pull-right ">Show Form</button>
                              </div>
                              
                         </div>
@@ -296,6 +304,7 @@
                                 </div>
                             <?php } } ?> 
                   </div>
+                 </div> <!---pdf section end -->
                 </div>
               </div>
             </div>
@@ -307,8 +316,14 @@
         $('#attachment_input').trigger('click');
     }); 
     //  toggle form
-    $(".show_hide_form").click(function(){
-      $(".status_response_form").toggle();
+    $(".show_hide_form").click(function(){ 
+        if($(this).text()=="Hide form")
+    {
+        $(this).text("Show form");
+    } else {
+        $(this).text("Hide form");
+    }
+     $(".status_response_form").toggle();
     });
     // hide show respondant
     $('#complaint_status_id_fk').on('change', function() {
@@ -326,4 +341,8 @@
             $('#respondatsHideShow').hide();
          }
     });
+    // downlaod complaint
+            
+   
+
 </script>>
