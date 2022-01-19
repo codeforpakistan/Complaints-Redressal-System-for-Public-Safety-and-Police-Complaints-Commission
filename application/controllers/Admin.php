@@ -143,15 +143,27 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
                 $this->session->set_userdata('user_role_name',$response->user_role_name); 
                 $this->session->set_userdata('user_district_id_fk',$response->user_district_id_fk);
-                redirect('/admin/dashboard'); exit();
+                  if($response->user_role_id_fk == 4)
+                  {
+                    $this->session->set_flashdata('errorMsg', "Complainant Not allowed");
+                    $this->messages('alert alert-danger',"Complainant Not allowed"); 
+
+	         	    $this->logout_user(); exit();
+                  }
+                  else
+                  {
+                      redirect('/admin/dashboard'); exit();
+                  }
+                
 				} // end is user name and passsword valid
                 else // not match ue name and pass
 	             {
 	             	$this->session->set_flashdata('errorMsg', "Username Or Password Invalid");
-                    $this->messages('alert alert-danger',"Username Or Password Invalid");
-                  //  echo "username or passwrod invalid"; 
+                    $this->messages('alert alert-danger',"Username Or Password Invalid"); 
+
 	         	    redirect(base_url());
 	         	    exit();
+
 	             }  //end // not match ue name and pass 
              //print_r($response);
         }  
@@ -175,6 +187,8 @@ class Admin extends CI_Controller {
         $this->session->unset_userdata('user_role_id_fk'); 
         $this->session->sess_destroy();
         $this->clear_cache();
+        session_start();
+        $this->messages('alert alert-danger',"session expired"); 
         redirect(base_url());
     }
     //==========================================================================
