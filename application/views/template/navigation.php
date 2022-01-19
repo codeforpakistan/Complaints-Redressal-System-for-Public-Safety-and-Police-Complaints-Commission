@@ -54,6 +54,15 @@
       }
 ?>
 
+<style>
+
+   .header-logoo
+   { 
+     position: inherit !important; 
+     left:0px !important; 
+   }
+
+</style>
 
 <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
