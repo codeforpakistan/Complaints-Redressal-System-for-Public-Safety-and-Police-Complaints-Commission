@@ -7,7 +7,8 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4><?= $title ?></h4>
+                    <div class="col-md-8"><h4><?= $title ?></h4></div>
+                    <div class="col-md-4 text-right"><p style="margin-bottom:0px;">Source: <span class="text-capitalize"><?= $complaint_detail[0]->complaint_source ?><span></p></div>
                   </div>
                   <div class="card-body">
                       <!-- start messages --->
