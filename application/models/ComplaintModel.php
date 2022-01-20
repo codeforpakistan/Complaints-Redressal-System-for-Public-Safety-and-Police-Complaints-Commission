@@ -596,6 +596,34 @@ class ComplaintModel extends CI_Model
         $this->db->group_by('district_id_fk');
         return $this->db->get()->result();
     }
+    function get_complaints_with_role()
+    {
+      $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title')->from('complaints');
+      $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
+      $this->db->join('districts', 'districts.district_id = complaints.district_id_fk','left');
+      $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
+      $this->db->join('complaint_statuses','complaint_statuses.complaint_status_id=complaints.complaint_status_id_fk','left');
+
+      $session_role_id     = $this->session->userdata('user_role_id_fk');
+        $session_district_id = $this->session->userdata('user_district_id_fk');
+        if($session_role_id != 1 )
+        {
+            $this->db->where('complaints.district_id_fk',$session_district_id);
+        }
+     $this->db->order_by('complaint_id','desc');
+     $this->db->limit(200);
+      $query = $this->db->get(); 
+    //  echo $this->db->last_query(); 
+
+        if($query->num_rows() > 0) 
+        {
+          return $query->result_array();
+        }
+        else
+        {
+          return FALSE;
+        }
+    }
 }
 
 ?>

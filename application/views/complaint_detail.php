@@ -32,7 +32,9 @@
                     <!-- end of messages  --->
                     <!-- <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data"> -->
                      <?php if($complaint_detail) foreach($complaint_detail as $oneByOne)  ?>
-                    <div id="pdf">
+                     <div id="editor"></div>
+<button id="cmd">generate PDF</button>
+                    <div id="printSection">
                         <div class="row" >
                         <div class="col-md-4">
                                 <div class="form-group">
@@ -225,59 +227,59 @@
                         <form method="post" action="<?= base_url("admin/insert_comploaint_remarks") ?>" >
                             <div class="row">
                                 <div class="col-md-8 asssingGridFour">
-                                        <div class="form-group">
-                                            <label>Status:</label>
-                                            <div class="input-group">
-                                                <select class="form-control" name="complaint_status_id_fk" id="complaint_status_id_fk" required>
-                                                    <option  selected value="0">Select Status</option>
-                                                    <?php if($complaint_statuses){ foreach($complaint_statuses as $statusess){?>
-                                                         <option value="<?= $statusess->complaint_status_id?>"><?= $statusess->complaint_status_title?></option>
-                                                     <?php } }?>
-                                                </select>
-                                            </div>
+                                    <div class="form-group">
+                                        <label>Status:</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="complaint_status_id_fk" id="complaint_status_id_fk" required>
+                                                <option  selected value="0">Select Status</option>
+                                                <?php if($complaint_statuses){ foreach($complaint_statuses as $statusess){?>
+                                                        <option value="<?= $statusess->complaint_status_id?>"><?= $statusess->complaint_status_title?></option>
+                                                    <?php } }?>
+                                            </select>
                                         </div>
-                                    </div> <!-- end of col-md-4 -->
-
-                                    <div class="col-md-4" style="display: none;" id="respondatsHideShow">
-                                        <div class="form-group">
-                                            <label>Respondent:</label>
-                                            <div class="input-group">
-                                                <select class="form-control" name="respondent_id_fk" id="respondent_id_fk">
-                                                    <option  selected value="0">Select Respondent</option>
-                                                    <?php if($respondats){ foreach($respondats as $respondats){?>
-                                                         <option value="<?= $respondats->respondent_id?>"><?= $respondats->respondent_title?></option>
-                                                     <?php } }?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end of col-md-4 -->
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>date:</label>
-                                            <div class="input-group">
-                                                <input type="date" class="form-control"  name="complaint_remarks_timestamp" id="complaint_remarks_timestamp" required >
-                                            </div>
-                                        </div>
-                                    </div> <!-- end of col-md-4 -->
-                                    
-                                </div> <!-- end of first row -->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Remarks:</label>
-                                            <div class="input-group">
-                                                <textarea class="form-control" name="complaint_remarks_detail" id="complaint_remarks_detail" rows="3" required></textarea>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end of col-md-12 -->                         
-                                </div>  <!-- end row -->
-                                <div class="row">
-                                    <div class="col-md-12 text-right">
-                                        <input type="hidden" name="complaint_id" value="<?= $complaint_id ?>">
-                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
                                     </div>
-                                </div>  
+                                </div> <!-- end of col-md-4 -->
+
+                                <div class="col-md-4" style="display: none;" id="respondatsHideShow">
+                                    <div class="form-group">
+                                        <label>Respondent:</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="respondent_id_fk" id="respondent_id_fk">
+                                                <option  selected value="0">Select Respondent</option>
+                                                <?php if($respondats){ foreach($respondats as $respondats){?>
+                                                        <option value="<?= $respondats->respondent_id?>"><?= $respondats->respondent_title?></option>
+                                                    <?php } }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> <!-- end of col-md-4 -->
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>date:</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control"  name="complaint_remarks_timestamp" id="complaint_remarks_timestamp" required >
+                                        </div>
+                                    </div>
+                                </div> <!-- end of col-md-4 -->
+                                    
+                            </div> <!-- end of first row -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Remarks:</label>
+                                        <div class="input-group">
+                                            <textarea class="form-control" name="complaint_remarks_detail" id="complaint_remarks_detail" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                </div> <!-- end of col-md-12 -->                         
+                            </div>  <!-- end row -->
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <input type="hidden" name="complaint_id" value="<?= $complaint_id ?>">
+                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                </div>
+                            </div>  
                         </form>
                         <hr>
                     </div>
@@ -304,6 +306,7 @@
                                 </div>
                             <?php } } ?> 
                   </div>
+                  <a class="btn btn-success" href="javascript:void(0)" style="float: right;" onclick="PrintDiv();">Print</a>
                  </div> <!---pdf section end -->
                 </div>
               </div>
@@ -311,20 +314,25 @@
           </div>
         </section>
       </div>
-<<script>
-    $('#mydropzone').click(function(){
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+<script>
+    $('#mydropzone').click(function()
+    {
         $('#attachment_input').trigger('click');
     }); 
     //  toggle form
-    $(".show_hide_form").click(function(){ 
+    $(".show_hide_form").click(function()
+    { 
         if($(this).text()=="Hide form")
-    {
-        $(this).text("Show form");
-    } else {
-        $(this).text("Hide form");
-    }
-     $(".status_response_form").toggle();
+        {
+            $(this).text("Show form");
+        } else 
+        {
+            $(this).text("Hide form");
+        }
+        $(".status_response_form").toggle();
     });
+    
     // hide show respondant
     $('#complaint_status_id_fk').on('change', function() {
      $respondant_id = this.value;
@@ -342,7 +350,30 @@
          }
     });
     // downlaod complaint
-            
-   
+    // function PrintDiv() 
+    // {   
+    //    var divToPrint = document.getElementById('printSection');
+    //    var popupWin = window.open('', '_blank', );
+    //    popupWin.document.open();
+    //    popupWin.document.write('<html><head><title>Salary-History</title></head><body onload="window.print()"><div class="container">' + divToPrint.innerHTML + '</div></html>');
+    //    popupWin.document.close();
+    // }  
+
+    var doc = new jsPDF();
+var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+};
+
+$('#cmd').click(function () {
+    doc.fromHTML($('#printSection').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+    doc.save('sample-file.pdf');
+});
+    
+
 
 </script>>

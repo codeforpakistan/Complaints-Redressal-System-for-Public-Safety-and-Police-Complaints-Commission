@@ -823,8 +823,17 @@ class Admin extends CI_Controller {
         
         $this->load->view('template',$data);
     }
+    // ::::::::::::::::::::::::::::::::: complaints with datatable
+    function complaints()
+    { 
+        $this->check_role_privileges('complaints',$this->session->userdata('user_role_id_fk'));
+        $data['complaints'] = $this->complaint->get_complaints_with_role();
+        $data['title']    = 'Complaints';
+        $data['page']     = 'complaints';
+        $this->load->view('template',$data);
+    }
 
-    public function complaints()
+    public function complaints_custom_search()
     { 
         $this->check_role_privileges('complaints',$this->session->userdata('user_role_id_fk'));
 

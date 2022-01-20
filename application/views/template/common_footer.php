@@ -105,6 +105,5 @@ function onlyDigits(charCode)
         return true;
     }
 }
-
-
+ 
 </script>
