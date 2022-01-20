@@ -25,6 +25,15 @@
   <link rel="stylesheet" href="assets/css/custom.css">
   <link rel='shortcut icon' type='image/x-icon' href='assets/img/logo/logo-icon.png' />
   <script src="assets/js/jquery.min.js"></script>
+
+  <style>
+
+    table tr.bg-success th
+    {
+      color: #fff !important;
+    }
+
+  </style>
   
 </head>
 
