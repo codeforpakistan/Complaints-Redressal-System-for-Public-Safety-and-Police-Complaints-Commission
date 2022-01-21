@@ -39,7 +39,7 @@
                      
                         <div class="card card-success" bis_skin_checked="1">
                             <div class="card-header" bis_skin_checked="1">
-                                <h4>Complainant Personal Information</h4>
+                                <h4>Applicant Personal Information</h4>
                             </div>
                             <div class="card-body" bis_skin_checked="1">
                                 <div class="row">

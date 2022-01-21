@@ -6,16 +6,16 @@
             <?php 
 
               $dashboard_data_arr = array(
-                                           'Complainants'   => $complainants,
                                            'All Complaints' => $complaints,
+                                           'Pending'        => $pending,
+                                           'Completed'      => $complete,
                                            'This Year'      => $thisYear,
                                            'This Month'     => $thisMonth, // date('F',time())
                                            'Today'          => $thisDay,
-                                           'Pending'        => $pending,
-                                           'Completed'      => $complete,
                                            'Irrelevant'     => $reject,
                                            'Web-Portal'     => $admin,
-                                           'Android'        => 0
+                                           'Android'        => 0,
+                                           'Applicants'     => $complainants,
                                          ); 
 
               foreach($dashboard_data_arr as $key_title => $value)

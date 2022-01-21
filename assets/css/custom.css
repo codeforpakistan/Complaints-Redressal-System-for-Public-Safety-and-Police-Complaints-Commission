@@ -6,3 +6,13 @@
     padding: 0.4rem 1.2em !important;
     box-shadow:none !important;
 }
+
+.theme-white .nav-pills .nav-link.active
+{
+    background-color: #4fa846 !important;
+}
+
+.badge.badge-white
+{
+    color: #357642 !important;
+}
