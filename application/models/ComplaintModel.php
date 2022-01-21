@@ -438,7 +438,7 @@ class ComplaintModel extends CI_Model
             $complaint_source = $this->session->userdata('complaint_source');
         }
 
-      $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title')->from('complaints');
+      $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title,complaint_statuses.complaint_status_color')->from('complaints');
       $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
       $this->db->join('districts', 'districts.district_id = complaints.district_id_fk','left');
       $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
