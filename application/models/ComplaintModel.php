@@ -31,7 +31,7 @@ class ComplaintModel extends CI_Model
         
         switch($data_arr['complaint_source'])
         {
-            case 'admin':
+            case 'web':
                 
                 $this->load->model('AuthModel');
     
@@ -44,7 +44,7 @@ class ComplaintModel extends CI_Model
                 
             break;
             
-            case 'complainant':
+            case 'mobile-app':
                 
                 $find_complainant_id = $this->db->query('select complainants.complainant_id, complainants.user_id_fk, users.user_id from complainants left join users on users.user_id = complainants.user_id_fk where user_id_fk = ?',array($data_arr['registered_by_user']))->result_array();
         
@@ -461,8 +461,8 @@ class ComplaintModel extends CI_Model
             {
                 if($complaint_source == 'All')
                 {
-                  $this->db->or_where('complaint_source','admin');
-                  $this->db->or_where('complaint_source',' complainant');
+                  $this->db->or_where('complaint_source','web');
+                  $this->db->or_where('complaint_source',' mobile-app');
                 }
                 else
                 {
@@ -541,8 +541,8 @@ class ComplaintModel extends CI_Model
             {
                 if($complaint_source == 'All')
                 {
-                  $this->db->like('complaint_source','admin');
-                  $this->db->like('complaint_source','complainant');
+                  $this->db->like('complaint_source','web');
+                  $this->db->like('complaint_source','mobile-app');
                 }
                 else
                 {

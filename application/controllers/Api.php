@@ -642,7 +642,7 @@ class Api extends CI_Controller {
         
         $data_arr = [];
         
-        $data_arr['complaint_source']         = 'complainant';
+        $data_arr['complaint_source']         = 'mobile-app';
         $data_arr['complainant_id_fk']        = $session_complainant_id;
         $data_arr['registered_by_user']       = $session_user_id;
         $data_arr['district_id_fk']           = $this->input->post('district_id_fk');

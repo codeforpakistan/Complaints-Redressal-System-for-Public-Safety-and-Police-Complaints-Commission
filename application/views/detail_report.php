@@ -44,7 +44,7 @@
                             </div>
                     <!-- end of messages  --->
                        <!-- :::::::::::::::::::::::::::::::::::: list of complaint start :::: -->
-								<form id="reset_form" method="post" action="admin/complaints"> 
+								<form id="reset_form" method="post" action="admin/detail_report"> 
 										<div class="row" style="padding-left:15px;">
 											<div class="col-md-2" style="padding-left:0px;">
 												<label>District</label>
@@ -76,8 +76,8 @@
 												<label>Source</label>
 												<select class="form-control" name="complaint_source" id="complaint_source">
 													<option value="All" <?= ($complaint_source == "All")? 'selected': '' ?> >ALL</option>
-													<option value="admin" <?= ($complaint_source == "admin")? 'selected': '' ?>>Admin</option>
-													<option value="complainant" <?= ($complaint_source == "complainant")? 'selected': '' ?> >Complainant</option>
+													<option value="admin" <?= ($complaint_source == "web")? 'selected': '' ?>>Admin</option>
+													<option value="complainant" <?= ($complaint_source == "mobile-app")? 'selected': '' ?> >Complainant</option>
 												</select>
 											</div>
 											<div class="col-md-1" style="padding-left:0px;">
@@ -111,11 +111,11 @@
 													<?php 
 														switch($oneByOne['complaint_source'])
 														{
-														case 'admin':
-															echo '<i class="fas fa-laptop mr-1"></i> <span clads>'.$oneByOne['complaint_source'].'</span>';
+														case 'web':
+															echo '<i class="fas fa-laptop mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
 														break;
 
-														case 'complainant':
+														case 'mobile-app':
 															echo '<i class="fas fa-user-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
 														break;
 														}
@@ -124,8 +124,9 @@
 												<td><?= $oneByOne['complainant_name']?></td> 
 												<td><?= $oneByOne['district_name']?></td> 
 												<td><?= $oneByOne['complaint_entry_timestamp']?></td>
-												<td class="text-capitalize" style="color: <?= $oneByOne['complaint_status_color'] ?>""><?= $oneByOne['complaint_status_title']?></td>
+												<td><span class="badge text-capitalize" style="color:#fff; background-color: <?= $oneByOne['complaint_status_color'] ?>"><?= $oneByOne['complaint_status_title']?></span></td>
 												<td>
+												<a href="admin/print_complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success mr-1" bis_skin_checked="1">Print</a>
 													<a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">View Detail</a>
 												</td>
 												</tr>

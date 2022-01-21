@@ -212,8 +212,8 @@ class Admin extends CI_Controller {
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
         $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
-        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
-        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
+        $data['admin']          = $this->model->countAll('complaints','complaint_source','web');
+        $data['complainants']   = $this->model->countAll('complaints','complaint_source','mobile-app');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
@@ -232,8 +232,8 @@ class Admin extends CI_Controller {
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard1';
         $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
-        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
-        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
+        $data['admin']          = $this->model->countAll('complaints','complaint_source','web');
+        $data['complainants']   = $this->model->countAll('complaints','complaint_source','mobile-app');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
@@ -787,7 +787,7 @@ class Admin extends CI_Controller {
                                         'complaint_council'         => $complaint_council,
                                         'complaint_detail'          => $complaint_detail,
                                         'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
-                                        'complaint_source'          => 'admin',
+                                        'complaint_source'          => 'web',
                                         'district_id_fk'            => $district_id_fk
                                     );
                 $this->load->model('ComplaintModel');
@@ -932,6 +932,7 @@ class Admin extends CI_Controller {
         $this->pagination->initialize($config);
         $data['pagination']  = $this->pagination->create_links();
         $data['complaints']  = $this->complaint->get_complaints($displayLimit,$offset);
+        // $data['complaints'] = array();
         // complaints status
         $table_name                 = 'complaint_statuses';
         $table_status_column_name   = 'status';
