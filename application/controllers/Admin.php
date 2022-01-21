@@ -930,7 +930,6 @@ class Admin extends CI_Controller {
         $this->pagination->initialize($config);
         $data['pagination']  = $this->pagination->create_links();
         $data['complaints']  = $this->complaint->get_complaints($displayLimit,$offset);
-        // $data['complaints'] = array();
         // complaints status
         $table_name                 = 'complaint_statuses';
         $table_status_column_name   = 'status';

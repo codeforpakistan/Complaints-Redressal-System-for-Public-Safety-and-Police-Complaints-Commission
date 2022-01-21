@@ -80,12 +80,12 @@
                                       <?php 
                                         switch($oneByOne['complaint_source'])
                                         {
-                                          case 'admin':
+                                          case 'web':
                                             echo '<i class="fas fa-laptop mr-1"></i> <span clads>'.$oneByOne['complaint_source'].'</span>';
                                           break;
 
-                                          case 'complainant':
-                                            echo '<i class="fas fa-user-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
+                                          case 'mobile-app':
+                                            echo '<i class="fas fa-mobile-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
                                           break;
                                         }
                                       ?>

@@ -76,8 +76,8 @@
 												<label>Source</label>
 												<select class="form-control" name="complaint_source" id="complaint_source">
 													<option value="All" <?= ($complaint_source == "All")? 'selected': '' ?> >ALL</option>
-													<option value="admin" <?= ($complaint_source == "web")? 'selected': '' ?>>Admin</option>
-													<option value="complainant" <?= ($complaint_source == "mobile-app")? 'selected': '' ?> >Complainant</option>
+													<option value="web" <?= ($complaint_source == "web")? 'selected': '' ?>>Web</option>
+													<option value="mobile-app" <?= ($complaint_source == "mobile-app")? 'selected': '' ?> >Mobile-App</option>
 												</select>
 											</div>
 											<div class="col-md-1" style="padding-left:0px;">
@@ -116,7 +116,7 @@
 														break;
 
 														case 'mobile-app':
-															echo '<i class="fas fa-user-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
+															echo '<i class="fas fa-mobile-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
 														break;
 														}
 													?>
