@@ -6,29 +6,30 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4><?= $title ?></h4>
+                    <div class="col-9 pl-0">
+                      <h4><?= $title ?></h4>
+                    </div>
+                    <div class="col-3 text-right pr-0">
+                      <a href="javascript:void(0);" class="btn btn-icon icon-left btn-success custom-success-btn" data-toggle="modal" data-target="#addModel" ><i class="fas fa-plus"></i> Add New Category </a>  
+                    </div>
                   </div>
                   <div class="card-body">
-                  <button type="button" class="btn btn-primary pull-right fa fa-plus" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;"> Add Category</button>
                       <!-- start messages --->
                       <div style="text-align: center">
-                              <?php if($feedback =$this->session->flashdata('feedback')){
-                                $feedback_class =$this->session->flashdata('feedbase_class');  ?>
-                                    <div class="row">
-                                      <div class="col-md-6 offset-3">
-                                      <div class="alert alert-dismissible <?=  $feedback_class;?>">
-                                      <?= $feedback ?>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                      </div>
-                                      </div>
-                                  </div>
-
-                              
-                                <?php }?>
-
+                        <?php if($feedback =$this->session->flashdata('feedback')){
+                          $feedback_class =$this->session->flashdata('feedbase_class');  ?>
+                            <div class="row">
+                              <div class="col-md-6 offset-3">
+                                <div class="alert alert-dismissible <?=  $feedback_class;?>">
+                                  <?= $feedback ?>
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
+                        <?php }?>
+                      </div>
                     <!-- end of messages  --->
                     <div class="table-responsive">
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">

@@ -6,10 +6,14 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4><?= $title ?></h4>
+                    <div class="col-9 pl-0">
+                      <h4><?= $title ?></h4>
+                    </div>
+                    <div class="col-3 text-right pr-0">
+                      <a href="javascript:void(0);" class="btn btn-icon icon-left btn-success custom-success-btn" data-toggle="modal" data-target="#addModel" ><i class="fas fa-plus"></i> Add New User </a>  
+                    </div>
                   </div>
                   <div class="card-body">
-                  <button type="button" class="btn btn-primary pull-right fa fa-plus" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;"> Add User</button>
                       <!-- start messages --->
                       <div style="text-align: center">
                               <?php if($feedback =$this->session->flashdata('feedback')){

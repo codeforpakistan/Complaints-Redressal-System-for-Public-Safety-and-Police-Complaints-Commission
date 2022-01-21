@@ -6,9 +6,13 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="col-md-8" style="padding-left:0px;"><h4>Complaints</h4></div>
-					<div class="col-md-4" style="padding-right:0px;"><a type="button" class="btn btn-primary pull-right fa fa-plus" href="admin/complaint_register"> Register New Complaint</a></div>
-                  </div>
+                    <div class="col-9 pl-0">
+                      <h4> Complaints </h4>
+                    </div>
+                    <div class="col-3 text-right pr-0">
+                      <a href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>  
+                    </div>  
+				</div>
                   <div class="card-body">
                       <!-- start messages --->
                            <div style="text-align: center">
