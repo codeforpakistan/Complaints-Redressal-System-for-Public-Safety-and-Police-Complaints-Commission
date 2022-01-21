@@ -15,7 +15,7 @@ class Admin extends CI_Controller {
         $this->load->library('form_validation');
         // Load the captcha helper
         $this->load->helper('captcha');
-
+        
         // if(empty($this->session->userdata('user_role_id_fk')))
         // {   
         //     $this->logout_user();
@@ -210,8 +210,8 @@ class Admin extends CI_Controller {
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
         $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
-        $data['admin']          = $this->model->countAll('complaints','complaint_source','web');
-        $data['complainants']   = $this->model->countAll('complaints','complaint_source','mobile-app');
+        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
+        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
@@ -230,8 +230,8 @@ class Admin extends CI_Controller {
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard1';
         $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
-        $data['admin']          = $this->model->countAll('complaints','complaint_source','web');
-        $data['complainants']   = $this->model->countAll('complaints','complaint_source','mobile-app');
+        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
+        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
@@ -421,12 +421,18 @@ class Admin extends CI_Controller {
         }
     }
     //==========================================================================
-    // respondents
+    // police station view
     //==========================================================================
     
-     public function respondents_view()
-    {
-        
+    public function police_stations()
+    {   
+        $this->check_role_privileges('districts',$this->session->userdata('user_role_id_fk'));
+        $data['police_sation'] = $this->model->police_stations();
+        // git district
+        $data['district']  = $this->model->status_active_record('districts','district_status',1);
+        $data['title']    = 'Police Stations';
+        $data['page']     = 'police_stations';
+        $this->load->view('template',$data);
     }
     
     //==========================================================================
@@ -785,7 +791,7 @@ class Admin extends CI_Controller {
                                         'complaint_council'         => $complaint_council,
                                         'complaint_detail'          => $complaint_detail,
                                         'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
-                                        'complaint_source'          => 'web',
+                                        'complaint_source'          => 'admin',
                                         'district_id_fk'            => $district_id_fk
                                     );
                 $this->load->model('ComplaintModel');

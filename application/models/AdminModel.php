@@ -128,6 +128,14 @@ class AdminModel extends CI_Model
                         ->order_by('user_id','desc')
                          ->get()->result();
     }
+    function police_stations()
+    {
+        return $this->db->select('d.district_name,p.*')
+                        ->from('police_stations p')
+                        ->join('districts d','d.district_id=p.district_id_fk','left')
+                        ->order_by('p.police_station_id','desc')
+                         ->get()->result();
+    }
 				
 }
 
