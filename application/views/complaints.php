@@ -9,7 +9,8 @@
                     <h4><?= $title ?></h4>
                   </div>
                   <div class="card-body">
-                  <button type="button" class="btn btn-primary pull-right fa fa-plus" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;"> Add District</button>
+                  <!-- <button type="button" class="btn btn-primary pull-right fa fa-plus" data-toggle="modal" data-target="#addModel" style="margin-top:-5%;"> Add District</button> -->
+                  <a type="button" class="btn btn-primary pull-right fa fa-plus" href="admin/complaint_register" style="margin-top:-5%;"> Register New Complaint</a>
                       <!-- start messages --->
                       <div style="text-align: center">
                               <?php if($feedback =$this->session->flashdata('feedback')){
@@ -43,7 +44,7 @@
                         </tr>
                         </thead>
                             <tbody>
-                                <?php if(!empty($complaints)) { foreach($complaints as $oneByOne){  ?>             
+                                <?php if($complaints): foreach($complaints as $oneByOne):  ?>             
                                         
                                         <tr>
                                         <td><?= $oneByOne['complaint_entry_timestamp']?></td>
@@ -56,7 +57,7 @@
                                             </a>
                                         </td>
                                         </tr>
-                                <?php } }?>
+                                <?php endforeach; endif;?>
                             </tbody>
                       </table>
                     </div>

@@ -34,7 +34,6 @@
                     <!-- <form class="" method="post" action="<?= base_url("admin/complaint_register_form") ?>" enctype="multipart/form-data"> -->
                      <?php if($complaint_detail) foreach($complaint_detail as $oneByOne)  ?>
                      <div id="editor"></div>
-<button id="cmd">generate PDF</button>
                     <div id="printSection">
                         <div class="row" >
                         <div class="col-md-4">
@@ -315,7 +314,6 @@
           </div>
         </section>
       </div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 <script>
     $('#mydropzone').click(function()
     {

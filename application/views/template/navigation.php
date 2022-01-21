@@ -115,7 +115,7 @@
                     <?php if($district_reports   == 1): ?>
                     <li><a class="nav-link" href="admin/district_reports">Districts Report</a></li>
                     <?php endif; ?>
-                    <!-- <li><a class="nav-link" href="admin/detail_reports">Detaile</a></li> -->
+                    <li><a class="nav-link" href="admin/detail_report">Detail Report</a></li>
               </ul>
             </li>
                         

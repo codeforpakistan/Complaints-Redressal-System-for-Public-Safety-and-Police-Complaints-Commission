@@ -833,7 +833,7 @@ class Admin extends CI_Controller {
         $this->load->view('template',$data);
     }
 
-    public function complaints_custom_search()
+    public function detail_report()
     { 
         $this->check_role_privileges('complaints',$this->session->userdata('user_role_id_fk'));
 
@@ -904,7 +904,7 @@ class Admin extends CI_Controller {
         $offset      = $this->uri->segment($uri_segment);
         $config = array();
         $config['total_rows']=$this->complaint->count_complaints();
-        $config['base_url']        = site_url('/admin/complaints');
+        $config['base_url']        = site_url('/admin/detail_report');
         $config['per_page']        = $displayLimit;
         $config['num_links']        = 4;
         
@@ -946,7 +946,7 @@ class Admin extends CI_Controller {
             
         $this->load->view('template/common_header');
         $this->load->view('template/navigation');   
-        $this->load->view('complaints',$data);
+        $this->load->view('detail_report',$data);
         $this->load->view('template/common_footer');
 
     }
