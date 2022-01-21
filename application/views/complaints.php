@@ -38,8 +38,8 @@
                             <th class="text-center">Complaint Id</th>
                             <th>Applicant Name</th>
                             <th>District</th>
-                            <th>Source</th>
                             <th>Complaint Date</th>
+                            <th>Source</th>
                             <th>Status </th>
                             <th>Actions</th> 
                         </tr>
@@ -47,15 +47,30 @@
                             <tbody>
                                 <?php if($complaints): foreach($complaints as $oneByOne):  ?>             
                                   <tr>
-                                    <td class="text-center"><?= $oneByOne['complaint_id']?></td>
+                                    <td class="text-center">
+                                      <?= $oneByOne['complaint_id']?>
+                                    </td>
                                     <td><?= $oneByOne['complainant_name']?></td> 
                                     <td><?= $oneByOne['district_name']?></td> 
-                                    <td><?= $oneByOne['complaint_source']?></td>
                                     <td><?= $oneByOne['complaint_entry_timestamp']?></td>
+                                    <td>
+                                      <?php 
+                                        switch($oneByOne['complaint_source'])
+                                        {
+                                          case 'admin':
+                                            echo '<i class="fas fa-laptop mr-1"></i> <span clads>'.$oneByOne['complaint_source'].'</span>';
+                                          break;
+
+                                          case 'complainant':
+                                            echo '<i class="fas fa-user-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
+                                          break;
+                                        }
+                                      ?>
+                                    </td>
                                     <td><span class="badge text-capitalize" style="color:#fff; background-color: <?= $oneByOne['complaint_status_color'] ?>"><?= $oneByOne['complaint_status_title']?></span></td>
                                     <td>
                                       <a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success mr-1" bis_skin_checked="1">Complaint Detail</a>
-                                      <a href="admin/print_complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">Print</a>
+                                      <a style="background-color:#54ca68 !important; color:#fff; border:none;" href="admin/print_complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">Print</a>
                                     </td>
                                   </tr>
                                 <?php endforeach; endif;?>
