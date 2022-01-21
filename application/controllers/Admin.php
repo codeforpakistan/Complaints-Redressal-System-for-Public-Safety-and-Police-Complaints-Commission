@@ -728,7 +728,8 @@ class Admin extends CI_Controller {
         {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
-            echo $message;
+            echo strip_tags($message,"<p></p>");
+            // echo $message;
             exit;
         }
         else
