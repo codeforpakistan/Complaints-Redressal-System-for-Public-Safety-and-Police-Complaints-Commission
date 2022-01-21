@@ -54,7 +54,8 @@
                                     <td><?= $oneByOne['complaint_entry_timestamp']?></td>
                                     <td><span class="badge text-capitalize" style="color:#fff; background-color: <?= $oneByOne['complaint_status_color'] ?>"><?= $oneByOne['complaint_status_title']?></span></td>
                                     <td>
-                                      <a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">Complaint Detail</a>
+                                      <a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success mr-1" bis_skin_checked="1">Complaint Detail</a>
+                                      <a href="admin/print_complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">Print</a>
                                     </td>
                                   </tr>
                                 <?php endforeach; endif;?>
