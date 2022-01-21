@@ -35,28 +35,28 @@
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                         <tr>
-                            <th>Complaint Date</th>
-                            <th>Citizen Name</th>
+                            <th class="text-center">Complaint Id</th>
+                            <th>Applicant Name</th>
                             <th>District</th>
                             <th>Source</th>
+                            <th>Complaint Date</th>
                             <th>Status </th>
                             <th>Actions</th> 
                         </tr>
                         </thead>
                             <tbody>
                                 <?php if($complaints): foreach($complaints as $oneByOne):  ?>             
-                                        
-                                        <tr>
-                                        <td><?= $oneByOne['complaint_entry_timestamp']?></td>
-                                        <td><?= $oneByOne['complainant_name']?></td> 
-                                        <td><?= $oneByOne['district_name']?></td> 
-                                        <td><?= $oneByOne['complaint_source']?></td>
-                                        <td><?= $oneByOne['complaint_status_title']?></td>
-                                        <td>
-                                            <a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detail
-                                            </a>
-                                        </td>
-                                        </tr>
+                                  <tr>
+                                    <td class="text-center"><?= $oneByOne['complaint_id']?></td>
+                                    <td><?= $oneByOne['complainant_name']?></td> 
+                                    <td><?= $oneByOne['district_name']?></td> 
+                                    <td><?= $oneByOne['complaint_source']?></td>
+                                    <td><?= $oneByOne['complaint_entry_timestamp']?></td>
+                                    <td><span class="badge text-capitalize" style="color:#fff; background-color: <?= $oneByOne['complaint_status_color'] ?>"><?= $oneByOne['complaint_status_title']?></span></td>
+                                    <td>
+                                      <a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">Complaint Detail</a>
+                                    </td>
+                                  </tr>
                                 <?php endforeach; endif;?>
                             </tbody>
                       </table>
