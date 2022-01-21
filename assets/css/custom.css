@@ -1,4 +1,8 @@
-
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3VzdG9tLmNzcyIsInNvdXJjZXMiOlsiY3VzdG9tLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiJ9 */
-
-/*# sourceMappingURL=custom.css.map */
+.custom-success-btn
+{
+    background-color: #4fa846 !important;
+    border-color:#4fa846 !important;
+    font-size: 14px !important;
+    padding: 0.4rem 1.2em !important;
+    box-shadow:none !important;
+}

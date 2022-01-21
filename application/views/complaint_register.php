@@ -239,14 +239,16 @@
                                             <input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="10M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
                                         </div> 
                                     </div> 
-                                </div> <!-- end of row-->
-                                </div class="row">
-                                    <div class="col-md-12 text-right mb-2">
-                                        <button type="submit" class="btn btn-success p-r-15 waves-effect" style="font-size:16px;">Submit Complaint</button>
-                                    </div>
 
-                                </div> <!-- end of row -->
+                                </div> <!-- end of row-->
                             </div>
+
+                            <div class="card-footer" style="border-top: 1px solid #e9e7e7; background-color: #f9f9f9;">
+                                <div class="col-md-12 text-right mb-2">
+                                    <button type="submit" class="btn btn-icon btn-success custom-success-btn" style="font-size:16px;">Submit Complaint</button>
+                                </div>
+                            </div>
+
                         </div>
 
                     </form>

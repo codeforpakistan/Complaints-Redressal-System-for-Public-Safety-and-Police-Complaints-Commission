@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="breadcrumb_assets/style.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="assets/css/custom.css">
