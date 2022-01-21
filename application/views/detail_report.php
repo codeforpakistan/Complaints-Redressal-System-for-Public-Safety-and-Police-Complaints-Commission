@@ -12,6 +12,15 @@
                     <div class="col-3 text-right pr-0">
                       <a href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>  
                     </div>  
+					<div class="col-3 text-right pr-0">
+						<!-- <div class="show pagination here">
+							<div class="col-md-12">
+								<?= $pagination; ?>
+								<a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right"><i class="fas fa-cloud-download-alt"></i> Export</a>
+							</div>
+						</div>
+						<div class="clearfix"></div> -->
+					</div>
 				</div>
                   <div class="card-body">
                       <!-- start messages --->
@@ -84,10 +93,11 @@
 							<table id="example2lol" class="table table-striped" >
 									<thead>
 										<tr class="bg-success">
-											<th>Complaint Date</th>
-											<th>Citizen Name</th>
-											<th>District</th>
+											<th class="text-center">Complaint Id</th>
 											<th>Source</th>
+											<th>Applicant Name</th>
+											<th>District</th>
+											<th>Complaint Date</th>
 											<th>Status </th>
 											<th>Actions</th> 
 										</tr>
@@ -96,14 +106,27 @@
 											<?php if(!empty($complaints)) { foreach($complaints as $oneByOne){  ?>             
 									
 												<tr>
-												<td><?= $oneByOne['complaint_entry_timestamp']?></td>
+												<td class="text-center"><?= $oneByOne['complaint_id']?></td>
+												<td>
+													<?php 
+														switch($oneByOne['complaint_source'])
+														{
+														case 'admin':
+															echo '<i class="fas fa-laptop mr-1"></i> <span clads>'.$oneByOne['complaint_source'].'</span>';
+														break;
+
+														case 'complainant':
+															echo '<i class="fas fa-user-alt mr-1"></i> <span>'.$oneByOne['complaint_source'].'</span>';
+														break;
+														}
+													?>
+													</td>
 												<td><?= $oneByOne['complainant_name']?></td> 
 												<td><?= $oneByOne['district_name']?></td> 
-												<td><?= $oneByOne['complaint_source']?></td>
-												<td><?= $oneByOne['complaint_status_title']?></td>
+												<td><?= $oneByOne['complaint_entry_timestamp']?></td>
+												<td class="text-capitalize" style="color: <?= $oneByOne['complaint_status_color'] ?>""><?= $oneByOne['complaint_status_title']?></td>
 												<td>
-													<a type="button" class="btn btn-primary btn-sm" href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>"  style="margin-top:-5%;">Complaint Detail
-													</a>
+													<a href="admin/complaint_detail/<?= $oneByOne['complaint_id'] ?>" class="btn btn-outline-success" bis_skin_checked="1">View Detail</a>
 												</td>
 												</tr>
 										<?php } } else{?>
@@ -116,12 +139,6 @@
 									</tfoot>
 								<?php }?>
 							</table>
-								<div class="row show pagination here">
-									<div class="col-md-12">
-									   <?= $pagination; ?>
-									   <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right"><i class="fas fa-cloud-download-alt"></i> Export</a>
-									</div>
-								</div>
               			
                        <!-- :::::::::::::::::::::::::::::::::::: list of complaint end   :::  -->
                     </div>
