@@ -712,7 +712,7 @@ class Admin extends CI_Controller {
     //==========================================================================
     
     public function complaint_register_ajax() 
-    {   
+    {    
         $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
         $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
         $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
@@ -729,11 +729,11 @@ class Admin extends CI_Controller {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
             echo $message;
-            
+            exit;
         }
         else
         {  // get form data
-            $attachments = array();
+            $attachments = array(); 
             $complainant_name           = $this->input->post('complainant_name');
             $complainant_contact        = $this->input->post('complainant_contact');
             $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
@@ -751,8 +751,8 @@ class Admin extends CI_Controller {
             
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
-            if(empty($user_role_id_fk))
-            {
+            if(empty($registered_by_user))
+            { echo $registered_by_user.'session is expired'; exit;
                 $this->messages('alert-danger','Your session is expired');
                 $this->logout_user();
             } 
