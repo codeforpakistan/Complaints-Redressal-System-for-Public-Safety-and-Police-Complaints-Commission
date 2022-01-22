@@ -10,6 +10,7 @@
       $reports              = 0;
       $complaint_register   = 0;
       $district_reports     = 0;
+      $police_stations      = 0;
       
 
       foreach($access_data as $oneByOne)
@@ -50,8 +51,12 @@
         {
           $district_reports = $oneByOne->access;
         }
+        if($oneByOne->page_name == 'police_stations')
+        {
+          $police_stations = $oneByOne->access;
+        }
 
-      }
+      } 
 ?>
 
 <style>
@@ -95,12 +100,14 @@
                   <i data-feather="briefcase"></i><span>Complaint Categories</span>
                 </a>
             </li> 
+            
              <?php } if($users   == 1) { ?>
             <li class="dropdown">
                 <a href="admin/users" class="nav-link">
                   <i data-feather="users"></i><span>Users</span>
                 </a>
-            </li>   
+            </li> 
+
             <?php } if($districts   == 1){ ?>        
             
             <li class="dropdown">
@@ -108,7 +115,14 @@
                   <i data-feather="briefcase"></i><span>Districts</span>
                 </a>
             </li>
-            <?php } ?>
+            <?php } if($police_stations   == 1){ ?> 
+            <li class="dropdown">
+                <a href="admin/police_stations" class="nav-link">
+                  <i data-feather="briefcase"></i><span>Police Stations</span>
+                </a>
+            </li>
+            <?php } ?> 
+
             <li class="dropdown">
               <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="image"></i><span>Reports</span></a>
               <ul class="dropdown-menu">

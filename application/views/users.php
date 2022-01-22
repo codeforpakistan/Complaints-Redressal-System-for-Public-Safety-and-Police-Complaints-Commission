@@ -164,8 +164,8 @@
                             <div class="form-group"  id="hideShowDistrict">
                                   <label>District</label>
                                   <div class="input-group">
-                                      <select class="form-control select2" name="district_id" id="" style="width:90%">
-                                        <option disabled value="" selected hidden>Please Select District</option>
+                                      <select class="form-control select2" name="district_id" id="" style="width:100%">
+                                        <option disabled value="" selected hidden>Select District</option>
                                         <?php if($district){ foreach($district as $dist){?>
                                            <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
                                         <?php } }?>

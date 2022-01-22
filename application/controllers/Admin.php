@@ -433,8 +433,122 @@ class Admin extends CI_Controller {
         $data['title']    = 'Police Stations';
         $data['page']     = 'police_stations';
         $this->load->view('template',$data);
+    } 
+
+    //==========================================================================
+    //add police station
+    //==========================================================================
+    public function police_station_insert()
+    {
+        $this->form_validation->set_rules('police_station_name', 'Police Station Name', 'required|trim|is_unique[police_stations.police_station_name]|max_length[100]');
+        $this->form_validation->set_rules('district_id_fk', 'Select District', 'required|trim');
+        if ($this->form_validation->run() == FALSE)
+        {
+            $error   = array('error' => validation_errors());
+            $message = implode(" ",$error);
+            $this->messages('alert-danger',$message);
+            return redirect('admin/police_stations');
+            
+        }
+        else
+        {
+            $police_station_name  = $this->input->post('police_station_name');
+            $district_id_fk       = $this->input->post('district_id_fk');
+
+            $insert_array   = array('police_station_name'=>$police_station_name,'district_id_fk'=>$district_id_fk,'police_station_status'=>1);
+            $table_name        = 'police_stations';
+            $response = $this->model->insert($insert_array,$table_name);
+                if($response == true)
+                {
+                    $this->messages('alert-success','Successfully Added');
+                    return redirect('admin/police_stations'); 
+                }
+                else
+                {
+                    $this->messages('alert-danger','Some Thing Wrong');
+                    return redirect('admin/police_stations');
+                }
+        }
     }
+    //==========================================================================
+    // police station view modal 
+    //==========================================================================
+    public function police_station_edit_model($police_station_id)
+    {
+            $table_name        = "police_stations";
+            $talbe_column_name = 'police_station_id';
+            $table_id          = $police_station_id;
+
+            $polioce_station = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
+            echo json_encode($polioce_station); exit(); 
+    } 
+    //==========================================================================
+    // Police Station update
+    //==========================================================================
+    public function police_station_update()
+    {
+        if($this->input->post('police_station_id'))
+        {
+            $this->form_validation->set_rules('police_station_name', 'Police Station Name', 'required|trim');
+            $this->form_validation->set_rules('police_station_status', 'Police Station Status', 'required|trim');
+            $this->form_validation->set_rules('district_id_fk', 'District', 'required|trim');
+            if ($this->form_validation->run() == FALSE)
+            {
+                $error   = array('error' => validation_errors());
+                $message = implode(" ",$error);
+                $this->messages('alert-danger',$message);
+                return redirect('admin/police_stations');
+                
+            }
+            else
+            {
+                $police_station_id     = $this->input->post('police_station_id');
+                $police_station_name   = $this->input->post('police_station_name');
+                $district_id_fk        = $this->input->post('district_id_fk');
+                $police_station_status = $this->input->post('police_station_status');
+
+                $update_ps_array   = array('police_station_name'=>$police_station_name,'district_id_fk'=>$district_id_fk,'police_station_status'=>$police_station_status);
+                $table_name        = 'police_stations';
+                $talbe_column_name = 'police_station_id';
+                $table_id          = $police_station_id;
+                $response = $this->model->update($update_ps_array,$table_name,$talbe_column_name,$table_id);
+                    if($response == true)
+                    {
+                        $this->messages('alert-success','Successfully Update');
+                        return redirect('admin/police_stations'); 
+                    }
+                    else
+                    {
+                        $this->messages('alert-danger','Some Thing Wrong');
+                        return redirect('admin/police_stations');
+                    }
+            }
+        }
+    }
+    //==========================================================================
+    // Police Station Delete
+    //==========================================================================
     
+    function police_station_delete($police_station_id= null)
+    {
+        if($police_station_id > 0)
+        {   
+            $table_name        = 'police_stations';
+            $talbe_column_name = 'police_station_id';
+            $table_id          = $police_station_id;
+            $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
+                if($response == true)
+                {
+                    $this->messages('alert-success','Successfully Update');
+                    return redirect('admin/police_stations'); 
+                }
+                else
+                {
+                    $this->messages('alert-danger','Some Thing Wrong');
+                    return redirect('admin/police_stations');
+                }
+        }
+    }
     //==========================================================================
     // district view
     //==========================================================================
@@ -462,7 +576,7 @@ class Admin extends CI_Controller {
             $districts = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);  // get row
             echo json_encode($districts); exit(); 
     }
-     //==========================================================================
+    //==========================================================================
     // district update
     //==========================================================================
     public function district_update()
@@ -545,6 +659,10 @@ class Admin extends CI_Controller {
             }
         
     }
+    //==========================================================================
+    // district Delete
+    //==========================================================================
+
     function district_delete($district_id= null)
     {
         if($district_id > 0)
@@ -756,9 +874,9 @@ class Admin extends CI_Controller {
             // complaintant checking
             $registered_by_user = $this->session->userdata('user_id'); 
             if(empty($registered_by_user))
-            { echo $registered_by_user.'session is expired'; exit;
-                $this->messages('alert-danger','Your session is expired');
-                $this->logout_user();
+            { 
+                echo "Your session is expired please loing";
+                exit;
             } 
             
             $complainant_response = $this->model->getComplainant($complainant_cnic);
@@ -1149,6 +1267,28 @@ class Admin extends CI_Controller {
                 $this->messages('alert-danger','Some Thing Wrong');
                 return redirect('admin/profile');
             }                       
+    }
+    function print_complaint_detail($complaint_id=null)
+    {
+
+        $data['title'] = 'Complaint Detail';
+        $data['page']  = 'print_complaint_detail'; 
+        
+        $data['complaint_detail']     = $this->complaint->get_complaint_by_id($complaint_id); // complinat detailed 
+        $data['complaint_attachment'] = $this->complaint->get_attachment_complaint_by_id($complaint_id); // complinat attachments 
+        $data['complaint_statuses']   = $this->model->get_all_records('complaint_statuses');
+        $data['respondats']           = $this->model->get_all_records('respondents');
+        $data['complaint_id']         = $complaint_id;
+        $data['complaints_remarks']   = $this->complaint->get_complaint_remarks($complaint_id);
+        //get active districts
+        $table_name                = 'districts';
+        $table_status_column_name   = 'district_status';
+        $table_status_column_value  = 1;
+        $data['district']           = $this->model->status_active_record($table_name,$table_status_column_name,$table_status_column_value);
+
+        
+        $this->load->view('template',$data);
+    //   $this->load->view('print_complaint_detail');
     }
 
 }

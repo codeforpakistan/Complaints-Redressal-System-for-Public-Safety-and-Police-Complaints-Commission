@@ -10,7 +10,7 @@
                       <h4><?= $title ?></h4>
                     </div>
                     <div class="col-3 text-right pr-0">
-                      <a href="javascript:void(0);" class="btn btn-icon icon-left btn-success custom-success-btn" data-toggle="modal" data-target="#addModel" ><i class="fas fa-plus"></i> Add New District </a>  
+                      <a href="javascript:void(0);" class="btn btn-icon icon-left btn-success custom-success-btn" data-toggle="modal" data-target="#addModel" ><i class="fas fa-plus"></i> Add New Police Station </a>  
                     </div>
                   </div>
                   <div class="card-body">
@@ -38,7 +38,8 @@
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
-                            <th>District Id</th>
+                            <th>Police Station Id</th>
+                            <th>Police Station Name</th>
                             <th>District Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -50,10 +51,11 @@
                                 <tr>
                                     <td><?= $onByOne->police_station_id?></td>
                                     <td><?= $onByOne->police_station_name?></td>
+                                    <td><?= $onByOne->district_name?></td>
                                     <td><?= ($onByOne->police_station_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
                                     <td>
-                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel"  href="javascript:void(0)" onclick="districts_update(<?= $onByOne->police_station_id?>)"></a>
-                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/district_delete/'.$onByOne->police_station_id) ?>"></a>
+                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel"  href="javascript:void(0)" onclick="police_station_update(<?= $onByOne->police_station_id?>)"></a>
+                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/police_station_delete/'.$onByOne->police_station_id) ?>"></a>
                                     </td>
                                 </tr>
                             <?php endforeach;?>
@@ -74,7 +76,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-success">
-                    <h5 class="modal-title text-white" id="formModal">Update district </h5>
+                    <h5 class="modal-title text-white" id="formModal">Update Police Station </h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -82,23 +84,34 @@
                     <div class="modal-body">
                     <!-- body-->
                        <!-- <span class="itStaffUpdateModel"></span> -->
-                       <form class="" method="post" action="<?= base_url("admin/district_update") ?>">
+                       <form class="" method="post" action="<?= base_url("admin/police_station_update") ?>">
                             <div class="form-group">
-                            <label>District Name</label>
+                            <label>Police Station Name</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="District Name" name="district_name" id="edit_district_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30" >
+                                <input type="text" class="form-control" placeholder="Police Station Name" name="police_station_name" id="edit_police_station_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30" >
                             </div>
                             </div>
+                            <div class="form-group">
+                                <label>District Name</label>
+                                <div class="input-group">
+                                   <select class="form-control select2" name="district_id_fk" id="edit_district_id_fk" style="width:100%">
+                                        <option disabled value="" selected hidden>Select District</option>
+                                        <?php if($district){ foreach($district as $dist){?>
+                                           <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
+                                        <?php } }?>
+                                    </select>
+                                </div>
+                                </div>
                             <div class="form-group">
                             <label>Status</label>
                             <div class="input-group">
-                                  <select class="form-control" name="district_status" id="edit_district_status">
+                                  <select class="form-control" name="police_station_status" id="edit_police_station_status">
                                       <option value="1">Active</option>
                                       <option value="0">Inactive<option>
                                   </select>
                             </div>
                             </div>
-                            <input type="hidden" name="district_id" id="edit_district_id" >
+                            <input type="hidden" name="police_station_id" id="edit_police_station_id" >
                             <div class="row">
                                     <div class="col-md-12 text-right">
                                       <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
@@ -115,18 +128,29 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-success">
-                    <h5 class="modal-title text-white" id="formModaladd">Add District</h5>
+                    <h5 class="modal-title text-white" id="formModaladd">Add Police Sation</h5>
                     <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                        <form class="" method="post" action="<?= base_url("admin/districts_insert") ?>">
+                        <form class="" method="post" action="<?= base_url("admin/police_station_insert") ?>">
+                                <div class="form-group">
+                                <label>Police Station Name</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Police Station Name" name="police_station_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30">
+                                </div>
+                                </div>
                                 <div class="form-group">
                                 <label>District Name</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="district name" name="district_name" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" required maxlength="30">
+                                   <select class="form-control select2" name="district_id_fk" id="" style="width:100%">
+                                        <option disabled value="" selected hidden>Select District</option>
+                                        <?php if($district){ foreach($district as $dist){?>
+                                           <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
+                                        <?php } }?>
+                                    </select>
                                 </div>
                                 </div>
                                 <div class="row">
@@ -141,14 +165,16 @@
         </div>
       <script>
         
-            function districts_update(district_id)		{
+            function police_station_update(police_station_id)		{
               $.ajax({
-                url: 'admin/districts_edit_model/'+district_id,
+                url: 'admin/police_station_edit_model/'+police_station_id,
                 dataType: 'json',
                 success: function(response){ 
-                  $('#edit_district_name').val(response.district_name);
-                  $('#edit_district_id').val(response.district_id); 
-                  $('#edit_district_status option[value="' + response.district_status + '"]').prop('selected', true);
+                  $('#edit_police_station_name').val(response.police_station_name);
+                  $('#edit_police_station_id').val(response.police_station_id); 
+                  $('#edit_police_station_status option[value="' + response.police_station_status + '"]').prop('selected', true);
+                  $('#edit_district_id_fk option[value="' + response.district_id_fk + '"]').prop('selected', true);
+                  $('#edit_district_id_fk').trigger("change");
                 }
               });
             }
