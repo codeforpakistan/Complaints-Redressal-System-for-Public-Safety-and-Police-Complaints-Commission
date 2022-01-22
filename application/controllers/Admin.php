@@ -1287,8 +1287,9 @@ class Admin extends CI_Controller {
         $data['district']           = $this->model->status_active_record($table_name,$table_status_column_name,$table_status_column_value);
 
         
-        $this->load->view('template',$data);
-    //   $this->load->view('print_complaint_detail');
+        // $this->load->view('template',$data);
+      $this->load->view('print_complaint_detail',$data);
+      
     }
 
 }

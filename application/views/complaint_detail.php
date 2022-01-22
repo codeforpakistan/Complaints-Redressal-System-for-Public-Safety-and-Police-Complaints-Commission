@@ -306,7 +306,6 @@
                                 </div>
                             <?php } } ?> 
                   </div>
-                  <a class="btn btn-success" href="javascript:void(0)" style="float: right;" onclick="PrintDiv();">Print</a>
                  </div> <!---pdf section end -->
                 </div>
               </div>
