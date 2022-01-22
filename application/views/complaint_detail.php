@@ -195,8 +195,10 @@
                             <?php if($complaint_attachment){ foreach($complaint_attachment as $attachments){ ?>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                           <center> <a href="<?= $attachments->complaint_attachment_file_path?>" target="_blank">view</a>
-                                            <a href="<?= $attachments->complaint_attachment_file_path?>"  download>Download</a></center>
+                                           <center> 
+                                                <a href="<?= $attachments->complaint_attachment_file_path?>" target="_blank">view</a>
+                                                <a href="<?= $attachments->complaint_attachment_file_path?>"  download style="color:blue">Download</a>
+                                            </center>
                                             <input type="file" class="form-control dropify" data-height="100" data-default-file="<?= $attachments->complaint_attachment_file_path?>" data-show-remove="false" data-show-loader="false">
                                         </div>       
                                     </div> <!-- end of col-md-12 --> 
