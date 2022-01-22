@@ -192,15 +192,16 @@
                         <div class="row">
 
                             <label>Attachments:</label>
-                            <?php if($complaint_attachment){ foreach($complaint_attachment as $attachments){?>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <a href="<?= $attachments->complaint_attachment_file_path?>" target="_blank" class="btn btn-primary btn-sm ">view</a>
-                                    <a href="<?= $attachments->complaint_attachment_file_path?>" class="btn btn-success btn-sm" download>Download</a>
-                                </div>
-                            </div> <!-- end of col-md-12 --> 
+                            <?php if($complaint_attachment){ foreach($complaint_attachment as $attachments){ ?>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                           <center> <a href="<?= $attachments->complaint_attachment_file_path?>" target="_blank">view</a>
+                                            <a href="<?= $attachments->complaint_attachment_file_path?>"  download>Download</a></center>
+                                            <input type="file" class="form-control dropify" data-height="100" data-default-file="<?= $attachments->complaint_attachment_file_path?>" data-show-remove="false" data-show-loader="false">
+                                        </div>       
+                                    </div> <!-- end of col-md-12 --> 
                                        
-                                    <?php } }?>                        
+                                <?php } }?>                        
                         </div>  <!-- end row --> 
 
 
@@ -314,6 +315,9 @@
         </section>
       </div>
 <script>
+    $(document).ready(function(){
+        $('.dropify').dropify();
+    });
     $('#mydropzone').click(function()
     {
         $('#attachment_input').trigger('click');

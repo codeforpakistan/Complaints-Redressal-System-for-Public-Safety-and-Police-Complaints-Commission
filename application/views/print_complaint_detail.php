@@ -240,36 +240,16 @@
                                     </div>
                                 </div>
                             </div> <!-- end of col-md-12 -->                         
-                        </div>  <!-- end row --> 
-
-                        <div class="row">
-
-                            <label>Attachments:</label>
-                            <?php if($complaint_attachment){ foreach($complaint_attachment as $attachments){?>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <a href="<?= $attachments->complaint_attachment_file_path?>" target="_blank" class="btn btn-primary btn-sm ">view</a>
-                                    <a href="<?= $attachments->complaint_attachment_file_path?>" class="btn btn-success btn-sm" download>Download</a>
-                                </div>
-                            </div> <!-- end of col-md-12 --> 
-                                       
-                                    <?php } }?>                        
-                        </div>  <!-- end row --> 
-
-
-                            <!-- <div class="row">
-                                    <div class="col-md-12 text-right">
-                                      <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
-                                    </div>
-                                </div> -->   
+                        </div>  <!-- end row -->  
                         
                         <!------ ::::::::::::::::::::::::: start Stats and respondant replay form --- :::::::::::::::::::::::::::-->
+                        <?php if($complaints_remarks){ ?>
                         <div class="row bg-success text-white pt-2 text-center">
                             <div class="col-12 ">
                               <h3 class="text-center">Respondent Response</h3> 
                             </div>  
                         </div>
-                            <?php if($complaints_remarks){ foreach($complaints_remarks as $remarks){?>
+                            <?php foreach($complaints_remarks as $remarks){?>
                                 <div class="card card-success">
                                       <div class="card-header">
                                         <!--- heading start-->
