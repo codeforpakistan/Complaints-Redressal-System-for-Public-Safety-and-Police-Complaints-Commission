@@ -13,13 +13,13 @@
                                            'This Month'     => $thisMonth, // date('F',time())
                                            'Today'          => $thisDay,
                                            'Irrelevant'     => $reject,
-                                           'Web-Portal'     => $admin,
-                                           'Android'        => 0,
+                                           'Web-Portal'     => $web,
+                                           'Android'        => $mobile_app,
                                            'Applicants'     => $complainants,
                                          ); 
 
               foreach($dashboard_data_arr as $key_title => $value)
-              {
+              { 
                   $value_formatted = ($value != '') ? $value : '0';
 
                   echo '<div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">

@@ -54,15 +54,14 @@ class AdminModel extends CI_Model
     }
     function countAll($table_name,$talbe_column_name,$value)
     {
-      return  $this->db->where($talbe_column_name,$value)->count_all_results($table_name);
+      return  $this->db->like($talbe_column_name,$value)->count_all_results($table_name);
     }
     function thisDay()
     {
-        $thisDay = date('Y-m-d');
-        $this->db->where('DATE(complaint_entry_timestamp) >= now()');
-        $this->db->where('DATE(complaint_entry_timestamp) <= now()');
-        $this->db->count_all_results('complaints'); 
-        // echo $this->db->last_query(); exit;
+        $this->db->where('DAY(complaint_entry_timestamp)', date('d'));
+        $this->db->where('MONTH(complaint_entry_timestamp)', date('m'));
+        $this->db->where('YEAR(complaint_entry_timestamp)', date('Y'));
+        return $this->db->count_all_results('complaints');
     }
     function thisMonth()
     {
@@ -73,8 +72,8 @@ class AdminModel extends CI_Model
     }
     function thisYear()
     {
-        $this->db->where('DATE(complaint_entry_timestamp)',date('Y'));
-       return $this->db->count_all_results('complaints'); 
+        $this->db->where('YEAR(complaint_entry_timestamp)',date('Y'));
+       return $this->db->count_all_results('complaints');  
     }
     function IT_district_admins()
     {

@@ -209,9 +209,9 @@ class Admin extends CI_Controller {
         
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
-        $data['complaints']     = $this->model->countAll('complaints','complaint_status_id_fk',1);
-        $data['admin']          = $this->model->countAll('complaints','complaint_source','admin');
-        $data['complainants']   = $this->model->countAll('complaints','complaint_source','complainant');
+        $data['complaints']     = $this->db->count_all_results('complaints');
+        $data['web']            = $this->model->countAll('complaints','complaint_source','web');
+        $data['mobile_app']     = $this->model->countAll('complaints','complaint_source','mobile-app');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);

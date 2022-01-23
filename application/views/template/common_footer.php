@@ -24,6 +24,8 @@
   <script src="assets/js/page/multiple-upload.js"></script>
   <!-- Template JS File -->
   <script src="assets/js/scripts.js"></script>
+  <!-- JS Libraies -->
+  <script src="assets/bundles/izitoast/js/iziToast.min.js"></script>
   <!-- Custom JS File -->
   <script src="assets/js/custom.js"></script>
   <script src="breadcrumb_assets/script.js"></script>
