@@ -6,22 +6,15 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="col-9 pl-0">
+                    <div class="col-6 pl-0">
                       <h4> Complaints </h4>
                     </div>
-                    <div class="col-3 text-right pr-0">
-                      <a href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>  
+                    <div class="col-6 text-right pr-0">
+                      <a style="margin-right:5px;" href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>  
+                      <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn custom-success-btn" style="background: #2eaac7 !important; border:none; color:#fff;"><i class="fas fa-cloud-download-alt"></i> Export</a>
                     </div>  
-					<div class="col-3 text-right pr-0">
-						<!-- <div class="show pagination here">
-							<div class="col-md-12">
-								<?= $pagination; ?>
-								<a href="<?= base_url('admin/exportIntoExcel')?>" class="btn btn-info pull-right"><i class="fas fa-cloud-download-alt"></i> Export</a>
-							</div>
-						</div>
-						<div class="clearfix"></div> -->
-					</div>
-				</div>
+					<div class="clearfix"></div>
+				  </div>
                   <div class="card-body">
                       <!-- start messages --->
                            <div style="text-align: center">
