@@ -7,8 +7,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Admin extends CI_Controller {
     
     public function __construct()
-	{   
-		parent::__construct();
+    {   
+        parent::__construct();
         $this->load->model('AdminModel','model');
         $this->load->model('ComplaintModel','complaint');
         $this->load->library('auto_no.php','zend');
@@ -22,7 +22,7 @@ class Admin extends CI_Controller {
         //     // $this->messages('alert-danger','Your session is expired please loing');
         //     // return redirect(base_url() );
         // }
-	} 
+    } 
 
     public function check_role_privileges($page_name,$role_id)
     {
@@ -135,7 +135,7 @@ class Admin extends CI_Controller {
             $response = $this->AuthModel->user_login($array); 
             
             if(!empty($response))// is user name and passsword valid
-			{
+            {
                 $this->session->set_userdata('user_id',$response->user_id);
                 $this->session->set_userdata('user_name',$response->user_name);
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
@@ -146,23 +146,23 @@ class Admin extends CI_Controller {
                     $this->session->set_flashdata('errorMsg', "Complainant Not allowed");
                     $this->messages('alert alert-danger',"Complainant Not allowed"); 
 
-	         	    $this->logout_user(); exit();
+                    $this->logout_user(); exit();
                   }
                   else
                   {
                       redirect('/admin/dashboard'); exit();
                   }
                 
-				} // end is user name and passsword valid
+                } // end is user name and passsword valid
                 else // not match ue name and pass
-	             {
-	             	$this->session->set_flashdata('errorMsg', "Username Or Password Invalid");
+                 {
+                    $this->session->set_flashdata('errorMsg', "Username Or Password Invalid");
                     $this->messages('alert alert-danger',"Username Or Password Invalid"); 
 
-	         	    redirect(base_url());
-	         	    exit();
+                    redirect(base_url());
+                    exit();
 
-	             }  //end // not match ue name and pass 
+                 }  //end // not match ue name and pass 
              //print_r($response);
         }  
     }
@@ -183,6 +183,9 @@ class Admin extends CI_Controller {
         $this->session->unset_userdata('user_name');
         $this->session->unset_userdata('user_id'); 
         $this->session->unset_userdata('user_role_id_fk'); 
+        $this->session->unset_userdata('user_id'); 
+        $this->session->unset_userdata('user_role_name'); 
+        $this->session->unset_userdata('user_district_id_fk'); 
         $this->session->sess_destroy();
         $this->clear_cache();
         session_start();
@@ -219,7 +222,7 @@ class Admin extends CI_Controller {
         $data['thisMonth']      = $this->model->thisMonth();
         $data['thisYear']       = $this->model->thisYear(); 
         $data['users']          = $this->model->countUsersByRoleId(3); 
-        $data['complainant']    = $this->model->countUsersByRoleId(4);
+        $data['complainants']    = $this->model->countUsersByRoleId(4);
         $this->load->view('template',$data);
     }
 
@@ -349,6 +352,7 @@ class Admin extends CI_Controller {
             $user_password     = $this->input->post('user_password');
             // $user_district_id_fk=$this->input->post('district_id');
             $user_status       = $this->input->post('user_status');
+            $user_role_id_fk      = $this->input->post('user_role_id_fk');
             $table_name        = "users";
             $talbe_column_name = 'user_id';
             $table_id          = $user_id;
@@ -368,7 +372,7 @@ class Admin extends CI_Controller {
                 $this->form_validation->set_rules('district_id', 'For Dostrict-admin District selection', 'required|trim');
             }
             
-            $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
+            // $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
             if ($this->form_validation->run() == FALSE)
             {
                 $error   = array('error' => validation_errors());
@@ -380,7 +384,15 @@ class Admin extends CI_Controller {
             else
             {
                 $user_district_id_fk= (empty($this->input->post('district_id'))? 0:$this->input->post('district_id'));
-                $update_it_array   = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_status'=>$user_status,'user_district_id_fk'=>$user_district_id_fk);
+                if(empty($user_password))
+                {
+                    $update_it_array   = array('user_name'=>$user_name,'user_status'=>$user_status,'user_district_id_fk'=>$user_district_id_fk,'user_role_id_fk'=>$user_role_id_fk);
+                }
+                else
+                {
+                  $update_it_array   = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_status'=>$user_status,'user_district_id_fk'=>$user_district_id_fk,'user_role_id_fk'=>$user_role_id_fk);  
+                }
+                
                 $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
                     if($response == true)
                     {
@@ -426,7 +438,7 @@ class Admin extends CI_Controller {
     
     public function police_stations()
     {   
-        $this->check_role_privileges('districts',$this->session->userdata('user_role_id_fk'));
+        $this->check_role_privileges('police_stations',$this->session->userdata('user_role_id_fk'));
         $data['police_sation'] = $this->model->police_stations();
         // git district
         $data['district']  = $this->model->status_active_record('districts','district_status',1);
@@ -835,12 +847,31 @@ class Admin extends CI_Controller {
     
     public function complaint_register_ajax() 
     {    
+    	// CNIC Validation
+         $form_cnic         = $this->input->post('complainant_cnic');
+         $validate_cnic = str_replace("-", "", $form_cnic);
+         $validate_cnic = str_replace("_", "", $validate_cnic);
+         if(strlen($validate_cnic) < 13)
+         {
+             echo "Invalid CNIC"; exit;
+         }
+         
+    	// contact number validation
+    	 $form_contact          = $this->input->post('complainant_contact');
+         $validate_contact = str_replace("-", "", $form_contact);
+         $validate_contact = str_replace("_", "", $validate_contact);
+         if(strlen($validate_contact) < 11)
+         {
+             echo "Invalid contact number"; exit;
+         }
+         
+
         $this->form_validation->set_rules('complainant_name', 'Complainant Name', 'required|trim');
-        $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim');
+        $this->form_validation->set_rules('complainant_contact', 'Complainant Contact', 'required|trim|max_length[12]|min_length[12]');
         $this->form_validation->set_rules('complainant_guardian_name', 'Complainant Guardian Name', 'required|trim');
         $this->form_validation->set_rules('complainant_council', 'Complainant Union Council', 'required|trim');
         $this->form_validation->set_rules('complainant_gender', 'Complainant Gender', 'required|trim');
-        $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim');
+        $this->form_validation->set_rules('complainant_cnic', 'Complainant CNIC', 'required|trim|max_length[15]|min_length[15]');
         $this->form_validation->set_rules('complaint_category_id', 'Complaint Category_id', 'required|trim');
         $this->form_validation->set_rules('complainant_address', 'Complainant Address', 'required|trim');
         $this->form_validation->set_rules('district_id_fk', 'District', 'required|trim');
@@ -909,7 +940,7 @@ class Admin extends CI_Controller {
                                         'complaint_council'         => $complaint_council,
                                         'complaint_detail'          => $complaint_detail,
                                         'complaint_status_id_fk'    => '1', //  1= pending, will make it global in next update
-                                        'complaint_source'          => 'admin',
+                                        'complaint_source'          => 'web',
                                         'district_id_fk'            => $district_id_fk
                                     );
                 $this->load->model('ComplaintModel');
@@ -1025,7 +1056,7 @@ class Admin extends CI_Controller {
         $uri_segment = 3;
         $offset      = $this->uri->segment($uri_segment);
         $config = array();
-        $config['total_rows']=$this->complaint->count_complaints();
+        $config['total_rows']      = $this->complaint->count_complaints();
         $config['base_url']        = site_url('/admin/detail_report');
         $config['per_page']        = $displayLimit;
         $config['num_links']        = 4;
@@ -1192,50 +1223,50 @@ class Admin extends CI_Controller {
     }
     public function exportIntoExcel() 
     {
-		// load excel library
-			$this->load->library('excel');
-			$uri_segment = 3;
-			$displayLimit = "10";
-		
-		
-			if($this->session->userdata('displayLimit'))
-			{
-				$displayLimit = $this->session->userdata('displayLimit');
-			}
-			
-		    $offset      = $this->uri->segment($uri_segment);
+        // load excel library
+            $this->load->library('excel');
+            $uri_segment = 3;
+            $displayLimit = "10";
+        
+        
+            if($this->session->userdata('displayLimit'))
+            {
+                $displayLimit = $this->session->userdata('displayLimit');
+            }
+            
+            $offset      = $this->uri->segment($uri_segment);
             $empInfo    = $this->complaint->get_complaints($displayLimit,$offset); 
-			$objPHPExcel = new PHPExcel();
-			$objPHPExcel->setActiveSheetIndex(0);
-			// set Header
-			$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Complaint Date');
-			$objPHPExcel->getActiveSheet()->SetCellValue('B1', 'Citizen Name');
-			$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Against District');
-			$objPHPExcel->getActiveSheet()->SetCellValue('D1', 'Source');
-			$objPHPExcel->getActiveSheet()->SetCellValue('E1', 'Status'); 
-			$objPHPExcel->getActiveSheet()->SetCellValue('F1', 'Complaint Category'); 
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->setActiveSheetIndex(0);
+            // set Header
+            $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Complaint Date');
+            $objPHPExcel->getActiveSheet()->SetCellValue('B1', 'Citizen Name');
+            $objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Against District');
+            $objPHPExcel->getActiveSheet()->SetCellValue('D1', 'Source');
+            $objPHPExcel->getActiveSheet()->SetCellValue('E1', 'Status'); 
+            $objPHPExcel->getActiveSheet()->SetCellValue('F1', 'Complaint Category'); 
             $objPHPExcel->getActiveSheet()->SetCellValue('G1', 'Complaint Council');
-			// set Row
-			$rowCount = 2;
-			foreach ($empInfo as $att) 
-			{
-				$objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $att['complaint_entry_timestamp']);
-				$objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $att['complainant_name']);
-				$objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $att['district_name']);
-				$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $att['complaint_source']);
-				$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $att['complaint_status_title']);
-				$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $att['complaint_category_name']); 
+            // set Row
+            $rowCount = 2;
+            foreach ($empInfo as $att) 
+            {
+                $objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $att['complaint_entry_timestamp']);
+                $objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $att['complainant_name']);
+                $objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $att['district_name']);
+                $objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $att['complaint_source']);
+                $objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $att['complaint_status_title']);
+                $objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $att['complaint_category_name']); 
                 $objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, $att['complaint_council']);
-				$rowCount++;
-			}
-			
-			$filename = "complaint". date("m-d-Y-H-i-s").".CSV";
-			header('Content-Type: application/vnd.ms-excel'); 
-			header('Content-Disposition: attachment;filename="'.$filename.'"');
-			header('Cache-Control: max-age=0'); 
-			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV');  
-			$objWriter->save('php://output');       
-		}
+                $rowCount++;
+            }
+            
+            $filename = "complaint". date("m-d-Y-H-i-s").".CSV";
+            header('Content-Type: application/vnd.ms-excel'); 
+            header('Content-Disposition: attachment;filename="'.$filename.'"');
+            header('Cache-Control: max-age=0'); 
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV');  
+            $objWriter->save('php://output');       
+        }
 
     function update_profile()
     { 
