@@ -79,10 +79,13 @@
           </div> 
           <ul class="sidebar-menu">
             <li class="dropdown active">
-              <a href="<?= base_url()?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard </span></a>
+              <a href="<?= base_url()?>" class="nav-link">
+                <img src="assets/img/dashboard-icons/dashboard.png" />
+                <span>Dashboard </span>
+              </a>
             </li>
             
-             <?php if($users   == 1) { ?>
+            <?php if($users   == 1) { ?>
             <li class="dropdown">
                 <a href="admin/users" class="nav-link">
                   <i data-feather="users"></i><span>Users</span>
