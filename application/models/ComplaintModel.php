@@ -1,6 +1,6 @@
 <?php 
 
-if (!defined('BASEPATH'))	exit('No direct script access allowed');
+if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
 class ComplaintModel extends CI_Model
 {  
@@ -171,7 +171,7 @@ class ComplaintModel extends CI_Model
                     
                     if ($attachment_upload_response['response'] == 0)
                     {
-        			    return array('response'=>0,'response_msg'=>$attachment_upload_response['response_msg']);
+                        return array('response'=>0,'response_msg'=>$attachment_upload_response['response_msg']);
                     }
                     else
                     {
@@ -192,7 +192,7 @@ class ComplaintModel extends CI_Model
         }
     }
     
-	public function upload_files($path, $title, $files, $data_arr)
+    public function upload_files($path, $title, $files, $data_arr)
     {
         $required_fields = array('complaint_id_fk'=>0,'user_id_fk'=>0,'remarks_id_fk'=>0);
         $missing = array_diff_key($required_fields,$data_arr);
@@ -461,8 +461,9 @@ class ComplaintModel extends CI_Model
             {
                 if($complaint_source == 'All')
                 {
-                  $this->db->or_where('complaint_source','web');
-                  $this->db->or_where('complaint_source',' mobile-app');
+                  // $this->db->or_where('complaint_source','web');
+                  // $this->db->or_where('complaint_source',' mobile-app');
+                     $this->db->where("(`complaints`.`complaint_source` = 'web' or `complaints`.`complaint_source`= 'mobile-app')");
                 }
                 else
                 {
@@ -587,7 +588,7 @@ class ComplaintModel extends CI_Model
         $this->db->join('respondents','respondents.respondent_id=complaint_remarks.respondent_id_fk','left');
      return $this->db->get()->result();
     }
-	
+    
     function district_reports()
     {
         $this->db->select('c.complaint_id,count(c.complaint_id) noofcomplaints,d.district_name');
@@ -604,16 +605,16 @@ class ComplaintModel extends CI_Model
       $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
       $this->db->join('complaint_statuses','complaint_statuses.complaint_status_id=complaints.complaint_status_id_fk','left');
 
-      $session_role_id     = $this->session->userdata('user_role_id_fk');
+      $session_role_id       = $this->session->userdata('user_role_id_fk');
         $session_district_id = $this->session->userdata('user_district_id_fk');
-        if($session_role_id != 1 )
+        if($session_role_id != 1 && $session_role_id != 3)
         {
             $this->db->where('complaints.district_id_fk',$session_district_id);
         }
      $this->db->order_by('complaint_id','desc');
      $this->db->limit(200);
       $query = $this->db->get(); 
-    //  echo $this->db->last_query(); 
+      // echo $this->db->last_query(); 
 
         if($query->num_rows() > 0) 
         {
