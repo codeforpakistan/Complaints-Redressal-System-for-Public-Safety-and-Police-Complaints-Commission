@@ -140,6 +140,7 @@
 									</tfoot>
 								<?php }?>
 							</table>
+							<?= $pagination; ?>
               			
                        <!-- :::::::::::::::::::::::::::::::::::: list of complaint end   :::  -->
                     </div>

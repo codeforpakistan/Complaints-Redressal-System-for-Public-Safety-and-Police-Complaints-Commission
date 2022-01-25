@@ -50,10 +50,13 @@
           </ul>
         </div>
         <ul class="navbar-nav navbar-right">
-          <li style="color:#fff; padding-top:5px;"> Code Merged: Jan 10,2022 10:40am</li></li>    
+          <!--<li style="color:#fff; padding-top:5px;"> Code Merged: Jan 10,2022 10:40am</li></li>    -->
           <li class="dropdown"><a href="#" data-toggle="dropdown"
-              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="assets/img/user.png"
-                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> 
+                <!--<img alt="image" src="assets/img/user.png" class="user-img-radious-style">-->
+                <div style="width: 40px; height: 40px; border: 1px solid #fff; display: inline-block; text-align: center; border-radius: 50%; padding-top: 2px;"><i class="fa fa-user" class="user-img-radious-style"></i></div>
+                <span class="d-sm-none d-lg-inline-block"></span>
+            </a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title"><?= $this->session->userdata('user_role_name')?></div>
               <!-- <a href="profile.html" class="dropdown-item has-icon" data-toggle="modal" data-target="#updateAmdinPasswordModel"> -->

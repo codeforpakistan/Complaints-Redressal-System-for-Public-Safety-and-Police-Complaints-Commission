@@ -14,7 +14,7 @@
                         <thead class="">
                           <tr>
                             <th>District Name</th>
-                            <th># Of Complaints</th>
+                            <th>Total Complaints</th>
                           </tr>
                         </thead>
                         <?php if($district_reports):?>

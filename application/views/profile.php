@@ -128,12 +128,12 @@
                               </div>
                               <div class="row">
                                   <div class="form-group col-md-6 col-12">
-                                    <label>Password</label>
-                                    <input type="password" class="form-control" name="password" onChange="onChange()" required>
+                                    <label>New Password</label>
+                                    <input type="password" class="form-control" name="password" onChange="onChange()">
                                   </div>
                                   <div class="form-group col-md-6 col-12">
-                                    <label>Conform Password</label>
-                                    <input type="password" class="form-control" name="confirm" onChange="onChange()" required>
+                                    <label>Re-type New Password</label>
+                                    <input type="password" class="form-control" name="confirm" onChange="onChange()">
                                   </div>
                               </div>
                               <div class="row">

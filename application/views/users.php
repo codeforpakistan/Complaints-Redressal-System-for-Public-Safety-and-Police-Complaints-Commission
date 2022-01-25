@@ -90,7 +90,7 @@
                             <div class="form-group">
                               <label>User</label>
                               <div class="input-group">
-                                  <select class="form-control" id="toggleDistrictSection_edit" name="user_role_id_fk" style="width:90%" required>
+                                  <select class="form-control" id="toggleDistrictSection_edit" name="user_role_id_fk" style="width:1000%" required>
                                     <option value="2">IT Staff</option>
                                     <option value="3">District Admin</option>
                                 </select>
@@ -100,7 +100,7 @@
                             <div class="form-group" id="hideShowDistrictEdit">
                                   <label>District</label>
                                   <div class="input-group">
-                                      <select class="form-control select2" id="edit_district_id" name="district_id" style="width:90%">
+                                      <select class="form-control select2" id="edit_district_id" name="district_id" style="width:1000%">
                                       <?php if($district){ foreach($district as $dist){?>
                                            <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
                                         <?php } }?>
@@ -236,7 +236,7 @@
             dataType: 'json',
             success: function(response){ 
               $('#edit_user_name').val(response.user_name);
-              $('#edit_user_password').val(response.user_password);
+            //   $('#edit_user_password').val(response.user_password);
               $('#edit_user_id').val(response.user_id); 
               $('#toggleDistrictSection_edit option[value="' + response.user_role_id_fk + '"]').prop('selected', true);
               $('#edit_user_status option[value="' + response.user_status + '"]').prop('selected', true);

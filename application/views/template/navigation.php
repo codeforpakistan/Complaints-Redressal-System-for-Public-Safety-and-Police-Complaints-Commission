@@ -15,6 +15,7 @@
 
       foreach($access_data as $oneByOne)
       { 
+
         if($oneByOne->page_name == 'dashboard')
         { 
           $dashboard = $oneByOne->access;
@@ -36,7 +37,7 @@
           $users = $oneByOne->access;
         }
         if($oneByOne->page_name == 'districts')
-        {
+        { 
           $districts = $oneByOne->access;
         }
         if($oneByOne->page_name == 'reports')
@@ -78,37 +79,17 @@
           </div> 
           <ul class="sidebar-menu">
             <li class="dropdown active">
-              <a href="<?= base_url()?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+              <a href="<?= base_url()?>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard </span></a>
             </li>
-            <?php if($complaints == 1 && $complaint_register == 1){?>
-            <li class="dropdown"> 
-                <a href="#" class="menu-toggle nav-link has-dropdown">
-                  <i data-feather="briefcase"></i><span>Complaints</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <?php if($complaints == 1) {?>
-                    <li><a class="nav-link" href="admin/complaints">View All</a></li>
-                     <?php } if($complaint_register  == 1) {?>
-                    <li><a class="nav-link" href="admin/complaint_register">Register Complaint</a></li>
-                    <?php } ?>
-                </ul>
-            </li>
-              <?php } ?> 
-              <?php if($complaint_categories  == 1) { ?>
-            <li class="dropdown">
-                <a href="admin/complaint_categories" class="nav-link">
-                  <i data-feather="briefcase"></i><span>Complaint Categories</span>
-                </a>
-            </li> 
             
-             <?php } if($users   == 1) { ?>
+             <?php if($users   == 1) { ?>
             <li class="dropdown">
                 <a href="admin/users" class="nav-link">
                   <i data-feather="users"></i><span>Users</span>
                 </a>
             </li> 
 
-            <?php } if($districts   == 1){ ?>        
+            <?php } if($districts == 1){ ?>        
             
             <li class="dropdown">
                 <a href="admin/districts" class="nav-link">
@@ -121,6 +102,22 @@
                   <i data-feather="briefcase"></i><span>Police Stations</span>
                 </a>
             </li>
+            <?php } ?> 
+            
+            <?php if($complaint_categories  == 1) { ?>
+            <li class="dropdown">
+                <a href="admin/complaint_categories" class="nav-link">
+                  <i data-feather="briefcase"></i><span>Complaint Categories</span>
+                </a>
+            </li> 
+            <?php } ?> 
+            
+            <?php if($complaints == 1) { ?>
+            <li class="dropdown">
+                <a href="admin/complaints" class="nav-link">
+                  <i data-feather="briefcase"></i><span>Complaints</span>
+                </a>
+            </li> 
             <?php } ?> 
 
             <li class="dropdown">
