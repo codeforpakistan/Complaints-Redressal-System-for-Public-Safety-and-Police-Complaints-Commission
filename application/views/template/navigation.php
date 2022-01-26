@@ -80,8 +80,7 @@
           <ul class="sidebar-menu">
             <li class="dropdown active">
               <a href="<?= base_url()?>" class="nav-link">
-                <img src="assets/img/dashboard-icons/dashboard.png" />
-                <span>Dashboard </span>
+                <i data-feather="monitor"></i><span>Dashboard</span>
               </a>
             </li>
             

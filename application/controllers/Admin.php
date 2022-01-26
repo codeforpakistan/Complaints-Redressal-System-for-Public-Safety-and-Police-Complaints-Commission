@@ -218,6 +218,12 @@ class Admin extends CI_Controller {
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
         $data['complete']       = $this->model->countAll('complaints','complaint_status_id_fk',5);
         $data['reject']         = $this->model->countAll('complaints','complaint_status_id_fk',6);
+        $data['itstaffAdmin']   = $this->model->countAll('users','user_role_id_fk',2);
+        $data['districtAdmin']  = $this->model->countAll('users','user_role_id_fk',3);
+        $data['activeDistricts']= $this->model->countAll('districts','district_status',1);
+        $data['inActiveDistricts']= $this->model->countAll('districts','district_status',0);
+        $data['policeStations'] = $this->model->countAll('police_stations','police_station_status',1);
+        $data['districts']      = $this->db->count_all_results('districts'); 
         $data['thisDay']        = $this->model->thisDay(); 
         $data['thisMonth']      = $this->model->thisMonth();
         $data['thisYear']       = $this->model->thisYear(); 

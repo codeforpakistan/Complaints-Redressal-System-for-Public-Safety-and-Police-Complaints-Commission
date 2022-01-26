@@ -16,6 +16,12 @@
                                            'Web-Portal'     => $web,
                                            'Android'        => $mobile_app,
                                            'Applicants'     => $complainants,
+                                           'IT-Staff Admin' => $itstaffAdmin,
+                                           'District Admin' => $districtAdmin,
+                                           'districts'      => $districts,
+                                           'Active-Districts'=> $activeDistricts,
+                                           'Inactive-Districts'=>$inActiveDistricts,
+                                           'Police Stations'    => $policeStations
                                          ); 
 
               foreach($dashboard_data_arr as $key_title => $value)
