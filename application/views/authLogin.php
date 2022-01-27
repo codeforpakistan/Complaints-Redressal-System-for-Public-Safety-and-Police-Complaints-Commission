@@ -26,9 +26,12 @@
           <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <div class="card card-primary">
               <div class="card-header">
-                <h4>Login</h4>
+                <img alt="image" src="assets/img/logo/logo-full.png" class="header-logo" />
+                <hr>
+                <!-- <h3 class="text-center">Login</h3> -->
               </div>
               <div class="card-body">
+              <h5 class="card-title text-center">User Login</h5>
                 <!-- start messages --->
                   <div style="text-align: center">
                       <?php if($feedback =$this->session->flashdata('feedback')){
