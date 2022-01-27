@@ -43,7 +43,11 @@ $("#table-2").dataTable({
 $('#save-stage').DataTable({
   "scrollX": true,
   stateSave: true,
-  // "ordering": false,
+  // "columnDefs": [
+  //   { "sortable": false, "targets":"no-sort" }
+  // ],
+  "ordering": false,
+  order: [[1, "desc"]] //column indexes is zero based
 });
 $('#tableExport').DataTable({
   dom: 'Bfrtip',

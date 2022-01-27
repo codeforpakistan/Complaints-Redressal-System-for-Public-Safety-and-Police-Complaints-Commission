@@ -27,8 +27,6 @@
             <div class="card card-primary">
               <div class="card-header">
                 <img alt="image" src="assets/img/logo/logo-full.png" class="header-logo" />
-                <hr>
-                <!-- <h3 class="text-center">Login</h3> -->
               </div>
               <div class="card-body">
               <h5 class="card-title text-center">User Login</h5>
@@ -75,6 +73,12 @@
                       please fill in your password
                     </div>
                   </div>
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                      <label class="custom-control-label" for="remember-me" onclick="hideShowPassword()" id="showHideLabel">Show password</label>
+                    </div>
+                  </div> 
                   <!-- <div class="form-group">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
@@ -146,4 +150,17 @@ $(document).ready(function(){
         });
     });
 });
+function hideShowPassword() 
+{
+  var passsword = document.getElementById("password");
+  var label     = document.getElementById('showHideLabel');
+
+  if (passsword.type === "password") {
+    passsword.type = "text";
+    label.innerHTML='Hide Password';
+  } else {
+    passsword.type = "password";
+    label.innerHTML='Show Password';
+  }
+}
 </script>

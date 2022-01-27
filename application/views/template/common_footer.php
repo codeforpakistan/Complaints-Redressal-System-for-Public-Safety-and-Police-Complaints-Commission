@@ -107,5 +107,15 @@ function onlyDigits(charCode)
         return true;
     }
 }
- 
+// $(document).ready(function() {
+//   $('#save-stage').DataTable({
+
+//     "ordering": true,
+//     columnDefs: [{
+//       orderable: false,
+//       targets: "no-sort"
+//     }]
+
+//   });
+// });
 </script>

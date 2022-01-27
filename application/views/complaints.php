@@ -69,8 +69,8 @@
                             <th>Applicant Name</th>
                             <th>District</th>
                             <th>Complaint Date</th>
-                            <th>Status </th>
-                            <th>Actions</th> 
+                            <th class="no-sort">Status </th>
+                            <th class="no-sort">Actions</th> 
                         </tr>
                         </thead>
                             <tbody>
