@@ -112,12 +112,20 @@
                   <i data-feather="briefcase"></i><span>Complaint Categories</span>
                 </a>
             </li> 
-            <?php } ?> 
+            <?php } ?>  
             
             <?php if($complaints == 1) { ?>
             <li class="dropdown">
                 <a href="admin/complaints" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaints</span>
+                </a>
+            </li> 
+            <?php } ?> 
+
+            <?php if($complaint_register == 1) { ?>
+            <li class="dropdown">
+                <a href="admin/complaint_register" class="nav-link">
+                  <i data-feather="briefcase"></i><span>Register Complaint</span>
                 </a>
             </li> 
             <?php } ?> 

@@ -37,7 +37,13 @@
 
             <div class="clearfix"></div>
             <div class="row">
-              <div class="col-12 text-right" style="padding-bottom:10px;">
+              <div class="col-8">
+              <!-- <a href="javascript:void(0)" class="btn btn-icon icon-left btn-warning custom-success-btn">
+                  <strong> Latest 200 Records Only.</strong> For More Records: Visit Reports > Detail Report
+              </a> -->
+                <!-- <span class="badge text-capitalize alert alert-warning"><strong> Latest 200 Records Only.</strong> For More Records: Visit Reports > Detail Report</span> -->
+               </div>
+              <div class="col-4 text-right" style="margin-bottom:10px;">
                     <a href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint</a>  
               </div>
               <div class="col-12">
@@ -69,8 +75,8 @@
                             <th>Applicant Name</th>
                             <th>District</th>
                             <th>Complaint Date</th>
-                            <th class="no-sort">Status </th>
-                            <th class="no-sort">Actions</th> 
+                            <th>Status</th>
+                            <th>Actions</th> 
                         </tr>
                         </thead>
                             <tbody>

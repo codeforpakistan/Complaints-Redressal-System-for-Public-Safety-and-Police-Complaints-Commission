@@ -42,8 +42,8 @@
                             <th>User Name</th>
                             <th>District</th>
                             <th>Role</th>
-                            <th class="no-sort">Status</th>
-                            <th class="no-sort">Action</th>
+                            <th>Status</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <?php if($users):?>
