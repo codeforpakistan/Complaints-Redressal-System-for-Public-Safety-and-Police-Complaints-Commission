@@ -204,11 +204,13 @@ class ComplaintModel extends CI_Model
         
         //======================================================================
        
+        $this->load->library('image_lib');
         $config = array(
                         'upload_path'   => $path,
                         // 'allowed_types' => 'jpg|jpeg|png|pdf|doc|docx|xls|xlsx|csv|txt|rtf|zip|mp3|wma|flv|mpg|avi',
                         'allowed_types' => '*',
-                        'overwrite'     => 1,                       
+                        'overwrite'     => 1, 
+                        // 'max_size'      => 1024,                     
                         );
 
         $this->load->library('upload', $config);
@@ -240,6 +242,20 @@ class ComplaintModel extends CI_Model
 
             if($this->upload->do_upload('attachments[]')) 
             {
+                $image_data =   $this->upload->data();
+               // image resize
+                $configer =  array(
+                'image_library'   => 'gd2',
+                'source_image'    =>  $image_data['full_path'],
+                'maintain_ratio'  =>  TRUE,
+                'width'           =>  250,
+                'height'          =>  250,
+                );
+                $this->image_lib->clear();
+                $this->image_lib->initialize($configer);
+                $this->image_lib->resize();
+               // edn of image resize
+
                 $timestamp_now = date("Y-m-d H:i:s",time());
                 $file_path_formatted = substr($file_path, 2); // remove ./ from start of the path string
                 
@@ -265,7 +281,13 @@ class ComplaintModel extends CI_Model
         
         $join_arr = [];
         array_push($join_arr,array('j_table'=>'complainants','t_table'=>'complaints','select_columns'=>array('complainant_name'=>0),'t_column'=>'complainant_id_fk','j_column'=>'complainant_id'));
+
         array_push($join_arr,array('j_table'=>'districts','t_table'=>'complaints','select_columns'=>array('district_name'=>0),'t_column'=>'district_id_fk','j_column'=>'district_id'));
+
+        array_push($join_arr,array('j_table'=>'complaint_statuses','t_table'=>'complaints','select_columns'=>array('complaint_status_title'=>0,'complaint_status_color'=>0),'t_column'=>'complaint_status_id_fk','j_column'=>'complaint_status_id'));
+
+        array_push($join_arr,array('j_table'=>'complaint_categories','t_table'=>'complaints','select_columns'=>array('complaint_category_name'=>0),'t_column'=>'complaint_category_id_fk','j_column'=>'complaint_category_id'));
+
         
         //======================================================================
         // set condition arr
@@ -490,7 +512,7 @@ class ComplaintModel extends CI_Model
           return FALSE;
         }
     }
-    
+    // by sadam
     function count_complaints()
     {
         $district_id = "";

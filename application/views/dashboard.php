@@ -18,7 +18,7 @@
                                            'Applicants'     => $complainants,
                                            'IT-Staff Admin' => $itstaffAdmin,
                                            'District Admin' => $districtAdmin,
-                                           'districts'      => $districts,
+                                           'Districts'      => $districts,
                                            'Active-Districts'=> $activeDistricts,
                                            'Inactive-Districts'=>$inActiveDistricts,
                                            'Police Stations'    => $policeStations

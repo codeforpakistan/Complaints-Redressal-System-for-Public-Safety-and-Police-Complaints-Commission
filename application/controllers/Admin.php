@@ -228,7 +228,7 @@ class Admin extends CI_Controller {
         $data['thisMonth']      = $this->model->thisMonth();
         $data['thisYear']       = $this->model->thisYear(); 
         $data['users']          = $this->model->countUsersByRoleId(3); 
-        $data['complainants']    = $this->model->countUsersByRoleId(4);
+        $data['complainants']   = $this->model->countUsersByRoleId(4);
         $this->load->view('template',$data);
     }
 

@@ -596,7 +596,8 @@ class Api extends CI_Controller {
         
         //======================================================================
         // call function
-        //======================================================================
+        //====================================================================== 
+        // print_r($cond_arr); exit;
         
         $data = $this->DmlModel->get('complaint_categories', $join_arr, $cond_arr, $order_by_arr, $limit);
         

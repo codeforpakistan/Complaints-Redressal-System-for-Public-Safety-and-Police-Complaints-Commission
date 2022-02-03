@@ -236,7 +236,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group ">
                                             <label>Attachments: <span class="add" style="cursor:pointer;color:blue;">Add More Attachments</span></label>
-                                            <input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="10M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
+                                            <input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="200M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
                                         </div> 
                                     </div> 
 
@@ -263,7 +263,7 @@
    
 
     $('.add').click(function() {
-        $('.optionBox:last').append('<div class="col-md-3 block"><label>Attachment:</label><div class="form-group"><input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="10M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" ><span class="remove" style="cursor:pointer;color:blue;">Remove</span> </div> </div>');
+        $('.optionBox:last').append('<div class="col-md-3 block"><label>Attachment:</label><div class="form-group"><input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="200M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" ><span class="remove" style="cursor:pointer;color:blue;">Remove</span> </div> </div>');
         $('.dropify').dropify();
     });
     $('.optionBox').on('click','.remove',function() { 
