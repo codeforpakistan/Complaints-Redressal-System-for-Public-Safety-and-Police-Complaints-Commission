@@ -425,7 +425,7 @@ class ComplaintModel extends CI_Model
 
     //::::::::::::::::::::::::::::::::::: sadam ::::::::::::::::::::::::::::::::::::::
     
-    function get_complaints($limit=20,$offset=0)
+    function get_complaints($limit=10,$offset=0)
     { 
         $displayLimit = "10";
 
@@ -512,7 +512,90 @@ class ComplaintModel extends CI_Model
           return FALSE;
         }
     }
-    // by sadam
+
+   // export data
+   function export_complaints()
+   { 
+
+       $district_id         = "";
+       $complaint_status_id = "";
+       $from_date           = "";
+       $to_date             = "";
+       $complaint_source    = "";
+
+       if($this->session->userdata('district_id'))
+       {
+           $district_id = $this->session->userdata('district_id');
+       }
+       if($this->session->userdata('complaint_status_id'))
+       {
+           $complaint_status_id = $this->session->userdata('complaint_status_id');
+       }
+       if($this->session->userdata('from_date'))
+       {
+           $from_date = $this->session->userdata('from_date');
+       }
+       if($this->session->userdata('to_date'))
+       {
+           $to_date = $this->session->userdata('to_date');
+       }
+       if($this->session->userdata('complaint_source'))
+       {
+           $complaint_source = $this->session->userdata('complaint_source');
+       }
+
+     $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title,complaint_statuses.complaint_status_color')->from('complaints');
+     $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
+     $this->db->join('districts', 'districts.district_id = complaints.district_id_fk','left');
+     $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
+     $this->db->join('complaint_statuses','complaint_statuses.complaint_status_id=complaints.complaint_status_id_fk','left');
+
+           if(trim($district_id)!="")
+           {
+               $this->db->where('complaints.district_id_fk',$district_id);
+           }
+           if(trim($complaint_status_id)!="")
+           {
+               $this->db->where('complaint_status_id_fk',$complaint_status_id);
+           }
+           if(trim($from_date)!="" && trim($to_date)!="")
+           {
+               $this->db->where('DATE(complaint_entry_timestamp) >=',$from_date);
+               $this->db->where('DATE(complaint_entry_timestamp) <=',$to_date);
+           }
+           if(trim($complaint_source)!="")
+           {
+               if($complaint_source == 'All')
+               {
+                 // $this->db->or_where('complaint_source','web');
+                 // $this->db->or_where('complaint_source',' mobile-app');
+                    $this->db->where("(`complaints`.`complaint_source` = 'web' or `complaints`.`complaint_source`= 'mobile-app')");
+               }
+               else
+               {
+                   $this->db->like('complaint_source',$complaint_source);
+               }
+           }
+       $session_role_id     = $this->session->userdata('user_role_id_fk');
+       $session_district_id = $this->session->userdata('user_district_id_fk');
+       if($session_role_id != 1 )
+       {
+           $this->db->where('complaints.district_id_fk',$session_district_id);
+       }
+    $this->db->order_by('complaint_id','desc');
+     $query = $this->db->get();  
+
+       if($query->num_rows() > 0) 
+       {
+         return $query->result_array();
+       }
+       else
+       {
+         return FALSE;
+       }
+   }
+
+
     function count_complaints()
     {
         $district_id = "";

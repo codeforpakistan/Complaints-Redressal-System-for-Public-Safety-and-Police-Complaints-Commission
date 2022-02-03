@@ -1213,11 +1213,19 @@ class Admin extends CI_Controller {
        
     }
 
+    //==========================================================================
+    // police station json data for edit modal
+    //==========================================================================
+
     function get_police_station_ajax($district_id_fk)
     { 
        $data = json_encode($this->model->get_by_id('police_stations','district_id_fk',$district_id_fk));
        echo $data;
     }
+
+    //==========================================================================
+    // complaints report district wise
+    //==========================================================================
 
     function district_reports()
     { 
@@ -1227,21 +1235,17 @@ class Admin extends CI_Controller {
         $data['page']     = 'district_reports';
         $this->load->view('template',$data);
     }
+
+    //==========================================================================
+    // complaints export into excel
+    //==========================================================================
+
     public function exportIntoExcel() 
     {
         // load excel library
             $this->load->library('excel');
-            $uri_segment = 3;
-            $displayLimit = "10";
         
-        
-            if($this->session->userdata('displayLimit'))
-            {
-                $displayLimit = $this->session->userdata('displayLimit');
-            }
-            
-            $offset      = $this->uri->segment($uri_segment);
-            $empInfo    = $this->complaint->get_complaints($displayLimit,$offset); 
+            $empInfo    = $this->complaint->export_complaints(); 
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->setActiveSheetIndex(0);
             // set Header
