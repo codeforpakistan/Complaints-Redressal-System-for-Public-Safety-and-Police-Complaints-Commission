@@ -38,6 +38,16 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-8">
+                <div class="col-12 text-center">
+                  <div class="alert alert-warning alert-dismissible show fade">
+                      <div class="alert-body">
+                          <button class="close" data-dismiss="alert">
+                          <span>×</span>
+                          </button>
+                          To change the complaint status & add a respondent reply click on " view detail " button.
+                      </div>
+                  </div>
+              </div>
               <!-- <a href="javascript:void(0)" class="btn btn-icon icon-left btn-warning custom-success-btn">
                   <strong> Latest 200 Records Only.</strong> For More Records: Visit Reports > Detail Report
               </a> -->
