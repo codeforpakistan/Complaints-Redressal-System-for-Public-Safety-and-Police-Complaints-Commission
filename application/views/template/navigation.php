@@ -58,6 +58,8 @@
         }
 
       } 
+
+      $current_active_tab = $this->uri->segment(2);
 ?>
 
 <style>
@@ -78,14 +80,14 @@
             </a>
           </div> 
           <ul class="sidebar-menu">
-            <li class="dropdown active">
+            <li class="dropdown <?= ( ($current_active_tab == '') || ($current_active_tab == 'dashboard') )? 'active' : ''?>">
               <a href="<?= base_url()?>" class="nav-link">
-                <i data-feather="monitor"></i><span>Dashboard</span>
+                <i data-feather="monitor"></i><span>Dashboard <?= $this->uri->segment(2)?></span>
               </a>
             </li>
             
             <?php if($users   == 1) { ?>
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'users')? 'active' : '' ?>">
                 <a href="admin/users" class="nav-link">
                   <i data-feather="users"></i><span>Users</span>
                 </a>
@@ -93,13 +95,13 @@
 
             <?php } if($districts == 1){ ?>        
             
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'districts')? 'active' : '' ?>">
                 <a href="admin/districts" class="nav-link">
                   <i data-feather="briefcase"></i><span>Districts</span>
                 </a>
             </li>
             <?php } if($police_stations   == 1){ ?> 
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'police_stations')? 'active' : '' ?>">
                 <a href="admin/police_stations" class="nav-link">
                   <i data-feather="briefcase"></i><span>Police Stations</span>
                 </a>
@@ -107,7 +109,7 @@
             <?php } ?> 
             
             <?php if($complaint_categories  == 1) { ?>
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'complaint_categories')? 'active' : '' ?>">
                 <a href="admin/complaint_categories" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaint Categories</span>
                 </a>
@@ -115,7 +117,7 @@
             <?php } ?>  
             
             <?php if($complaints == 1) { ?>
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'complaints')? 'active' : '' ?>">
                 <a href="admin/complaints" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaints</span>
                 </a>
@@ -123,14 +125,14 @@
             <?php } ?> 
 
             <?php if($complaint_register == 1) { ?>
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'complaint_register')? 'active' : '' ?>">
                 <a href="admin/complaint_register" class="nav-link">
                   <i data-feather="briefcase"></i><span>Register Complaint</span>
                 </a>
             </li> 
             <?php } ?> 
 
-            <li class="dropdown">
+            <li class="dropdown <?= ($current_active_tab == 'district_reports' || $current_active_tab == 'detail_report' )? 'active' : '' ?>">
               <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="image"></i><span>Reports</span></a>
               <ul class="dropdown-menu">
                     <?php if($district_reports   == 1): ?>
