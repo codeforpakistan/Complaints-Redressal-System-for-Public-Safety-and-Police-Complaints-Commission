@@ -29,8 +29,17 @@
   <!-- Custom JS File -->
   <script src="assets/js/custom.js"></script>
   <script src="breadcrumb_assets/script.js"></script>
-  <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+  <!-- <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css" rel="stylesheet">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script> -->
+
+   <script type="text/javascript" src="assets/js/dropify.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/dropify.min.css">
+
+   <link href="assets/css/jquery-confirm.min.css" rel="stylesheet">
+   <script src="assets/js/jquery-confirm.min.js"></script>
 </body>
 
 
@@ -118,4 +127,30 @@ function onlyDigits(charCode)
 
 //   });
 // });
+
+function message(status,response_msg)
+{
+    if(status == 1)
+    {
+        
+        iziToast.success({
+        title: 'Success:',
+        message: response_msg,
+        position: 'topRight'
+        });
+    }
+    else
+    { 
+    iziToast.error({
+        title: 'Error:',
+        message: response_msg,
+        position: 'topRight'
+        });
+
+    }
+}
 </script>
+
+<style>
+    .jconfirm .jconfirm-scrollpane {position: relative;;left: 36%;}
+</style>

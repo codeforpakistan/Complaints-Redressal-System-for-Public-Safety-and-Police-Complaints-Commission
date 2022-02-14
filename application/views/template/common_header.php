@@ -8,6 +8,7 @@
   <title>Public Safety Comission Police Complaint Management System</title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/css/app.min.css">
+  <link rel="stylesheet" href="assets/bundles/izitoast/css/iziToast.min.css">
   <link rel="stylesheet" href="assets/bundles/chocolat/dist/css/chocolat.css">
   <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
   <link rel="stylesheet" href="assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
@@ -58,7 +59,7 @@
                 <span class="d-sm-none d-lg-inline-block"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
-              <div class="dropdown-title"><?= $this->session->userdata('user_role_name')?></div>
+              <div class="dropdown-title"><?= (!empty($this->session->userdata('user_first_name') || $this->session->userdata('user_last_name')))? ($this->session->userdata('user_first_name').' '.$this->session->userdata('user_last_name')) :$this->session->userdata('user_role_name')?></div>
               <!-- <a href="profile.html" class="dropdown-item has-icon" data-toggle="modal" data-target="#updateAmdinPasswordModel"> -->
               <a href="admin/profile" class="dropdown-item has-icon"> 
                 <i class="far fa-user"></i> Profile

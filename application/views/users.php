@@ -14,31 +14,11 @@
                     </div>
                   </div>
                   <div class="card-body">
-                      <!-- start messages --->
-                      <div style="text-align: center">
-                              <?php if($feedback =$this->session->flashdata('feedback')){
-                                $feedback_class =$this->session->flashdata('feedbase_class');  ?>
-                                    <div class="row">
-                                      <div class="col-md-6 offset-3">
-                                      <div class="alert alert-dismissible <?=  $feedback_class;?>">
-                                      <?= $feedback ?>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                      </div>
-                                      </div>
-                                  </div>
-
-                              
-                                <?php }?>
-
-                            </div>
-                    <!-- end of messages  --->
                     <div class="table-responsive">
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead>
                           <tr>
-                            <th>User Id</th>
+                            <th>S.#</th>
                             <th>User Name</th>
                             <th>District</th>
                             <th>Role</th>
@@ -46,23 +26,8 @@
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <?php if($users):?>
                             <tbody>
-                            <?php foreach($users as $onByOne):?>
-                                <tr>
-                                    <td><?= $onByOne->user_id?></td>
-                                    <td><?= $onByOne->user_name?></td>
-                                    <td><?= $onByOne->district_name?></td>
-                                    <td><?= $onByOne->user_role_name?></td>
-                                    <td><?= ($onByOne->user_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
-                                    <td>
-                                       <a class="fa fa-edit text-info" data-toggle="modal" data-target="#editModel" href="javascript:void(0)" onclick="users_update(<?= $onByOne->user_id?>)"></a>
-                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to delete?')" href="<?= base_url('admin/users_delete/'.$onByOne->user_id) ?>"></a>
-                                    </td>
-                                </tr>
-                            <?php endforeach;?>
                             </tbody>
-                        <?php endif; ?>
                       </table>
                     </div>
                   </div>
@@ -85,7 +50,7 @@
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                        <form class="" method="post" action="<?= base_url("admin/users_update") ?>">
+                        <form class="users_update_form" method="post">
                           
                             <div class="form-group">
                               <label>User</label>
@@ -151,7 +116,7 @@
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                        <form class="" method="post" action="<?= base_url("admin/users_insert") ?>">
+                        <form class="users_add_form" method="post">
                             <div class="form-group">
                               <label>User Role</label>
                               <div class="input-group">
@@ -256,4 +221,185 @@
             }
           });
         }
+       // CURD Start 
+      $(document).ready(function()
+      {
+        users_list();
+        function users_list()
+        {
+          var html   = '';
+          var status = '';
+          var count  = 0;
+          var dataTable = $("#save-stage").DataTable();
+          dataTable.clear().draw();
+          $.ajax({
+            url: 'admin/users_list',
+            dataType:'json',
+            success: function(response)
+            { 
+              $.each(response, function( index, onByOne ) 
+              {
+              if(onByOne.user_status == 1)
+              {
+                status = '<span class="text-success">Active</span>';
+              }
+              else
+              {
+                status = '<span class="text-danger">Inactive</span>';
+              }
+                
+                dataTable.row.add([
+                  ++count,
+                  onByOne.user_name,
+                  onByOne.district_name,
+                  onByOne.user_role_name,
+                  status,
+                  '<a class="fa fa-edit text-info" data-target="#editModel" data-toggle="modal" href="javascript:void(0)" onclick="users_update('+onByOne.user_id+')"></a>\
+                  <a class="fa fa-trash text-danger deleteRecord" href="javascript:void(0)" data-id='+onByOne.user_id+'></a>'
+                ]).draw();
+              });
+            }
+          });
+        }  // end users_list
+
+        // add users
+      $('.users_add_form').submit(function(e){
+            e.preventDefault(); 
+            $('.add_button').prop("disabled", true);
+            var formData = new FormData( $(".users_add_form")[0] );
+
+            $.ajax({
+                        url:"<?php echo base_url(); ?>admin/users_insert",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(response)
+                        { 
+                          $('.add_button').prop("disabled", false);
+                            if(response == 'Record Add')
+                            {
+                                $(".users_add_form")[0].reset();
+                                $('#addModel').modal('hide');
+                                users_list();
+                                message(1,response);
+                            }
+                            else
+                            { 
+                              message(0,response);
+                            }
+                        }
+                    }); 
+                    
+        });
+          // update users
+        $('.users_update_form').submit(function(e){
+              e.preventDefault(); 
+              $('.update_button').prop("disabled", true);
+              var formData = new FormData( $(".users_update_form")[0] );
+
+              $.ajax({
+                        url:"<?php echo base_url(); ?>admin/users_update",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(response)
+                        { 
+                            if(response == 'Recored Update')
+                            {
+                              $('.update_button').prop("disabled", false);
+                                $(".users_update_form")[0].reset();
+                                $('#editModel').modal('hide');
+                                users_list();
+                                message(1,response);
+                            }
+                            else
+                            { 
+                              message(0,response);
+                            }
+                        }
+                      }); 
+          });
+
+
+            // delete users
+          $(document).on("click", ".deleteRecord", function() 
+          {
+            var id = $(this).attr("data-id");
+              $.confirm({
+                        title: '<span style="font-weight: bold;color: #C0392B;"> Conform!</span>',
+                        content: '<span style="font-weight: bold;color: black;">Do You Want To Do This ?</span>',
+                        type: 'red',
+                        icon: 'fa fa-trash',
+                        typeAnimated: true,
+                        autoOpen: false,
+                        position: {my: "center top", at:"center top", of: window },
+                        buttons: {
+                            confirm: function () 
+                            {
+                                $.ajax({
+                                    url: '<?php echo base_url(); ?>admin/users_delete',   
+                                    type:"post",
+                                    data:{id:id},
+                                    cache:false,
+                                    async:false,
+                                    success: function (response) 
+                                    { 
+                                      if(response == 'Record Delete')
+                                      { 
+                                        message(1,response);
+                                        users_list();
+                                      }
+                                      else
+                                      { 
+                                        message(0,response);
+                                      }
+                                    }
+                                });
+                                $(id).animate({
+                                      opacity: 0
+                                  }, 500, function() {
+                                      $(this).hide(); // applies display: none; to the element .panel
+                                  });
+                    
+                    
+                            },
+                            cancel: function () 
+                            {
+                    
+                            }
+                        }
+                     });
+          }); // end of delete
+          // $(document).on("click", ".deleteRecord", function() {
+          //   var id = $(this).attr("data-id");
+          //     $.ajax({
+          //               url:"<?php echo base_url(); ?>admin/users_delete",
+          //               type:"post",
+          //               data:{id:id},
+          //               cache:false,
+          //               async:false,
+          //               success: function(response)
+          //               {  
+          //                   if(response == 'Record Delete')
+          //                   { 
+          //                     users_list();
+          //                     message(1,response);
+          //                   }
+          //                   else
+          //                   { 
+          //                     message(0,response);
+          //                   }
+          //               }
+          //             }); 
+          // });
+          
+
+         
+      });
       </script>

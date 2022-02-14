@@ -80,7 +80,7 @@
                                         <div class="form-group">
                                             <label>CNIC <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required minlength="15" maxlength="15">
+                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required minlength="15" maxlength="15" onblur="cnic_validation()">
                                             </div>
                                         </div>
                                     </div> 
@@ -95,7 +95,7 @@
                                         <div class="form-group">
                                             <label>Contact No <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12">
+                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12" onblur="contact_validation()">
                                             </div>
                                         </div>
                                     </div> 
@@ -235,7 +235,7 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group ">
-                                            <label>Attachments: <span class="add" style="cursor:pointer;color:blue;">Add More Attachments</span></label>
+                                            <label>Attachments: <span class="add" style="cursor:pointer;color:blue;"><b>Add More Attachments</b></span></label>
                                             <input type="file" name="attachments[]"  class="form-control dropify" data-height="100"  data-max-file-size="200M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
                                         </div> 
                                     </div> 
@@ -245,7 +245,8 @@
 
                             <div class="card-footer" style="border-top: 1px solid #e9e7e7; background-color: #f9f9f9;">
                                 <div class="col-md-12 text-right mb-2">
-                                    <button type="submit" class="btn btn-icon btn-success custom-success-btn" style="font-size:16px;">Submit Complaint</button>
+                                    <button type="submit" id="submitButton" class="btn btn-icon btn-success custom-success-btn" style="font-size:16px;">Submit Complaint</button>
+                                     <button id="loaderButton" class="btn btn-success custom-success-btn"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i></button>
                                 </div>
                             </div>
 
@@ -275,9 +276,13 @@
 
     //    $('#attachment_input').trigger('click');  
     // }); 
-
-    $(document).ready(function(){
-        // $('.dropify').dropify();
+    $(":input").inputmask();
+    
+  
+    $(document).ready(function()
+    {
+        $('.dropify').dropify();
+        $('#loaderButton').hide();
         $('.dropify').dropify({
             messages: {
                 'default': 'Drag and drop a file here or click to select manually',
@@ -286,17 +291,11 @@
                 'error':   'Ooops, something went wrong'
             }
         });
-    });
-    $(":input").inputmask();
-    
-
-
+      
     // add record script
-    $(document).ready(function()
-    {
-
-        $('#register_complaint_form').submit(function(e){
-            e.preventDefault(); 
+        $('#register_complaint_form').submit(function(e){  
+            $('#submitButton').hide();
+            $('#loaderButton').show();
             var formData = new FormData( $("#register_complaint_form")[0] );
 
             $.ajax({
@@ -308,35 +307,23 @@
                         cache:false,
                         async:false,
                         success: function(response)
-                        { alert(response);
+                        { //alert(response);
                             if(response == 'Complaint Registered Successfully')
-                            {
+                            { 
                                 $("#register_complaint_form")[0].reset();
-                                window.location.href = "admin/complaints";
+                                 message(1,response);
+                              window.location.href = "admin/complaints/1";
+                            }
+                            else
+                            {
+                                message(0,response);
+                                $('#loaderButton').hide();
+                                $('#submitButton').show();
                             }
                         }
                     });
+            e.preventDefault();        
         });
-        // ::::::::::::::::: Selection union againt home district 
-        // $("#home_district_id").change(function(home_district_id)
-        // {
-        //     var home_district_id = $(this).val(); 
-
-        //     $.ajax({
-        //         url: 'admin/get_home_district_union_ajax/'+home_district_id,
-        //         dataType: 'json',
-        //         success: function(response)
-        //         { 
-        //             $('#complainant_council').empty();
-
-        //             $.each(response, function(key, value) 
-        //             {
-        //                 $('#complainant_council').append('<option value="'+ value.district_council_id +'">'+value.district_council_name+'</option>');
-        //                 $('#complainant_council option[value='+value.district_council_id+']').attr('selected','selected'); 
-        //             });
-        //         }
-        //     });
-        // });
     
     // ::::::::::::::::: Selection union againt complaint  
     $("#district_id_fk").change(function(district_id_fk)
@@ -349,14 +336,54 @@
                 success: function(response)
                 { 
                     $('#police_station_id_fk').empty();
+                    $('#police_station_id_fk').append('<option disabled value="" selected hidden>Select Police Station</option>');
                     $.each(response, function(key, value) 
                     {
                         $('#police_station_id_fk').append('<option value="'+ value.police_station_id +'">'+value.police_station_name+'</option>');
-                        $('#police_station_id_fk option[value='+value.police_station_id+']').attr('selected','selected'); 
+                        // $('#police_station_id_fk option[value='+value.police_station_id+']').attr('selected','selected'); 
                     });
                 }
             });
         });
     });
+
+function cnic_validation()
+{
+    var cnic          = $('#complainant_cnic').val();
+    var rem_uderscore = cnic.replace(/-/g, "");
+    var rem_hyphens   = rem_uderscore.replace(/_/g, "");
+    var cnic_length   = rem_hyphens.length;
+    if(cnic_length < 13)
+    { 
+        $('#complainant_cnic').css({'border' : '1px solid red'});
+        $('#complainant_cnic').focus();
+        return false;
+    }
+    else
+    {
+        $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
+        $('#complainant_cnic').blur();
+        return true;
+    }
+}
+function contact_validation()
+{
+    var contact       = $('#complainant_contact').val();
+    var rem_uderscore = contact.replace(/-/g, "");
+    var rem_hyphens   = rem_uderscore.replace(/_/g, "");
+    var contact_length= rem_hyphens.length;
+    if(contact_length < 11)
+    { 
+        $('#complainant_contact').css({'border' : '1px solid red'});
+        $('#complainant_contact').focus();
+        return false;
+    }
+    else
+    {
+        $('#complainant_contact').css({'border' : '1px solid #e4e6fc'});
+        $('#complainant_contact').blur();
+        return true;
+    }
+}
 </script>
 

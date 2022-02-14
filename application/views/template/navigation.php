@@ -82,7 +82,7 @@
           <ul class="sidebar-menu">
             <li class="dropdown <?= ( ($current_active_tab == '') || ($current_active_tab == 'dashboard') )? 'active' : ''?>">
               <a href="<?= base_url()?>" class="nav-link">
-                <i data-feather="monitor"></i><span>Dashboard <?= $this->uri->segment(2)?></span>
+                <i data-feather="monitor"></i><span>Dashboard</span>
               </a>
             </li>
             
@@ -117,7 +117,7 @@
             <?php } ?>  
             
             <?php if($complaints == 1) { ?>
-            <li class="dropdown <?= ($current_active_tab == 'complaints')? 'active' : '' ?>">
+            <li class="dropdown <?= ($current_active_tab == 'complaints' || $current_active_tab == 'complaint_detail')? 'active' : '' ?>">
                 <a href="admin/complaints" class="nav-link">
                   <i data-feather="briefcase"></i><span>Complaints</span>
                 </a>
