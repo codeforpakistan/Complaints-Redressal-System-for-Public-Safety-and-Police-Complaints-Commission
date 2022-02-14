@@ -108,7 +108,7 @@ class AuthModel extends CI_Model
         // set condition arr
         //======================================================================
         
-        $optional_cond_arr = array('user_id','user_name','user_contact');
+        $optional_cond_arr = array('user_id','user_name','user_contact','user_email');
         
         foreach($optional_cond_arr as $key=>$value)
         {
@@ -157,7 +157,7 @@ class AuthModel extends CI_Model
         $data_arr_update = [];
         $set_query = '';
         
-        $optional_update_cols = array('user_district_id_fk','user_name','user_contact','user_status');
+        $optional_update_cols = array('user_district_id_fk','user_name','user_contact','user_status','vcode');
         
         foreach($optional_update_cols as $key=>$value)
         {
@@ -178,6 +178,14 @@ class AuthModel extends CI_Model
             $data_arr_update['user_password'] =  md5(trim($data_arr['user_password']));
             $set_query_row = ' , user_password = ?';
             $set_query .= $set_query_row;
+            
+            $user_get = $this->users_get(array('user_id'=>$data_arr["user_id"]));
+            $user_info = $user_get[0];
+            
+            if(trim($user_info['user_password']) == md5(trim($data_arr['user_password'])))
+            {
+                return array('response'=>0,'response_msg'=>'New password can not be same as old one');
+            }
         }
         
         //======================================================================
@@ -195,13 +203,13 @@ class AuthModel extends CI_Model
         
         $set_query_formatted = ltrim(trim($set_query),","); 
         
-        // echo 'update users set '.$set_query_formatted.' where complainant_id = ?'; exit();
-        
         $data_arr_update['user_id'] = $data_arr['user_id'];
         
-        $update_complainant = $this->db->query('update users set '.$set_query_formatted.' where user_id = ? ',$data_arr_update);
+        // echo 'update users set '.$set_query_formatted.' where user_id = ?'; print_r($data_arr_update); exit();
         
-        if($update_complainant == false)
+        $update_user = $this->db->query('update users set '.$set_query_formatted.' where user_id = ? ',$data_arr_update);
+        
+        if($update_user == false)
         {
             return array('response'=>0,'response_msg'=>'Failed to update user#'.$data_arr["user_id"]);
         }
