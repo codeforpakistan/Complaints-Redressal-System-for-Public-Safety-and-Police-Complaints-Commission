@@ -227,7 +227,7 @@
                             
                         </div>
                         <div class="status_response_form" style="display: none;">
-                        <form method="post" action="<?= base_url("admin/insert_comploaint_remarks") ?>" >
+                        <form class="comp_remarks_add_form" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <div class="alert alert-warning alert-dismissible show fade">
@@ -280,46 +280,32 @@
                                     
                             </div> <!-- end of first row -->
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <div class="form-group">
                                         <label>Remarks:</label>
                                         <div class="input-group">
-                                            <textarea class="form-control" name="complaint_remarks_detail" id="complaint_remarks_detail" rows="3" required></textarea>
+                                            <textarea class="" name="complaint_remarks_detail" id="complaint_remarks_detail" rows="5" cols="300" required></textarea>
                                         </div>
                                     </div>
-                                </div> <!-- end of col-md-12 -->                         
+                                </div> <!-- end of col-md-9 -->
+                                <div class="col-md-3">
+                                        <div class="form-group ">
+                                            <label>Attachment:</label>
+                                            <input type="file" name="attachment"  class="form-control dropify" data-height="100"  data-max-file-size="200M" data-allowed-file-extensions="pdf png jpg jpeg doc docx csv xlsx mp4 mpeg mp3" >
+                                        </div> 
+                                </div> <!-- end of col-md-3 -->                         
                             </div>  <!-- end row -->
                             <div class="row">
                                 <div class="col-md-12 text-right">
                                     <input type="hidden" name="complaint_id" value="<?= $complaint_id ?>">
-                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect add_button">Save</button>
                                 </div>
                             </div>  
                         </form>
                         <hr>
                     </div>
-                            <?php if($complaints_remarks){ foreach($complaints_remarks as $remarks){?>
-                                <div class="card card-success">
-                                      <div class="card-header">
-                                        <!--- heading start-->
-                                        <div class="row col-md-12">
-                                            <div class="col-md-4">
-                                                <p><strong>Remarks From: </strong><?= empty($remarks->respondent_title)?'Admin':$remarks->respondent_title ?></p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p><strong>Status: </strong><?= $remarks->complaint_status_title ?></p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p><strong>Date: </strong><?= date_format(date_create($remarks->complaint_remarks_timestamp),'d-m-Y') ?></p>
-                                            </div>
-                                         </div>
-                                        <!-- end heading -->
-                                      </div>
-                                      <div class="card-body">
-                                        <p><?= $remarks->complaint_remarks_detail?></p>
-                                      </div>
-                                </div>
-                            <?php } } ?> 
+                          <div class="showRemarks"></div>
+                            
                   </div>
                  </div> <!---pdf section end -->
                 </div>
@@ -329,13 +315,13 @@
         </section>
       </div>
 <script>
-    $(document).ready(function(){
-        $('.dropify').dropify();
-    });
-    $('#mydropzone').click(function()
-    {
-        $('#attachment_input').trigger('click');
-    }); 
+    // $(document).ready(function(){
+    //     $('.dropify').dropify();
+    // });
+    // $('#mydropzone').click(function()
+    // {
+    //     $('#attachment_input').trigger('click');
+    // }); 
     //  toggle form
     $(".show_hide_form").click(function()
     { 
@@ -365,31 +351,110 @@
             $('#respondatsHideShow').hide();
          }
     });
-    // downlaod complaint
-    // function PrintDiv() 
-    // {   
-    //    var divToPrint = document.getElementById('printSection');
-    //    var popupWin = window.open('', '_blank', );
-    //    popupWin.document.open();
-    //    popupWin.document.write('<html><head><title>Salary-History</title></head><body onload="window.print()"><div class="container">' + divToPrint.innerHTML + '</div></html>');
-    //    popupWin.document.close();
-    // }  
-
-    var doc = new jsPDF();
-var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-};
-
-$('#cmd').click(function () {
-    doc.fromHTML($('#printSection').html(), 15, 15, {
-        'width': 170,
-            'elementHandlers': specialElementHandlers
-    });
-    doc.save('sample-file.pdf');
-});
     
 
+ // CURD start      
+ $(document).ready(function()
+{ $('.dropify').dropify();
+        complaint_remarks_list();
+        function complaint_remarks_list()
+        {
+        var complaint_id = <?= $complaint_id?>;
+          var html   = '';
+         $('.showRemarks').html('');
+          var response_by = '';
+          $.ajax({
+            url: 'admin/complaints_remarks_list/'+complaint_id,
+            dataType:'json',
+            success: function(response)
+            { 
+              $.each(response, function( index, oneByOne ) 
+              {
+                if(oneByOne.respondent_title != '')
+                {
+                    response_by = 'Admin';
+                }
+                else
+                {
+                    response_by = oneByOne.respondent_title;
+                }
+                
+                  html +='\
+                            <div class="card card-success">\
+                                    <div class="card-header">\
+                                    <div class="row col-md-12">\
+                                        <div class="col-md-4">\
+                                            <p><strong>Remarks From: </strong>'+response_by+'</p>\
+                                        </div>\
+                                        <div class="col-md-4">\
+                                            <p><strong>Status: </strong>'+ oneByOne.complaint_status_title +'</p>\
+                                        </div>\
+                                        <div class="col-md-4">\
+                                            <p><strong>Date: </strong>'+ oneByOne.complaint_remarks_timestamp+'</p>\
+                                        </div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="card-body">\
+                                    <p>'+oneByOne.complaint_remarks_detail+'</p>';
+                                    if(oneByOne.attachment != '')
+                                    { 
+                                        html +='\
+                                                <div class="row">\
+                                                    <label>Attachment:</label>\
+                                                            <div class="col-md-2">\
+                                                                <div class="form-group">\
+                                                                    <center>\
+                                                                        <a href="assets/complaint_remarks_attachment/'+oneByOne.attachment+'" target="_blank">view</a>\
+                                                                        <a href="assets/complaint_remarks_attachment/'+oneByOne.attachment+'"  download style="color:blue">Download</a>\
+                                                                    </center>\
+                                                                    <input type="file" class="form-control dropify" data-height="100" data-default-file="assets/complaint_remarks_attachment/'+oneByOne.attachment+'" data-show-remove="false" data-show-loader="false">\
+                                                                </div>\
+                                                            </div>\
+                                                </div>';
+                                    }    
+                                html +='\
+                                    </div>\
+                            </div>\
+                          ';
+              });
+              $('.showRemarks').append(html);
+              $('.dropify').dropify();
+            }
+          });
+        }  // end complaint_remarks_list
 
+        // add complaint category
+      $('.comp_remarks_add_form').submit(function(e){
+            e.preventDefault(); 
+            $('.add_button').prop("disabled", true);
+            var formData = new FormData( $(".comp_remarks_add_form")[0] );
+
+            $.ajax({
+                        url:"<?php echo base_url(); ?>admin/insert_comploaint_remarks",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(response)
+                        {
+                          $('.add_button').prop("disabled", false);
+                            if(response == 'Record Add')
+                            {
+                                $(".comp_remarks_add_form")[0].reset();
+                                complaint_remarks_list();
+                                $('.show_hide_form').click();
+                                message(1,response);
+                            }
+                            else
+                            { 
+                              message(0,response);
+                            }
+                        }
+                    }); 
+                    
+        });
+        
+      });
 </script>>

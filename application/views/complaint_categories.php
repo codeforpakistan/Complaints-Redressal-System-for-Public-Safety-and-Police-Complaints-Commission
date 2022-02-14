@@ -14,48 +14,18 @@
                     </div>
                   </div>
                   <div class="card-body">
-                      <!-- start messages --->
-                      <div style="text-align: center">
-                        <?php if($feedback =$this->session->flashdata('feedback')){
-                          $feedback_class =$this->session->flashdata('feedbase_class');  ?>
-                            <div class="row">
-                              <div class="col-md-6 offset-3">
-                                <div class="alert alert-dismissible <?=  $feedback_class;?>">
-                                  <?= $feedback ?>
-                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                        <?php }?>
-                      </div>
-                    <!-- end of messages  --->
                     <div class="table-responsive">
                       <table class="table table-striped table-hover" id="save-stage" style="width:100%;">
                         <thead class="">
                           <tr>
-                            <th>Complaint Category Id</th>
+                            <th>S.#</th>
                             <th>Complaint Category Name</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <?php if($complaint_categories):?>
-                            <tbody>
-                            <?php foreach($complaint_categories as $onByOne):?>
-                                <tr>
-                                    <td><?= $onByOne->complaint_category_id?></td>
-                                    <td><?= $onByOne->complaint_category_name?></td>
-                                    <td><?= ($onByOne->complaint_category_status == 1)?'<span class="text-success">Active</span>':'<span class="text-danger">Inactive</span>'?></td>
-                                    <td>
-                                       <a class="fa fa-edit text-info" data-target="#editModel" data-toggle="modal" href="javascript:void(0)" onclick="complaint_categories_update(<?= $onByOne->complaint_category_id?>)"></a>
-                                        <a class="fa fa-trash text-danger" onclick="return confirm('Are you sure to deactivate?')" href="<?= base_url('admin/complaint_categories_delete/'.$onByOne->complaint_category_id) ?>"></a>
-                                    </td>
-                                </tr>
-                            <?php endforeach;?>
+                            <tbody id="table_category">
                             </tbody>
-                        <?php endif; ?>
                       </table>
                     </div>
                   </div>
@@ -78,8 +48,7 @@
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                       <!-- <span class="itStaffUpdateModel"></span> -->
-                       <form class="" method="post" action="<?= base_url("admin/complaint_category_update") ?>">
+                        <form class="district_update_form" method="post">
                             <div class="form-group">
                             <label>Complaint Category Name</label>
                             <div class="input-group">
@@ -98,7 +67,7 @@
                             <input type="hidden" name="complaint_category_id" id="edit_complaint_category_id" >
                             <div class="row">
                                     <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Update</button>
+                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect update_button">Update</button>
                                     </div>
                                 </div>
                             
@@ -119,7 +88,8 @@
                     </div>
                     <div class="modal-body">
                     <!-- body-->
-                    <form class="" method="post" action="<?= base_url("admin/complaint_category_insert") ?>">
+                    <!-- <form class="complaint_category_form" method="post" action="<?= base_url("admin/complaint_category_insert") ?>">-->
+                       <form class="complaint_category_form" method="post" action="<?= base_url("admin/complaint_category_insert") ?>"> 
                             <div class="form-group">
                             <label>Complaint Category Name</label>
                             <div class="input-group">
@@ -136,16 +106,174 @@
                 </div>
             </div>
         </div>
-      <script>
-          function complaint_categories_update(complaint_category_id)		{
-			$.ajax({
-				url: 'admin/complaint_categories_edit_model/'+complaint_category_id,
-        dataType:'json',
-				success: function(response){ 
-              $('#edit_complaint_category_name').val(response.complaint_category_name);
-              $('#edit_complaint_category_id').val(response.complaint_category_id); 
-              $('#edit_complaint_category_status option[value="' + response.complaint_category_status + '"]').prop('selected', true);
-				}
-			});
-		}
-      </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script>
+      $(document).ready(function()
+      {
+        complaint_category_list();
+        function complaint_category_list()
+        {
+          var html   = '';
+          var status = '';
+          var count  = 0;
+          var dataTable = $("#save-stage").DataTable();
+          dataTable.clear().draw();
+          $.ajax({
+            url: 'admin/complaint_categories_list',
+            dataType:'json',
+            success: function(response)
+            { 
+              $.each(response, function( index, onByOne ) 
+              {
+              if(onByOne.complaint_category_status == 1)
+              {
+                status = '<span class="text-success">Active</span>';
+              }
+              else
+              {
+                status = '<span class="text-danger">Inactive</span>';
+              }
+                
+                dataTable.row.add([
+                  ++count,
+                  onByOne.complaint_category_name,
+                  status,
+                  '<a class="fa fa-edit text-info" data-target="#editModel" data-toggle="modal" href="javascript:void(0)" onclick="complaint_categories_update('+onByOne.complaint_category_id+')"></a>\
+                  <a class="fa fa-trash text-danger deleteRecord" href="javascript:void(0)" data-id='+onByOne.complaint_category_id+'></a>'
+                ]).draw();
+              });
+            }
+          });
+        }  // end complaint_category_list
+
+        // add complaint category
+      $('.complaint_category_form').submit(function(e){
+            e.preventDefault(); 
+            $('#loaderButton').show();
+            var formData = new FormData( $(".complaint_category_form")[0] );
+
+            $.ajax({
+                        url:"<?php echo base_url(); ?>admin/complaint_category_insert",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(response)
+                        { 
+                            if(response == 'Record Add')
+                            {
+                                $(".complaint_category_form")[0].reset();
+                                $('#addModel').modal('hide');
+                                complaint_category_list();
+                                message(1,response);
+                            }
+                            else
+                            { 
+                              message(0,response);
+                            }
+                        }
+                    }); 
+                    
+        });
+          // update complaint category
+        $('.district_update_form').submit(function(e){
+              e.preventDefault(); 
+              $('.update_button').prop("disabled", true);
+              var formData = new FormData( $(".district_update_form")[0] );
+
+              $.ajax({
+                        url:"<?php echo base_url(); ?>admin/complaint_category_update",
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        async:false,
+                        success: function(response)
+                        { 
+                            if(response == 'Recored Update')
+                            {
+                              $('.update_button').prop("disabled", false);
+                                $(".district_update_form")[0].reset();
+                                $('#editModel').modal('hide');
+                                complaint_category_list();
+                                message(1,response);
+                            }
+                            else
+                            { 
+                              message(0,response);
+                            }
+                        }
+                      }); 
+          });
+
+
+            // delete complaint category
+            
+          $(document).on("click", ".deleteRecord", function() 
+          {
+            var id = $(this).attr("data-id");
+              $.confirm({
+                        title: '<span style="font-weight: bold;color: #C0392B;"> Conform!</span>',
+                        content: '<span style="font-weight: bold;color: black;">Do You Want To Do This ?</span>',
+                        type: 'red',
+                        icon: 'fa fa-trash',
+                        typeAnimated: true,
+                        autoOpen: false,
+                        position: {my: "center top", at:"center top", of: window },
+                        buttons: {
+                            confirm: function () 
+                            {
+                                $.ajax({
+                                    url: '<?php echo base_url(); ?>admin/complaint_categories_delete',   
+                                    type:"post",
+                                    data:{id:id},
+                                    cache:false,
+                                    async:false,
+                                    success: function (response) 
+                                    { 
+                                      if(response == 'Record Delete')
+                                      { 
+                                        complaint_category_list();
+                                        message(1,response);
+                                      }
+                                      else
+                                      { 
+                                        message(0,response);
+                                      }
+                                    }
+                                });
+                                $(id).animate({
+                                      opacity: 0
+                                  }, 500, function() {
+                                      $(this).hide(); // applies display: none; to the element .panel
+                                  });
+                    
+                    
+                            },
+                            cancel: function () 
+                            {
+                    
+                            }
+                        }
+                     });
+          }); // end of delete
+     
+      });
+
+      function complaint_categories_update(complaint_category_id)	
+      {
+        $.ajax({
+          url: 'admin/complaint_categories_edit_model/'+complaint_category_id,
+          dataType:'json',
+          success: function(response)
+          { 
+            $('#edit_complaint_category_name').val(response.complaint_category_name);
+            $('#edit_complaint_category_id').val(response.complaint_category_id); 
+            $('#edit_complaint_category_status option[value="' + response.complaint_category_status + '"]').prop('selected', true);
+          }
+        });
+      }
+    </script>

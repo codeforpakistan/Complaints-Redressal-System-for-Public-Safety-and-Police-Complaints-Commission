@@ -62,11 +62,11 @@
                   <div class="form-group">
                     <div class="d-block">
                       <label for="password" class="control-label">Password</label>
-                      <!-- <div class="float-right">
+                      <div class="float-right">
                         <a href="admin/forgot_passord" class="text-small">
                           Forgot Password?
                         </a>
-                      </div> -->
+                      </div>
                     </div>
                     <input id="password" type="password" class="form-control" name="user_password" tabindex="2" required>
                     <div class="invalid-feedback">
@@ -142,25 +142,3 @@
 </html>
 
 <!-- captcha refresh code -->
-<script>
-$(document).ready(function(){
-    $('.refreshCaptcha').on('click', function(){
-        $.get('<?= base_url().'admin/refreshCaptcha'; ?>', function(data){
-            $('#captImg').html(data);
-        });
-    });
-});
-function hideShowPassword() 
-{
-  var passsword = document.getElementById("password");
-  var label     = document.getElementById('showHideLabel');
-
-  if (passsword.type === "password") {
-    passsword.type = "text";
-    label.innerHTML='Hide Password';
-  } else {
-    passsword.type = "password";
-    label.innerHTML='Show Password';
-  }
-}
-</script>
