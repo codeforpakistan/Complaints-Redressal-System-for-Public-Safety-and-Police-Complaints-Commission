@@ -127,6 +127,7 @@ class AdminModel extends CI_Model
                         ->order_by('user_id','desc')
                          ->get()->result();
     }
+
     function police_stations()
     {
         return $this->db->select('d.district_name,p.*')
@@ -134,6 +135,14 @@ class AdminModel extends CI_Model
                         ->join('districts d','d.district_id=p.district_id_fk','left')
                         ->order_by('p.police_station_id','desc')
                          ->get()->result();
+    }
+
+    function user_password($user_id)
+    {
+     return $this->db->select('users.user_password')
+                     ->where('user_id',$user_id)
+                     ->get('users')
+                     ->row()->user_password;
     }
 				
 }
