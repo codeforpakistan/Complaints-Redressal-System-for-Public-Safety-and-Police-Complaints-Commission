@@ -12,34 +12,11 @@ class DmlModel extends CI_Model
   {
       $array_data     = [];
       $sub_clause     = ' 1=1 ';
-      // by sadam noreena please check
-      switch ($table) 
-      {
-        case 'complaints':
-          $select_columns = $table.'.complaint_source,complaint_council,complaint_detail,complaint_entry_timestamp';
-          break;
-
-          case 'complaint_categories':
-           $select_columns = $table.'.complaint_category_id,complaint_category_name'; 
-          break;
-        
-        default:
-          $select_columns = $table.'.* ';
-          break;
-      }
-      // end by sadam
-      
+      $select_columns = $table.'.* ';
       $join_clauses   = null;
       $orderByClause  = null;
       $selection      = " $table.* ";
-
-      // echo 'table: '.$table;
-      // echo 'joins: '; print_r($joins);
-      // echo 'conditions: '; print_r($conditions);
-      // echo 'orderBy: '; print_r($orderBy);
-      // echo 'limit: '.$limit;
-      // exit();
-
+      
       //========================================================================
       // joins
       //========================================================================
@@ -263,23 +240,13 @@ class DmlModel extends CI_Model
         //======================================================================
         // execute query
         //======================================================================
-        // by sadam 
-        if($sub_clause !=1)
-        {
-          $sql = "SELECT $select_columns FROM $table $join_clauses WHERE $sub_clause ";
-          $data = $this->db->query($sql,$array_data)->result_array();
-        }
 
-        else
-        {
-          $sql = "SELECT $select_columns FROM $table $join_clauses";
-          $data = $this->db->query($sql,$array_data)->result_array();
-        }
+        $sql = "SELECT $select_columns FROM $table $join_clauses WHERE $sub_clause ";
         
         // echo $sql;
         // print_r($array_data);
         
-        // $sql = "SELECT $select_columns FROM $table $join_clauses WHERE $sub_clause ";
+        $data = $this->db->query($sql,$array_data)->result_array();
         return $data;
           
 
