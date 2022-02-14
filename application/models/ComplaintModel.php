@@ -117,6 +117,41 @@ class ComplaintModel extends CI_Model
             return array('response'=>0,'response_msg'=>'Please enter complaint-detail');
         }
         
+        //==============================================================
+        // insert attachments
+        //==============================================================
+        
+        $attachment_ids_string = '';
+               
+        if (!empty($_FILES['attachments']['name'][0])) 
+        { 
+            //==========================================================
+            // check if directory exists
+            //==========================================================
+                    
+            if (!is_dir('./assets/complaints/'.$data_arr['complainant_id_fk']))
+            {
+                mkdir('./assets/complaints/'.$data_arr['complainant_id_fk'], 0777, true);
+            }
+                    
+            //==========================================================
+            // pass attachments to upload function
+            //==========================================================
+    
+            $path ='./assets/complaints/'.$data_arr['complainant_id_fk'].'/';
+                    
+            $attachment_upload_response = $this->upload_files($path,'complainant'.$data_arr['complainant_id_fk'], $_FILES['attachments'],array('user_id_fk'=>$data_arr['registered_by_user'],'complaint_id_fk'=>0,'remarks_id_fk'=>0,'complainant_id_fk'=>$data_arr['complainant_id_fk']));
+                    
+            if ($attachment_upload_response['response'] == 0)
+            {
+                return array('response'=>0,'response_msg'=>$attachment_upload_response['response_msg'].' :: '.$attachment_upload_response['system_error']);
+            }
+            else
+            {
+                $attachment_ids_string = implode(",",$attachment_upload_response['attachment_ids']); // if attachment id's required in return response
+            }
+        }
+        
         //======================================================================
         // check duplication 
         //======================================================================
@@ -147,35 +182,18 @@ class ComplaintModel extends CI_Model
                 $complaint_id = $this->db->insert_id();
                 
                 //==============================================================
-                // insert attachments
+                // update complaint-id in uploaded attachments
                 //==============================================================
-               
-                if (!empty($_FILES['attachments']['name'][0])) 
-                { 
-                    //==========================================================
-                    // check if directory exists
-                    //==========================================================
+                
+                if($attachment_ids_string != '')
+                {
+                    // echo 'attachment_ids_string: '.$attachment_ids_string;
                     
-                    if (!is_dir('./assets/complaints/'.$complaint_id))
+                    $update_attachments = $this->db->query('update complaint_attachments set complaint_id_fk = ? where complaint_attachment_id IN ('.$attachment_ids_string.') ',array('complaint_id'=>$complaint_id));
+        
+                    if($update_attachments == false)
                     {
-                        mkdir('./assets/complaints/'.$complaint_id, 0777, true);
-                    }
-                    
-                    //==========================================================
-                    // pass attachments to upload function
-                    //==========================================================
-    
-                    $path ='./assets/complaints/'.$complaint_id.'/';
-                    
-                    $attachment_upload_response = $this->upload_files($path,'complaint'.$complaint_id, $_FILES['attachments'],array('user_id_fk'=>$data_arr['registered_by_user'],'complaint_id_fk'=>$complaint_id,'remarks_id_fk'=>0));
-                    
-                    if ($attachment_upload_response['response'] == 0)
-                    {
-                        return array('response'=>0,'response_msg'=>$attachment_upload_response['response_msg']);
-                    }
-                    else
-                    {
-                        $attachment_ids_string = implode(",",$attachment_upload_response['attachment_ids']); // if attachment id's required in return response
+                        return array('response'=>0,'response_msg'=>'Failed to update complaint_id of attchments');
                     }
                 }
                 
@@ -192,6 +210,41 @@ class ComplaintModel extends CI_Model
         }
     }
     
+    public function attachments_validation($files)
+    {
+        // $return_arr = [];
+        // // $alowed_extensions = array('jpg','jpeg','png','pdf','doc','docx','xls','xlsx','csv','txt','rtf','zip','mp3','wma','flv','mpg','avi');
+        
+        // foreach ($files['name'] as $key => $image) 
+        // {
+            // echo 'key: '.$key;
+            // print_r($image);
+             
+            // $type = $files['type'][$key];
+            // $size = $files['size'][$key];
+            
+            // if(!in_array($type,$alowed_extensions))
+            // {
+            //     $row_error = $type.' not allowed';
+            //     array_push($retur_arr,$row_error);
+            // }
+            
+            // if($size > 5000000)
+            // {
+            //     $row_error = ' File attachment must not be larger than 5mb';
+            //     array_push($retur_arr,$row_error);
+            // }
+            
+            //  array_push($return_arr,'size: '.$size.' , type: '.$type);
+            //  array_push($return_arr, $image);
+            
+        // }
+        
+        // print_r($return_arr); exit();
+        
+        // return $return_arr;
+    }
+    
     public function upload_files($path, $title, $files, $data_arr)
     {
         $required_fields = array('complaint_id_fk'=>0,'user_id_fk'=>0,'remarks_id_fk'=>0);
@@ -202,6 +255,42 @@ class ComplaintModel extends CI_Model
             return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
         }
         
+        //======================================================================
+        // validation 
+        //======================================================================
+        
+        foreach ($files['name'] as $key => $image) 
+        {
+            
+            $allowed_extensions = array('jpg','jpeg','png','pdf','doc','docx','xls','xlsx','csv','txt','rtf','zip','mp3','mp4','wma','flv','mpg','avi','m4a');
+            $file_extension_check = pathinfo($image, PATHINFO_EXTENSION);
+            
+            //==================================================================
+            // extension validation 
+            //==================================================================
+            
+            if(!in_array($file_extension_check,$allowed_extensions))
+            {
+                return array(
+                             'response'     => 0,
+                             'response_msg' => 'Invalid format of attachment-no.'.$key, 
+                             'name'         => $image,
+                             'extension'    => $file_extension_check
+                            );
+            }
+            
+            //==================================================================
+            // size validation 
+            //==================================================================
+            
+            if($files['size'][$key] > 5000000)
+            {
+                return array('response'=>0,'response_msg'=>'Size should not be larger than 5mb for attachment-no.'.$key.', name: '.$files['name'][$key].', type: '.$files['type'][$key]);
+            }
+        }
+        
+        //======================================================================
+        // proceed uploading files 
         //======================================================================
        
         $this->load->library('image_lib');
@@ -242,18 +331,19 @@ class ComplaintModel extends CI_Model
 
             if($this->upload->do_upload('attachments[]')) 
             {
-                $image_data =   $this->upload->data();
+                // $image_data =   $this->upload->data();
                // image resize
-                $configer =  array(
-                'image_library'   => 'gd2',
-                'source_image'    =>  $image_data['full_path'],
-                'maintain_ratio'  =>  TRUE,
-                'width'           =>  250,
-                'height'          =>  250,
-                );
-                $this->image_lib->clear();
-                $this->image_lib->initialize($configer);
-                $this->image_lib->resize();
+                // $configer =  array(
+                //                     'image_library'   => 'gd2',
+                //                     'source_image'    =>  $image_data['full_path'],
+                //                     'maintain_ratio'  =>  TRUE,
+                //                     'width'           =>  250,
+                //                     'height'          =>  250,
+                //                   );
+                                  
+                // $this->image_lib->clear();
+                // $this->image_lib->initialize($configer);
+                // $this->image_lib->resize();
                // edn of image resize
 
                 $timestamp_now = date("Y-m-d H:i:s",time());
@@ -266,7 +356,9 @@ class ComplaintModel extends CI_Model
             }
             else 
             {
-                return array('response'=>0,'response_msg'=>'Failed to upload attachment, no.'.$key);
+                return array('response'     => 0,
+                             'system_error' => $this->upload->display_errors(),
+                             'response_msg' => 'Failed to upload attachment, no.'.$key.', name: '.$_FILES['attachments[]']['name'].', type: '.$_FILES['attachments[]']['type']);
             }
         }
 
@@ -425,7 +517,7 @@ class ComplaintModel extends CI_Model
 
     //::::::::::::::::::::::::::::::::::: sadam ::::::::::::::::::::::::::::::::::::::
     
-    function get_complaints($limit=10,$offset=0)
+    function get_complaints($limit=20,$offset=0)
     { 
         $displayLimit = "10";
 
@@ -512,90 +604,7 @@ class ComplaintModel extends CI_Model
           return FALSE;
         }
     }
-
-   // export data
-   function export_complaints()
-   { 
-
-       $district_id         = "";
-       $complaint_status_id = "";
-       $from_date           = "";
-       $to_date             = "";
-       $complaint_source    = "";
-
-       if($this->session->userdata('district_id'))
-       {
-           $district_id = $this->session->userdata('district_id');
-       }
-       if($this->session->userdata('complaint_status_id'))
-       {
-           $complaint_status_id = $this->session->userdata('complaint_status_id');
-       }
-       if($this->session->userdata('from_date'))
-       {
-           $from_date = $this->session->userdata('from_date');
-       }
-       if($this->session->userdata('to_date'))
-       {
-           $to_date = $this->session->userdata('to_date');
-       }
-       if($this->session->userdata('complaint_source'))
-       {
-           $complaint_source = $this->session->userdata('complaint_source');
-       }
-
-     $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title,complaint_statuses.complaint_status_color')->from('complaints');
-     $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
-     $this->db->join('districts', 'districts.district_id = complaints.district_id_fk','left');
-     $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
-     $this->db->join('complaint_statuses','complaint_statuses.complaint_status_id=complaints.complaint_status_id_fk','left');
-
-           if(trim($district_id)!="")
-           {
-               $this->db->where('complaints.district_id_fk',$district_id);
-           }
-           if(trim($complaint_status_id)!="")
-           {
-               $this->db->where('complaint_status_id_fk',$complaint_status_id);
-           }
-           if(trim($from_date)!="" && trim($to_date)!="")
-           {
-               $this->db->where('DATE(complaint_entry_timestamp) >=',$from_date);
-               $this->db->where('DATE(complaint_entry_timestamp) <=',$to_date);
-           }
-           if(trim($complaint_source)!="")
-           {
-               if($complaint_source == 'All')
-               {
-                 // $this->db->or_where('complaint_source','web');
-                 // $this->db->or_where('complaint_source',' mobile-app');
-                    $this->db->where("(`complaints`.`complaint_source` = 'web' or `complaints`.`complaint_source`= 'mobile-app')");
-               }
-               else
-               {
-                   $this->db->like('complaint_source',$complaint_source);
-               }
-           }
-       $session_role_id     = $this->session->userdata('user_role_id_fk');
-       $session_district_id = $this->session->userdata('user_district_id_fk');
-       if($session_role_id != 1 )
-       {
-           $this->db->where('complaints.district_id_fk',$session_district_id);
-       }
-    $this->db->order_by('complaint_id','desc');
-     $query = $this->db->get();  
-
-       if($query->num_rows() > 0) 
-       {
-         return $query->result_array();
-       }
-       else
-       {
-         return FALSE;
-       }
-   }
-
-
+    // by sadam
     function count_complaints()
     {
         $district_id = "";
