@@ -94,7 +94,7 @@ class ComplainantModel extends CI_Model
         $data_arr_update = [];
         $set_query = '';
         
-        $optional_update_cols = array('complainant_council','complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_address');
+        $optional_update_cols = array('complainant_district_id_fk','complainant_council','complainant_name','complainant_guardian_name','complainant_contact','complainant_cnic','complainant_gender','complainant_email','complainant_address');
         
         foreach($optional_update_cols as $key=>$value)
         {
