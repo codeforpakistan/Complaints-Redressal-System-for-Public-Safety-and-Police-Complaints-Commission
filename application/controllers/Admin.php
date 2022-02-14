@@ -131,7 +131,7 @@ class Admin extends CI_Controller {
 
             $username = $this->input->post('user_name');
             $password = $this->input->post('user_password');
-            $array    = array('user_name'=>$username,'user_password'=>$password,'user_status'=>1);
+            $array    = array('user_name'=>$username,'user_password'=>$password);
             $response = $this->AuthModel->user_login($array); 
             
             if(!empty($response))// is user name and passsword valid
@@ -141,6 +141,8 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_role_id_fk',$response->user_role_id_fk);
                 $this->session->set_userdata('user_role_name',$response->user_role_name); 
                 $this->session->set_userdata('user_district_id_fk',$response->user_district_id_fk);
+                $this->session->set_userdata('user_first_name',$response->user_first_name);
+                $this->session->set_userdata('user_last_name',$response->user_last_name);
                   if($response->user_role_id_fk == 4)
                   {
                     $this->session->set_flashdata('errorMsg', "Complainant Not allowed");
@@ -258,16 +260,24 @@ class Admin extends CI_Controller {
 
     public function profile()
     {   
-        //$this->check_role_privileges('dashboard',$this->session->userdata('user_role_id_fk'));
         $data['title']       = 'User Profile';
         $data['page']        = 'profile';
         $user_role_id_fk     = $this->session->userdata('user_role_id_fk');
         if(empty($user_role_id_fk))
         {
             $this->logout_user();
-        } 
-        $data['profile']     = $this->model->profile($user_role_id_fk);      
+        }       
         $this->load->view('template',$data);
+    } 
+    //==========================================================================
+    // profile info ajax
+    //==========================================================================
+
+    public function profle_info()
+    {   
+        $user_role_id_fk = $this->session->userdata('user_role_id_fk');
+        $profile         = $this->model->profile($user_role_id_fk);      
+        echo json_encode($profile); exit;
     }
 
     //==========================================================================
@@ -290,6 +300,15 @@ class Admin extends CI_Controller {
         $this->load->view('template',$data);
     }
     //==========================================================================
+    // user List
+    //==========================================================================
+
+    function users_list()
+    { 
+        $users = $this->model->IT_district_admins();
+        echo json_encode($users); exit;
+    }
+    //==========================================================================
     // insert user
     //==========================================================================
     function users_insert()
@@ -306,8 +325,7 @@ class Admin extends CI_Controller {
         {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
-            $this->messages('alert-danger',$message);
-            return redirect('admin/users');
+            echo strip_tags($message); exit;
             
         }
         else
@@ -324,13 +342,11 @@ class Admin extends CI_Controller {
 
                 if($response == true)
                 {
-                    $this->messages('alert-success','Successfully Added');
-                    return redirect('admin/users'); 
+                    echo "Record Add"; exit;
                 }
                 else
                 {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/users');
+                    echo "Some Thing Wrong"; exit;
                 }
         }
     }
@@ -356,7 +372,6 @@ class Admin extends CI_Controller {
             $user_id           = $this->input->post('user_id');
             $user_name         = $this->input->post('user_name');
             $user_password     = $this->input->post('user_password');
-            // $user_district_id_fk=$this->input->post('district_id');
             $user_status       = $this->input->post('user_status');
             $user_role_id_fk      = $this->input->post('user_role_id_fk');
             $table_name        = "users";
@@ -383,8 +398,7 @@ class Admin extends CI_Controller {
             {
                 $error   = array('error' => validation_errors());
                 $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/users');
+                echo strip_tags($message);exit;
                 
             }
             else
@@ -402,13 +416,11 @@ class Admin extends CI_Controller {
                 $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
                     if($response == true)
                     {
-                        $this->messages('alert-success','Successfully Update');
-                        return redirect('admin/users'); 
+                        echo "Recored Update"; exit; 
                     }
                     else
                     {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/users');
+                        echo "Some Thing Wrong"; exit;
                     }
             }
         }
@@ -416,25 +428,22 @@ class Admin extends CI_Controller {
     //==========================================================================
     // Delete User
     //==========================================================================
-    function users_delete($user_id= null)
+    function users_delete()
     {
+        $user_id = $this->input->post('id');
         if($user_id > 0)
         {   
             $talbe_column_name = 'user_id';
             $table_name        = 'users';
             $table_id          = $user_id; 
-            // $update_it_array   = array('user_status'=>0);
-            // $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
             $response = $this->model->delete($talbe_column_name,$table_id,$table_name); 
             if($response == true)
             {
-                $this->messages('alert-success','Successfully Deleted');
-                return redirect('admin/users'); 
+                echo "Record Delete"; exit;
             }
             else
             {
-                $this->messages('alert-danger','Some Thing Wrong');
-                return redirect('admin/users');
+                echo "Some Thing Wrong"; exit;
             }
         }
     }
@@ -451,7 +460,16 @@ class Admin extends CI_Controller {
         $data['title']    = 'Police Stations';
         $data['page']     = 'police_stations';
         $this->load->view('template',$data);
-    } 
+    }  
+    //==========================================================================
+    // police station List
+    //==========================================================================
+    
+    public function police_station_list()
+    {
+        $police_sation = $this->model->police_stations();
+        echo json_encode($police_sation); exit;
+    }
 
     //==========================================================================
     //add police station
@@ -464,8 +482,7 @@ class Admin extends CI_Controller {
         {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
-            $this->messages('alert-danger',$message);
-            return redirect('admin/police_stations');
+            echo strip_tags($message); exit;
             
         }
         else
@@ -478,13 +495,11 @@ class Admin extends CI_Controller {
             $response = $this->model->insert($insert_array,$table_name);
                 if($response == true)
                 {
-                    $this->messages('alert-success','Successfully Added');
-                    return redirect('admin/police_stations'); 
+                    echo "Record Add"; exit; 
                 }
                 else
                 {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/police_stations');
+                    echo "Some Thing Wrong"; exit;
                 }
         }
     }
@@ -514,8 +529,7 @@ class Admin extends CI_Controller {
             {
                 $error   = array('error' => validation_errors());
                 $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/police_stations');
+                echo strip_tags($message); exit;
                 
             }
             else
@@ -532,13 +546,11 @@ class Admin extends CI_Controller {
                 $response = $this->model->update($update_ps_array,$table_name,$talbe_column_name,$table_id);
                     if($response == true)
                     {
-                        $this->messages('alert-success','Successfully Update');
-                        return redirect('admin/police_stations'); 
+                        echo "Recored Update"; exit;
                     }
                     else
                     {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/police_stations');
+                        echo "Some Thing Wrong"; exit;
                     }
             }
         }
@@ -547,8 +559,9 @@ class Admin extends CI_Controller {
     // Police Station Delete
     //==========================================================================
     
-    function police_station_delete($police_station_id= null)
+    function police_station_delete()
     {
+        $police_station_id = $this->input->post('id');
         if($police_station_id > 0)
         {   
             $table_name        = 'police_stations';
@@ -556,14 +569,12 @@ class Admin extends CI_Controller {
             $table_id          = $police_station_id;
             $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
                 if($response == true)
-                {
-                    $this->messages('alert-success','Successfully Update');
-                    return redirect('admin/police_stations'); 
+                { 
+                    echo "Record Delete"; exit;
                 }
                 else
                 {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/police_stations');
+                    echo "Some Thing Wrong"; exit;
                 }
         }
     }
@@ -574,14 +585,23 @@ class Admin extends CI_Controller {
     public function districts()
     {   
         $this->check_role_privileges('districts',$this->session->userdata('user_role_id_fk'));
-        $table_name = 'districts';
-        $order_by = 'district_id';
-        $order    = 'DESC';
-        $data['districts'] = $this->model->get_all_records($table_name,$order_by,$order);
         $data['title']    = 'Districts';
         $data['page']     = 'districts';
         $this->load->view('template',$data);
+    } 
+     //==========================================================================
+    // district list
+    //==========================================================================
+    
+    public function districts_list()
+    {   
+        $table_name = 'districts';
+        $order_by = 'district_id';
+        $order    = 'DESC';
+        $districts = $this->model->get_all_records($table_name,$order_by,$order);
+        echo json_encode($districts);
     }
+
      //==========================================================================
     // district view modal 
     //==========================================================================
@@ -607,8 +627,7 @@ class Admin extends CI_Controller {
             {
                 $error   = array('error' => validation_errors());
                 $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/districts');
+                echo strip_tags($message);
                 
             }
             else
@@ -624,13 +643,11 @@ class Admin extends CI_Controller {
                 $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
                     if($response == true)
                     {
-                        $this->messages('alert-success','Successfully Update');
-                        return redirect('admin/districts'); 
+                        echo "Recored Update"; exit;
                     }
                     else
                     {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/districts');
+                        echo "Some Thing Wrong"; exit;
                     }
             }
         }
@@ -647,8 +664,7 @@ class Admin extends CI_Controller {
             {
                 $error   = array('error' => validation_errors());
                 $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/districts');
+                echo strip_tags($message); exit;
                 
             }
             else
@@ -657,22 +673,19 @@ class Admin extends CI_Controller {
 
                 if(strlen($district_name) > 35)
                 {
-                    $this->messages('alert-danger','District Name should be less than 35 letters');
-                    return redirect('admin/districts');
+                    echo "District Name should be less than 35 letters";exit;
                 }
 
                 $update_it_array   = array('district_name'=>$district_name,'district_status'=>1);
                 $table_name        = 'districts';
                 $response = $this->model->insert($update_it_array,$table_name);
                     if($response == true)
-                    {
-                        $this->messages('alert-success','Successfully Added');
-                        return redirect('admin/districts'); 
+                    { 
+                        echo "Record Add"; exit;
                     }
                     else
                     {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/districts');
+                        echo "Some Thing Wrong"; exit;
                     }
             }
         
@@ -681,8 +694,8 @@ class Admin extends CI_Controller {
     // district Delete
     //==========================================================================
 
-    function district_delete($district_id= null)
-    {
+    function district_delete()
+    {  $district_id = $this->input->post('id');
         if($district_id > 0)
         {   
             $table_name        = 'districts';
@@ -691,13 +704,11 @@ class Admin extends CI_Controller {
             $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
                 if($response == true)
                 {
-                    $this->messages('alert-success','Successfully Update');
-                    return redirect('admin/districts'); 
+                    echo "Record Delete"; exit; 
                 }
                 else
                 {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/districts');
+                    echo "Some Thing Wrong"; exit;
                 }
         }
     }
@@ -710,13 +721,22 @@ class Admin extends CI_Controller {
     {
         $this->check_role_privileges('complaint_categories',$this->session->userdata('user_role_id_fk'));
 
-        $table_name = 'complaint_categories';
-        $order_by = 'complaint_category_id';
-        $order    = 'DESC';
-        $data['complaint_categories'] = $this->model->get_all_records($table_name,$order_by,$order);
+        // $table_name = 'complaint_categories';
+        // $order_by = 'complaint_category_id';
+        // $order    = 'DESC';
+        // $data['complaint_categories'] = $this->model->get_all_records($table_name,$order_by,$order);
         $data['title']    = 'Complaint Categories';
         $data['page']     = 'complaint_categories';
         $this->load->view('template',$data);
+    }
+
+    public function complaint_categories_list()
+    {
+        $table_name = 'complaint_categories';
+        $order_by = 'complaint_category_id';
+        $order    = 'DESC';
+        $complaint_categories = $this->model->get_all_records($table_name,$order_by,$order);
+        echo json_encode($complaint_categories); exit;
     }
 
      //==========================================================================
@@ -747,8 +767,9 @@ class Admin extends CI_Controller {
             {
                 $error   = array('error' => validation_errors());
                 $message = implode(" ",$error);
-                $this->messages('alert-danger',$message);
-                return redirect('admin/complaint_categories');
+                echo strip_tags($message); exit;
+                // $this->messages('alert-danger',$message);
+                // return redirect('admin/complaint_categories');
                 
             }
             else
@@ -764,13 +785,15 @@ class Admin extends CI_Controller {
                 $response = $this->model->update($update_it_array,$table_name,$talbe_column_name,$table_id);
                     if($response == true)
                     {
-                        $this->messages('alert-success','Successfully Update');
-                        return redirect('admin/complaint_categories'); 
+                        // $this->messages('alert-success','Recored Update');
+                        // return redirect('admin/complaint_categories'); 
+                        echo "Recored Update"; exit;
                     }
                     else
                     {
-                        $this->messages('alert-danger','Some Thing Wrong');
-                        return redirect('admin/complaint_categories');
+                        // $this->messages('alert-danger','Some Thing Wrong');
+                        // return redirect('admin/complaint_categories');
+                        echo "Some Thing Wrong"; exit;
                     }
             }
         }
@@ -781,14 +804,13 @@ class Admin extends CI_Controller {
     //==========================================================================
 
     function complaint_category_insert()
-    {
+    { 
         $this->form_validation->set_rules('complaint_category_name', 'Username', 'required|trim|is_unique[complaint_categories.complaint_category_name]');
         if ($this->form_validation->run() == FALSE)
         {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
-            $this->messages('alert-danger',$message);
-            return redirect('admin/complaint_categories');
+             echo strip_tags($message); exit;
             
         }
         else
@@ -800,8 +822,7 @@ class Admin extends CI_Controller {
                 $dublicate = $this->model->exist_record_row($talbe_column_name,$table_id,$table_name);
                     if(is_object($dublicate))
                     {
-                        $this->messages('alert-danger','Complaint Category Already Exists');
-                        return redirect('admin/complaint_categories'); 
+                        echo "Complaint Category Already Exists"; exit;
                     }
                     else
                     {
@@ -809,13 +830,11 @@ class Admin extends CI_Controller {
                         $response = $this->model->insert($inert_it_array,$table_name);
                             if($response == true)
                             {
-                                $this->messages('alert-success','Successfully Added');
-                                return redirect('admin/complaint_categories'); 
+                                echo "Record Add"; exit;
                             }
                             else
                             {
-                                $this->messages('alert-danger','Some Thing Wrong');
-                                return redirect('admin/complaint_categories');
+                                echo "Some Thing Wrong"; exit;
                             }
                     }
         }
@@ -824,8 +843,9 @@ class Admin extends CI_Controller {
     // complaint category delete
     //==========================================================================
 
-    function complaint_categories_delete($complaint_category_id= null)
+    function complaint_categories_delete()
     {
+        $complaint_category_id = $this->input->post('id');
         if($complaint_category_id > 0)
         {   
             $talbe_column_name = 'complaint_category_id';
@@ -836,13 +856,15 @@ class Admin extends CI_Controller {
             $response = $this->model->delete($talbe_column_name,$table_id,$table_name);
             if($response == true)
             {
-                $this->messages('alert-success','Successfully Deleted');
-                return redirect('admin/complaint_categories'); 
+                // $this->messages('alert-success','Successfully Deleted');
+                // return redirect('admin/complaint_categories');
+                echo "Record Delete"; exit;
             }
             else
             {
-                $this->messages('alert-danger','Some Thing Wrong');
-                return redirect('admin/complaint_categories');
+                // $this->messages('alert-danger','Some Thing Wrong');
+                // return redirect('admin/complaint_categories');
+                echo "Some Thing Wrong"; exit;
             }
         }
     }
@@ -983,12 +1005,16 @@ class Admin extends CI_Controller {
         $this->load->view('template',$data);
     }
     // ::::::::::::::::::::::::::::::::: complaints with datatable
-    function complaints()
+    function complaints($test_msg= null)
     { 
         $this->check_role_privileges('complaints',$this->session->userdata('user_role_id_fk'));
         $data['complaints'] = $this->complaint->get_complaints_with_role();
         $data['title']    = 'Complaints';
         $data['page']     = 'complaints';
+        if($test_msg == 1)
+        {
+            $this->messages('alert-success','Complaint Register Succcessfully');
+        }
         $this->load->view('template',$data);
     }
 
@@ -1131,11 +1157,15 @@ class Admin extends CI_Controller {
         
         $this->load->view('template',$data);
     }
+    function complaints_remarks_list($complaint_id = null)
+    {
+        $complaints_remarks   = $this->complaint->get_complaint_remarks($complaint_id);
+        echo json_encode($complaints_remarks);
+    }
    
     function insert_comploaint_remarks()
     {
         $this->form_validation->set_rules('complaint_status_id_fk', 'Complainant Status', 'required|trim');
-        // $this->form_validation->set_rules('respondent_id_fk', 'respondent', 'required|trim');
         $this->form_validation->set_rules('complaint_remarks_timestamp', 'Complainant Date', 'required|trim');
         $this->form_validation->set_rules('complaint_remarks_detail', 'Complainant Remarks', 'required|trim');
 
@@ -1143,8 +1173,7 @@ class Admin extends CI_Controller {
         {
             $error   = array('error' => validation_errors());
             $message = implode(" ",$error);
-            $this->messages('alert-danger',$message);
-            return redirect('admin/complaint_detail');
+            echo strip_tags($message);
             
         }
         else
@@ -1153,9 +1182,47 @@ class Admin extends CI_Controller {
             $respondent_id_fk             = empty($this->input->post('respondent_id_fk') )?'0':$this->input->post('respondent_id_fk');
             $complaint_remarks_timestamp  = $this->input->post('complaint_remarks_timestamp');
             $complaint_remarks_detail     = $this->input->post('complaint_remarks_detail');
-            $user_id_fk                   = $this->session->userdata('user_id'); 
+            $user_id_fk                   = $this->session->userdata('user_id');
             $table_name                   = 'complaint_remarks';
             $complaint_id                 = $this->input->post('complaint_id');
+            if(empty($user_id_fk))
+            {
+                echo "Your session is expired please login again"; exit;
+            } 
+            $uploadPath     = FCPATH . 'assets/complaint_remarks_attachment';
+				if (!file_exists($uploadPath)) 
+				{
+					mkdir($uploadPath);
+					chmod($uploadPath, 0777);
+				}
+            if (!empty($_FILES['attachment']['name']))
+            {
+                $this->load->library('upload');
+                $config['upload_path']   = $uploadPath;
+                $config['allowed_types'] = '*';
+                $config['max_width']     = '';
+                $config['max_height']    = '';
+                $config['remove_spaces'] = TRUE;
+                $config['encrypt_name']  = FALSE;
+                $config['detect_mime']   = TRUE;
+                $config['overwrite']     = FALSE;
+                $varAttachment = 'attachment_'.date("YmdHis");;
+                $config['file_name'] = $varAttachment;
+                $this->upload->initialize($config);
+                if (!$this->upload->do_upload('attachment')):
+                    echo "Error in uploading attachment";
+                    exit;
+                else:
+                        $data = array(
+                            'upload_data' => $this->upload->data()
+                        );
+                        $attachment = $data['upload_data']['file_name'];
+                endif;
+            }
+            else
+            {
+               $attachment = ''; 
+            }
             $complaint_remarks_array   = array(
                                                 'complaint_status_id_fk'       => $complaint_status_id_fk,
                                                 'respondent_id_fk'             => $respondent_id_fk,
@@ -1163,6 +1230,7 @@ class Admin extends CI_Controller {
                                                 'complaint_remarks_detail'     => $complaint_remarks_detail,
                                                 'user_id_fk'                   => $user_id_fk,
                                                 'complaint_id_fk'              => $complaint_id,
+                                                'attachment'                   => $attachment,
                                                 'complaint_remarks_status'     =>1
                                             ); 
 
@@ -1172,13 +1240,11 @@ class Admin extends CI_Controller {
 
                 if($response == true)
                 {
-                    $this->messages('alert-success','Successfully Added');
-                    return redirect('admin/complaint_detail/'.$complaint_id); 
+                    echo "Record Add"; exit;
                 }
                 else
                 {
-                    $this->messages('alert-danger','Some Thing Wrong');
-                    return redirect('admin/complaint_detail/'.$complaint_id);
+                    echo "Some Thing Wrong"; exit;
                 }
 
         }
@@ -1280,6 +1346,21 @@ class Admin extends CI_Controller {
 
     function update_profile()
     { 
+        $old_password = $this->input->post('old_password');
+        $user_id      = $this->session->userdata('user_id');
+        // check user session is available
+            if($user_id > 0)
+            {
+            $user_password = $this->model->user_password($user_id);
+                if(md5($old_password) !== $user_password) 
+                {
+                    echo "Invalid Old  Password"; exit;
+                }
+            }
+            else
+            {
+                echo "Please login now"; exit;
+            }
         $update_profile = array(
                                  'user_first_name'  => $this->input->post('user_first_name'),
                                  'user_last_name'   => $this->input->post('user_last_name'),
@@ -1288,25 +1369,22 @@ class Admin extends CI_Controller {
                                  'user_address'     => $this->input->post('user_address'),
                                  'user_password'    => md5($this->input->post('confirm'))
                                 );
-        $response = $this->model->update($update_profile,'users','user_role_id_fk',$this->session->userdata('user_role_id_fk'));
+        $response = $this->model->update($update_profile,'users','user_id',$user_id);
             if($response == true)
             {
                 if($this->input->post('remember') == 'on')
                 {
-                    $this->messages('alert-success','Please login now');
-                    return redirect('admin/logout_user');
+                    echo "Please login now"; exit;
                 }
                 else
-                {
-                    $this->messages('alert-success','Successfully Update');
-                    return redirect('admin/profile');    
+                { 
+                    echo "Record Update"; exit;   
                 }
                 
             }
             else
             {
-                $this->messages('alert-danger','Some Thing Wrong');
-                return redirect('admin/profile');
+                echo "Some Thing Wrong"; exit;
             }                       
     }
     function print_complaint_detail($complaint_id=null)
@@ -1329,6 +1407,11 @@ class Admin extends CI_Controller {
         
         $this->load->view('print_complaint_detail',$data);
       
+    }
+
+    function forgot_passord()
+    {
+        $this->load->view('authForgotPassword');
     }
 
 }

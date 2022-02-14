@@ -10,7 +10,7 @@
                       <h4> Complaints </h4>
                     </div>
                     <div class="col-6 text-right pr-0">
-                      <a style="margin-right:5px;" href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>  
+                      <!-- <a style="margin-right:5px;" href="admin/complaint_register" class="btn btn-icon icon-left btn-success custom-success-btn"><i class="fas fa-plus"></i> Register New Complaint </a>   -->
                       <a href="<?= base_url('admin/exportIntoExcel')?>" class="btn custom-success-btn" style="background: #2eaac7 !important; border:none; color:#fff;"><i class="fas fa-cloud-download-alt"></i> Export</a>
                     </div>  
 					<div class="clearfix"></div>
