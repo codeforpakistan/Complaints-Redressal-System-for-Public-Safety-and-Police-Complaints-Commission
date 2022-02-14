@@ -168,12 +168,8 @@ class Api extends CI_Controller {
             //==================================================================
             
             $key = PRIVATE_KEY;
-            $iat = time(); // current timestamp value
-            $exp = $iat + 3600;
      
             $payload = array(
-                                "iat"            => $iat, //Time the JWT issued at
-                                "exp"            => $exp, // Expiration time of token
                                 "user_id"        => $complainant_login->user_id,
                                 "user_name"      => $complainant_login->user_name,
                                 "complainant_id" => $find_complainant[0]['complainant_id']
@@ -198,6 +194,22 @@ class Api extends CI_Controller {
     
     public function complainant_registration()
     {
+        //======================================================================
+        // Required Data Validation
+        //======================================================================
+        
+        $check_required_values = array('user_name','user_contact','user_password','complainant_district_id_fk','complainant_email','complainant_name');
+    
+        foreach($check_required_values as $key=>$value)
+        {
+            if(!$this->input->post($value))
+            {
+                $this->format_response('error',$value.' is required',[]);
+            }
+        }
+        
+        //======================================================================
+        
         $user_name     = $this->input->post('user_name');
         $user_contact  = $this->input->post('user_contact');
         $user_password = $this->input->post('user_password');
@@ -243,7 +255,10 @@ class Api extends CI_Controller {
                                'user_contact'        => $user_contact,
                                'user_role_id_fk'     => 4,
                                'user_status'         => 1,
-                               'user_district_id_fk' => 0
+                               'user_district_id_fk' => $this->input->post('complainant_district_id_fk'),
+                               'user_email'          => $this->input->post('complainant_email'),
+                               'user_first_name'     => $this->input->post('complainant_name'),
+                               'user_address'        => $this->input->post('complainant_address')
                                );
         
         $insert_user = $this->AuthModel->user_add($data_arr_user);
@@ -260,20 +275,31 @@ class Api extends CI_Controller {
         //======================================================================
         // add complainant
         //======================================================================
-            
+        
         $complainant_data_arr = array(
                                       'user_id_fk'                 => $user_id,
                                       'complainant_name'           => $user_name,
-                                      'complainant_guardian_name'  => '',
                                       'complainant_contact'        => $user_contact,
-                                      'complainant_cnic'           => 0,
-                                      'complainant_gender'         => 0,
-                                      'complainant_email'          => '',
-                                      'complainant_district_id_fk' => 0,
-                                      'complainant_council'        => '',
-                                      'complainant_address'        => '',
                                       'complainant_status'         => 1
                                       );
+                                      
+        //======================================================================
+        // optional parameters
+        //======================================================================
+        
+        $allowed_columns = array('complainant_name','complainant_cnic','complainant_gender','complainant_district_id_fk','complainant_guardian_name','complainant_email','complainant_council','complainant_address');
+        
+        foreach($allowed_columns as $key=>$value)
+        {
+            if($this->input->post($value) != false)
+            {
+                $complainant_data_arr[$value] = trim($this->input->post($value));
+            }
+        }
+            
+        //======================================================================
+        // insert complainant
+        //======================================================================
         
         $insert_complainant = $this->ComplainantModel->complainant_add($complainant_data_arr);
             
@@ -612,26 +638,6 @@ class Api extends CI_Controller {
     }
     
     //==========================================================================
-    // Complainant Profile
-    //==========================================================================
-    
-    public function complainant_profile()
-    {
-        $this->check_session();
-        
-        //==================================================================
-        // find complainant 
-        //==================================================================
-            
-        $find_complainant = $this->ComplainantModel->complainants_get(array('user_id_fk'=>$complainant_login->user_id));
-            
-        if(count($find_complainant) == 0)
-        {
-            $this->format_response('error','User is not linked with any complainant',[]);
-        }
-    }
-    
-    //==========================================================================
     // Complaint Register
     //==========================================================================
     
@@ -920,6 +926,277 @@ class Api extends CI_Controller {
         {
             $this->format_response('error',$remarks_add_response['response_msg'],[]);
         }
+        
+    }
+    
+    public function profile_get()
+    {
+        $session_info = $this->check_session();
+        $session_user_id = $session_info->user_id;
+        $session_complainant_id = $session_info->complainant_id;
+        $data_arr = [];
+        
+        //======================================================================
+        // get complainant info
+        //======================================================================
+        
+        $find_complainant = $this->ComplainantModel->complainants_get(array('complainant_id'=>$session_complainant_id));
+            
+        if(count($find_complainant) == 0)
+        {
+            $this->format_response_2('error','User is not linked with any complainant',[]);
+        }
+        else
+        {
+            $complainant_info = $find_complainant[0];
+            
+            $data_arr['complainant_name']           = $complainant_info['complainant_name'];
+            $data_arr['complainant_cnic']           = $complainant_info['complainant_cnic'];
+            $data_arr['complainant_gender']         = $complainant_info['complainant_gender'];
+            $data_arr['complainant_guardian_name']  = $complainant_info['complainant_guardian_name'];
+            $data_arr['complainant_email']          = $complainant_info['complainant_email'];
+            $data_arr['complainant_district_id_fk'] = $complainant_info['complainant_district_id_fk' ];
+            $data_arr['complainant_council']        = $complainant_info['complainant_council' ]; 
+            $data_arr['complainant_address']        = $complainant_info['complainant_address'];  
+            $data_arr['complainant_contact']        = $complainant_info['complainant_contact'];
+            
+            if($complainant_info['user_id_fk'] == '0' || trim($complainant_info['user_id_fk']) == '')
+            {
+                $this->format_response_2('error','User Account is not linked with this complainant',['user_id'=>$complainant_info['user_id_fk']]);
+            }
+            else
+            {
+                $find_user = $this->AuthModel->users_get(array('user_id'=>$complainant_info['user_id_fk']));
+        
+                if(count($find_user) == 0)
+                {
+                    $this->format_response_2('error','Account info does not exist',[]);
+                }
+                else
+                {
+                    $user_info = $find_user[0];
+                    $data_arr['user_name'] = $user_info['user_name'];
+                }
+            }
+            
+            $this->format_response_2('success','Profile Fetched Successfully',['user_profile'=>$data_arr]);
+        }
+    
+    }
+    
+    public function verify_account()
+    {
+        //======================================================================
+        // Required Data Validation
+        //======================================================================
+        
+    
+        if(!$this->input->post('verification_source'))
+        {
+            $this->format_response_2('error','verification_source is required',[]);
+        }
+        else
+        {
+            $verification_source = $this->input->post('verification_source');
+        }
+        
+        //======================================================================
+        
+        $cond_arr = [];
+        
+        switch($verification_source)
+        {
+            case 'sms':
+                
+                if(!$this->input->post('user_contact'))
+                {
+                    $this->format_response_2('error','user_contact is required ',[]);
+                }
+                
+                $user_contact = $this->input->post('user_contact');
+                $cond_arr['user_contact'] = trim($user_contact);
+                
+            break;
+            
+            case 'email':
+                
+                if(!$this->input->post('user_email'))
+                {
+                    $this->format_response_2('error','user_email is required ',[]);
+                }
+                
+                $user_email = $this->input->post('user_email');
+                $cond_arr['user_email'] = trim($user_email);
+                
+            break;
+            
+            default:
+                $this->format_response_2('error','verification_source can be sms/email ',[]);
+            break;
+        }
+        
+        //======================================================================
+        
+        $find_user = $this->AuthModel->users_get($cond_arr);
+        
+        if(count($find_user) == 0)
+        {
+            $this->format_response_2('error','So such account exist',[]);
+        }
+        else
+        {
+            $user_info = $find_user[0];
+            
+            if($user_info['user_role_id_fk'] != '4')
+            {
+                $this->format_response_2('error','Android app is only for applicants',[]);
+            }
+
+            //==================================================================
+            
+            $otp = substr(str_shuffle(time()), 0, 6);
+            
+            switch($verification_source)
+            {
+                case 'sms':
+                    // send otp on user's mobile
+                    $this->format_response_2('success','There is no sms api integrated, kindly try verifying through email',[]);
+                break;
+                
+                case 'email':
+                    
+                    $update_user = $this->AuthModel->user_edit(array('user_id'=>$user_info['user_id'],'vcode'=>trim($otp)));
+        
+                    if($update_user['response'] == 0)
+                    {
+                        $this->format_response('error','Failed to set vcode',[]);
+                    }
+                    else
+                    {
+                        $htmlContent = "
+                                        <p>Hi, ".$user_info['user_name'].", </p>
+                                        <p>We received a request to reset your password through your email address. Your PPSC verification code is: </p>
+                                        <h2>".$otp."</h2>
+                                        <p>
+                                            If you did not request this code, it is possible that someone else is trying to access your PPSC Account. 
+                                            <b>Do not forward or give this code to anyone.</b>
+                                        </p>
+                                        <a href='https://ppsc.kp.gov.pk'> https://ppsc.kp.gov.pk </a>
+                                       ";
+                        
+                        $this->load->library('email');
+                        $this->email->from('noreply@ppsc.kp.gov.pk', 'PPSC');
+                        $this->email->to($user_info['user_email']);
+                        $this->email->subject('PPSC Verification Code');
+                        $this->email->message($htmlContent); 
+                        $this->email->set_mailtype("html");
+                        
+                        if($this->email->send())
+                        {
+            				$this->format_response_2('success','Kindly check your email for verification code',[]);
+            			}
+                        else
+                        {
+            				$this->format_response_2('error','Failed to send verification code on email. Try again',[]);
+                        }
+                    }
+                    
+                
+                break;
+            }
+        }
+    }
+    
+    public function forget_password_reset()
+    {
+        //======================================================================
+        // Required Data Validation
+        //======================================================================
+    
+        $check_required_values = array('verification_source','vcode','new_password');
+    
+        foreach($check_required_values as $key=>$value)
+        {
+            if(!$this->input->post($value))
+            {
+                $this->format_response_2('error',$value.' is required',[]);
+            }
+        }
+        
+        //======================================================================
+        // verification-source validation
+        //======================================================================
+        
+        $cond_arr = [];
+    
+        $verification_source = trim($this->input->post('verification_source'));
+            
+        switch($verification_source)
+        {
+            case 'sms':
+                    
+                if(!$this->input->post('user_contact'))
+                {
+                    $this->format_response_2('error','user_contact is required ',[]);
+                }
+                    
+                $user_contact = $this->input->post('user_contact');
+                $cond_arr['user_contact'] = trim($user_contact);
+                    
+            break;
+                
+            case 'email':
+                    
+                if(!$this->input->post('user_email'))
+                {
+                    $this->format_response_2('error','user_email is required ',[]);
+                }
+                    
+                $user_email = $this->input->post('user_email');
+                $cond_arr['user_email'] = trim($user_email);
+                    
+            break;
+            
+            default:
+                $this->format_response_2('error','verification_source can be sms/email ',[]);
+            break;
+        }
+        
+        //======================================================================
+        //  proceed to validate vcode
+        //======================================================================
+        
+        $find_user = $this->AuthModel->users_get($cond_arr);
+        
+        if(count($find_user) == 0)
+        {
+            $this->format_response_2('error','So such account exist',[]);
+        }
+        else
+        {
+            $user_info = $find_user[0];
+            
+            if(trim($user_info['vcode']) != trim($this->input->post('vcode')))
+            {
+                $this->format_response_2('error','Incorrect verification code ',[]);
+            }
+            else
+            {
+                $new_password = $this->input->post('new_password');
+                
+                $update_user = $this->AuthModel->user_edit(array('user_id'=>$user_info['user_id'],'user_password'=>trim($new_password)));
+        
+                if($update_user['response'] == 0)
+                {
+                    $this->format_response('error',$update_user['response_msg'],[]);
+                }
+                else
+                {
+                    $this->format_response('success','Password updated successfully',[]);
+                }
+            }
+        }
+        
         
     }
 
