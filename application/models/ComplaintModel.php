@@ -646,6 +646,10 @@ class ComplaintModel extends CI_Model
         $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
         $this->db->join('districts', 'districts.district_id=complaints.district_id_fk','left');
         $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
+        if($this->session->userdata('user_role_id') !=1)
+        {
+            $this->db->where('complaints.district_id_fk',$this->session->userdata('user_district_id_fk'));
+        }
      return $this->db->get()->result();
     }
     

@@ -1144,7 +1144,13 @@ class Admin extends CI_Controller {
         
         $data['complaint_detail']     = $this->complaint->get_complaint_by_id($complaint_id); // complinat detailed 
         $data['complaint_attachment'] = $this->complaint->get_attachment_complaint_by_id($complaint_id); // complinat attachments 
-        $data['complaint_statuses']   = $this->model->get_all_records('complaint_statuses');
+        // $data['complaint_statuses']   = $this->model->get_all_records('complaint_statuses');
+         // complaints status
+        $table_name                 = 'complaint_statuses';
+        $table_status_column_name   = 'status';
+        $table_status_column_value  = 1;
+        
+        $data['complaint_statuses'] =   $this->model->status_active_record($table_name,$table_status_column_name,$table_status_column_value);
         $data['respondats']           = $this->model->get_all_records('respondents');
         $data['complaint_id']         = $complaint_id;
         $data['complaints_remarks']   = $this->complaint->get_complaint_remarks($complaint_id);
