@@ -968,7 +968,7 @@ class Admin extends CI_Controller {
                                                     'complainant_email'          => $complainant_email,
                                                     'complainant_address'        => $complainant_address,
                                                     'complainant_status'         => 1,
-                                                    'district_id_fk'              => $complainant_district_id_fk
+                                                    'complainant_district_id_fk' => $complainant_district_id_fk
                                                 ); 
                 $complainant_id     = $this->model->insert_with_last_insert_id('complainants',$inert_complainant_array);
             }
