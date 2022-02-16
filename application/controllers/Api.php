@@ -236,14 +236,14 @@ class Api extends CI_Controller {
         // check complainant duplication
         //======================================================================
         
-        $data_arr_c = array('complainant_contact'=>$user_contact); 
+        // $data_arr_c = array('complainant_contact'=>$user_contact); 
         
-        $find_complainant_duplication = $this->ComplainantModel->complainants_get($data_arr_c);
+        // $find_complainant_duplication = $this->ComplainantModel->complainants_get($data_arr_c);
         
-        if(count($find_complainant_duplication))
-        {
-          $this->format_response('error','This contact has already registered as complainant',[]);
-        }
+        // if(count($find_complainant_duplication))
+        // {
+        //   $this->format_response('error','This contact has already registered as complainant',[]);
+        // }
         
         //======================================================================
         // insert user & pass user_id as forign-key to complainant table
@@ -742,47 +742,117 @@ class Api extends CI_Controller {
     
     public function phone_validation()
     {
-        if(!$this->input->post('complainant_contact'))
+        if(!$this->input->post('user_contact'))
         {
             $this->format_response('error','Complainant\'s contact is required',[]);
         }
         
-        $complainant_contact = $this->input->post('complainant_contact');
+        $user_contact = $this->input->post('user_contact');
         
-        if($complainant_contact != null && trim($complainant_contact) != '' && $complainant_contact != '0')
+        if($user_contact != null && trim($user_contact) != '' && $user_contact != '0')
         {
             
-            if(strlen($complainant_contact) == 11)
+            if(strlen($user_contact) == 11)
             {
-                $user_data = $this->AuthModel->users_get(array('user_contact'=>trim($complainant_contact)));
+                $user_data = $this->AuthModel->users_get(array('user_contact'=>trim($user_contact)));
                 
                 if(count($user_data) == 0)
                 {
-                    $this->format_response('error','No user found with this contact detail',[]);
+                    $this->format_response('error','No user found with this contact.no',[]);
                 }
                 else
                 {
-                    $complainant_data = $this->ComplainantModel->complainants_get(array('complainant_contact'=>trim($complainant_contact),'user_id_fk'=>$user_data[0]['user_contact']));
-        
-                    if(count($complainant_data) == 0)
+                    if($user_data[0]['user_role_id_fk'] != '4')
                     {
-                       $this->format_response('error','Provided contact is not linked',[]);
+                        $this->format_response('error','User not registered as applicant',[]);
                     }
                     else
                     {
-                        $this->format_response_2('success','Phone.no Verified',['complainant_id'=>$complainant_data[0]['complainant_id'],'user_id'=>$user_data[0]['user_contact']]);
+                        // $complainant_data = $this->ComplainantModel->complainants_get(array('complainant_contact'=>trim($complainant_contact),'user_id_fk'=>$user_data[0]['user_contact']));
+            
+                        // if(count($complainant_data) == 0)
+                        // {
+                        //   $this->format_response('error','Provided contact is not linked',[]);
+                        // }
+                        // else
+                        // {
+                            $this->format_response_2('success','Phone.no Verified',['user_id'=>$user_data[0]['user_contact']]);
+                        // }
                     }
                 }
             }
             else
             {
-                $this->format_response('error','Complainant\'s contact required format eg; 03331234567',[]);
+                $this->format_response('error','User\'s contact required format eg; 03331234567',[]);
             }
         }
         else
         {
-            $this->format_response('error','Complainant\'s contact can not be empty',[]);
+            $this->format_response('error','User\'s contact can not be empty',[]);
         }
+    }
+    
+    //==========================================================================
+    // Signup Validation
+    //==========================================================================
+    
+    public function signup_validation()
+    {
+        $check_required_values = array('user_name','user_contact');
+    
+        foreach($check_required_values as $key=>$value)
+        {
+            if(!$this->input->post($value))
+            {
+                $this->format_response('error',$value.' is required',[]);
+            }
+            else
+            {
+                if(trim($this->input->post($value)) == '' || trim($this->input->post($value)) == null)
+                {
+                    $this->format_response('error',$value.' can not be empty/null',[]);
+                }
+                else
+                {
+                    $data_arr[$value] = trim($this->input->post($value));
+                }
+            }
+        }
+        
+        //======================================================================
+        // check user_contact format
+        //======================================================================
+        
+        if(strlen($data_arr['user_contact']) != 11)
+        {
+            $this->format_response('error','user_contact required format eg; 03331234567',[]);
+        }
+        
+        //======================================================================
+        // user_contact validation
+        //======================================================================
+               
+        $user_data_1 = $this->AuthModel->users_get(array('user_contact'=>$data_arr['user_contact']));
+                
+        if(count($user_data_1) != 0)
+        {
+            $this->format_response('error','This contact already exist',[]);
+        }
+        
+        //======================================================================
+        // user_name validation
+        //======================================================================
+        
+        $user_data_2 = $this->AuthModel->users_get(array('user_name'=>$data_arr['user_name']));
+                
+        if(count($user_data_2) != 0)
+        {
+            $this->format_response('error','This user_name already exist',[]);
+        }
+               
+        //======================================================================
+        
+        $this->format_response_2('success','Proceed to signup, user_name & contact is unique',[]);
     }
     
     //==========================================================================
