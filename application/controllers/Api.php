@@ -395,7 +395,7 @@ class Api extends CI_Controller {
     
     public function districts_get()
     {
-        $this->check_session();
+        // $this->check_session();
         
         //======================================================================
         // joins
@@ -956,6 +956,7 @@ class Api extends CI_Controller {
             $data_arr['complainant_guardian_name']  = $complainant_info['complainant_guardian_name'];
             $data_arr['complainant_email']          = $complainant_info['complainant_email'];
             $data_arr['complainant_district_id_fk'] = $complainant_info['complainant_district_id_fk' ];
+            $data_arr['complainant_district_name']  = $complainant_info['district_name' ];
             $data_arr['complainant_council']        = $complainant_info['complainant_council' ]; 
             $data_arr['complainant_address']        = $complainant_info['complainant_address'];  
             $data_arr['complainant_contact']        = $complainant_info['complainant_contact'];
