@@ -4,8 +4,24 @@
   <div class="row ">
 
             <?php 
-
-              $dashboard_data_arr = array(
+              if($this->session->userdata('user_role_id_fk') == 3)
+              {
+                $dashboard_data_arr = array(
+                  'All Complaints' => $complaints,
+                  'Pending'        => $pending,
+                  'Completed'      => $complete,
+                  'This Year'      => $thisYear,
+                  'This Month'     => $thisMonth, // date('F',time())
+                  'Today'          => $thisDay,
+                  'Irrelevant'     => $reject,
+                  'Web-Portal'     => $web,
+                  'Android'        => $mobile_app,
+                  'Police Stations'    => $policeStations
+                );
+              }
+              else
+              {
+                $dashboard_data_arr = array(
                                            'All Complaints' => $complaints,
                                            'Pending'        => $pending,
                                            'Completed'      => $complete,
@@ -23,6 +39,8 @@
                                            'Inactive-Districts'=>$inActiveDistricts,
                                            'Police Stations'    => $policeStations
                                          ); 
+              }
+              
 
               foreach($dashboard_data_arr as $key_title => $value)
               { 

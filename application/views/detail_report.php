@@ -41,12 +41,25 @@
 										<div class="row" style="padding-left:15px;">
 											<div class="col-md-2" style="padding-left:0px;">
 												<label>District</label>
-												<select class="form-control select2" name="district_id" id="district_id">
+												<?php 
+												      if($this->session->userdata('user_role_id_fk') == 3)
+													  {
+														  $district_class = 'disabled';
+														  $district_id = $this->session->userdata('user_district_id_fk');
+													  }
+													  else
+													  {
+														$district_class = '';
+														$district_id = 0;  
+													  }
+												?>
+												<select class="form-control select2" name="district_id" id="district_id" <?= $district_class?>>
 													<option disabled value="" selected hidden>Please Select</option>
 													<?php if($districts){ foreach($districts as $dist){?>
 													<option value="<?= $dist->district_id?>" <?= ($district_id == $dist->district_id)? 'selected': '' ?> ><?= $dist->district_name?></option>
 													<?php } }?>
 												</select>
+
 											</div>
 											<div class="col-md-2" style="padding-left:0px;">
 												<label>Status</label>

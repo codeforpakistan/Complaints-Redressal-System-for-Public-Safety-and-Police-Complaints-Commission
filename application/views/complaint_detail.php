@@ -219,14 +219,14 @@
                               <h3>Change Status / Respondent Reply</h3>  
                             </div>
                              <div class="col-2">
-                                 <button class="show_hide_form btn btn-primary pull-right ">Show Form</button>
+                                 <button class="show_hide_form btn btn-primary pull-right ">Hide Form</button>
                              </div>
                              
                         </div>
                         <div class="mt-5">
                             
                         </div>
-                        <div class="status_response_form" style="display: none;">
+                        <div class="status_response_form">
                         <form class="comp_remarks_add_form" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-12 text-center">
@@ -269,11 +269,11 @@
                                     </div>
                                 </div> <!-- end of col-md-4 -->
 
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display:none;">
                                     <div class="form-group">
                                         <label>date:</label>
                                         <div class="input-group">
-                                            <input type="date" class="form-control"  name="complaint_remarks_timestamp" id="complaint_remarks_timestamp" required >
+                                            <input type="date" class="form-control"  name="complaint_remarks_timestamp" id="complaint_remarks_timestamp" >
                                         </div>
                                     </div>
                                 </div> <!-- end of col-md-4 -->
@@ -325,12 +325,12 @@
     //  toggle form
     $(".show_hide_form").click(function()
     { 
-        if($(this).text()=="Hide form")
-        {
-            $(this).text("Show form");
-        } else 
+        if($(this).text()=="Show form")
         {
             $(this).text("Hide form");
+        } else 
+        {
+            $(this).text("Show form");
         }
         $(".status_response_form").toggle();
     });
@@ -444,7 +444,7 @@
                             {
                                 $(".comp_remarks_add_form")[0].reset();
                                 complaint_remarks_list();
-                                $('.show_hide_form').click();
+                                // $('.show_hide_form').click();
                                 message(1,response);
                             }
                             else

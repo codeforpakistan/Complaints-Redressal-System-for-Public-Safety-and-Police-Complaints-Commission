@@ -283,8 +283,9 @@
                             {
                                 $(".users_add_form")[0].reset();
                                 $('#addModel').modal('hide');
-                                users_list();
                                 message(1,response);
+                                users_list();
+                                $('#hideShowDistrict').hide();
                             }
                             else
                             { 
@@ -376,28 +377,6 @@
                         }
                      });
           }); // end of delete
-          // $(document).on("click", ".deleteRecord", function() {
-          //   var id = $(this).attr("data-id");
-          //     $.ajax({
-          //               url:"<?php echo base_url(); ?>admin/users_delete",
-          //               type:"post",
-          //               data:{id:id},
-          //               cache:false,
-          //               async:false,
-          //               success: function(response)
-          //               {  
-          //                   if(response == 'Record Delete')
-          //                   { 
-          //                     users_list();
-          //                     message(1,response);
-          //                   }
-          //                   else
-          //                   { 
-          //                     message(0,response);
-          //                   }
-          //               }
-          //             }); 
-          // });
           
 
          

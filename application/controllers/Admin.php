@@ -15,6 +15,7 @@ class Admin extends CI_Controller {
         $this->load->library('form_validation');
         // Load the captcha helper
         $this->load->helper('captcha');
+        date_default_timezone_set("Asia/Karachi");
         
         // if(empty($this->session->userdata('user_role_id_fk')))
         // {   
@@ -214,7 +215,7 @@ class Admin extends CI_Controller {
         
         $data['title']          = 'Dashboard';
         $data['page']           = 'dashboard';
-        $data['complaints']     = $this->db->count_all_results('complaints');
+        $data['complaints']     = $this->model->countAllResult('complaints');
         $data['web']            = $this->model->countAll('complaints','complaint_source','web');
         $data['mobile_app']     = $this->model->countAll('complaints','complaint_source','mobile-app');
         $data['pending']        = $this->model->countAll('complaints','complaint_status_id_fk',1);
@@ -225,7 +226,7 @@ class Admin extends CI_Controller {
         $data['activeDistricts']= $this->model->countAll('districts','district_status',1);
         $data['inActiveDistricts']= $this->model->countAll('districts','district_status',0);
         $data['policeStations'] = $this->model->countAll('police_stations','police_station_status',1);
-        $data['districts']      = $this->db->count_all_results('districts'); 
+        $data['districts']      = $this->model->countAllResult('districts');
         $data['thisDay']        = $this->model->thisDay(); 
         $data['thisMonth']      = $this->model->thisMonth();
         $data['thisYear']       = $this->model->thisYear(); 
@@ -319,8 +320,8 @@ class Admin extends CI_Controller {
         if($this->input->post('user_role_id_fk') == 3) // to for District admin
         {
             $this->form_validation->set_rules('district_id', 'Dostrict selection', 'required|trim');
-        } 
-
+        }
+        
         if ($this->form_validation->run() == FALSE)
         {
             $error   = array('error' => validation_errors());
@@ -329,12 +330,23 @@ class Admin extends CI_Controller {
             
         }
         else
-        {
+        {   
+            if($this->input->post('user_role_id_fk') == 3) // to for District admin
+            { // check the dublicate user of district
+                $dublicate_district_arr = array('user_role_id_fk'=>3,'user_district_id_fk'=>$this->input->post('district_id'));
+                $dublicate_response = $this->model->dublicate_district_admin($dublicate_district_arr);
+                if($dublicate_response > 0)
+                {
+                    echo "District Admin is Already Exist"; exit;
+                }
+            }
             $user_name            = $this->input->post('user_name');
             $user_password        = $this->input->post('user_password');
             $user_district_id_fk  = (empty($this->input->post('district_id'))? 0:$this->input->post('district_id'));
             $user_role_id_fk      = $this->input->post('user_role_id_fk');
             $table_name           = 'users';
+            
+            // insert user array
             $inert_it_array       = array('user_name'=>$user_name,'user_password'=>md5($user_password),'user_district_id_fk'=>$user_district_id_fk,'user_status'=>1,'user_role_id_fk'=>$user_role_id_fk);
             $table_name           = 'users';
 
@@ -1141,8 +1153,16 @@ class Admin extends CI_Controller {
 
         $data['title'] = 'Complaint Detail';
         $data['page']  = 'complaint_detail'; 
+        $check_valid_complaint = $this->complaint->get_complaint_by_id($complaint_id);
+        if(empty($check_valid_complaint))
+        {
+          return redirect('admin/complaints'); exit;
+        }
+        else
+        {
+           $data['complaint_detail']     = $this->complaint->get_complaint_by_id($complaint_id); // complinat detailed  
+        }
         
-        $data['complaint_detail']     = $this->complaint->get_complaint_by_id($complaint_id); // complinat detailed 
         $data['complaint_attachment'] = $this->complaint->get_attachment_complaint_by_id($complaint_id); // complinat attachments 
         // $data['complaint_statuses']   = $this->model->get_all_records('complaint_statuses');
          // complaints status
@@ -1172,7 +1192,7 @@ class Admin extends CI_Controller {
     function insert_comploaint_remarks()
     {
         $this->form_validation->set_rules('complaint_status_id_fk', 'Complainant Status', 'required|trim');
-        $this->form_validation->set_rules('complaint_remarks_timestamp', 'Complainant Date', 'required|trim');
+        // $this->form_validation->set_rules('complaint_remarks_timestamp', 'Complainant Date', 'required|trim');
         $this->form_validation->set_rules('complaint_remarks_detail', 'Complainant Remarks', 'required|trim');
 
         if ($this->form_validation->run() == FALSE)
@@ -1186,7 +1206,8 @@ class Admin extends CI_Controller {
         {
             $complaint_status_id_fk       = $this->input->post('complaint_status_id_fk');
             $respondent_id_fk             = empty($this->input->post('respondent_id_fk') )?'0':$this->input->post('respondent_id_fk');
-            $complaint_remarks_timestamp  = $this->input->post('complaint_remarks_timestamp');
+            // $complaint_remarks_timestamp  = $this->input->post('complaint_remarks_timestamp');
+            $complaint_remarks_timestamp  = date('Y-m-d H:i:s');
             $complaint_remarks_detail     = $this->input->post('complaint_remarks_detail');
             $user_id_fk                   = $this->session->userdata('user_id');
             $table_name                   = 'complaint_remarks';

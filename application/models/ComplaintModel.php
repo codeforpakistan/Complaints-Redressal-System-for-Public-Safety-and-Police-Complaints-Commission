@@ -640,15 +640,16 @@ class ComplaintModel extends CI_Model
     }
     
     function get_complaint_by_id($complaint_id)
-    { 
+    {  
         $this->db->select('*')->from('complaints');
         $this->db->where('complaint_id',$complaint_id);
         $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
         $this->db->join('districts', 'districts.district_id=complaints.district_id_fk','left');
         $this->db->join('complaint_categories cat', 'cat.complaint_category_id=complaints.complaint_category_id_fk','left');
-        if($this->session->userdata('user_role_id') !=1)
-        {
-            $this->db->where('complaints.district_id_fk',$this->session->userdata('user_district_id_fk'));
+        if($this->session->userdata('user_role_id_fk') == 3 )
+        { 
+            $where_case = 'complaints.district_id_fk = '.$this->session->userdata("user_district_id_fk").' and complaints.district_id_fk != 0';
+            $this->db->where($where_case);
         }
      return $this->db->get()->result();
     }
@@ -669,6 +670,7 @@ class ComplaintModel extends CI_Model
         $this->db->join('districts', 'districts.district_id=complaints.complaint_council','left');
         $this->db->join('complaint_statuses', 'complaint_statuses.complaint_status_id=complaint_remarks.complaint_status_id_fk','left');
         $this->db->join('respondents','respondents.respondent_id=complaint_remarks.respondent_id_fk','left');
+        $this->db->order_by('complaint_remarks.complaint_remarks_id','desc');
      return $this->db->get()->result();
     }
     
@@ -690,7 +692,7 @@ class ComplaintModel extends CI_Model
 
       $session_role_id       = $this->session->userdata('user_role_id_fk');
         $session_district_id = $this->session->userdata('user_district_id_fk');
-        if($session_role_id != 1 && $session_role_id != 3)
+        if($session_role_id == 3)
         {
             $this->db->where('complaints.district_id_fk',$session_district_id);
         }

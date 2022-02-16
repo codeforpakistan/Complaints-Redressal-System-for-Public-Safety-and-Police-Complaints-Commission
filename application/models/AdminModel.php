@@ -4,6 +4,11 @@ if (!defined('BASEPATH'))	exit('No direct script access allowed');
 
 class AdminModel extends CI_Model
 {
+  function __construct()
+  {
+    parent::__construct();
+    date_default_timezone_set("Asia/Karachi");
+  }
     function user_by_role($table_name,$user_role_id_fk,$user_district_id_fk=null)
     {
         if($user_district_id_fk != null )
@@ -54,25 +59,90 @@ class AdminModel extends CI_Model
     }
     function countAll($table_name,$talbe_column_name,$value)
     {
-      return  $this->db->like($talbe_column_name,$value)->count_all_results($table_name);
+         switch ($table_name) {
+             case 'complaints': 
+                if($this->session->userdata('user_role_id_fk') == 3)
+                {
+                  return  $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'))->like($talbe_column_name,$value)->count_all_results($table_name);
+                }
+                else
+                {
+                   return  $this->db->like($talbe_column_name,$value)->count_all_results($table_name);
+                }
+                 break;
+
+                 case 'police_stations': 
+                    if($this->session->userdata('user_role_id_fk') == 3)
+                    {
+                      return  $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'))->like($talbe_column_name,$value)->count_all_results($table_name);
+                    }
+                    else
+                    {
+                       return  $this->db->like($talbe_column_name,$value)->count_all_results($table_name);
+                    }
+                     break;
+             
+             default: 
+               return  $this->db->like($talbe_column_name,$value)->count_all_results($table_name);
+                 break;
+         }
+            
+        
+      
+    }
+
+    function countAllResult($table_name)
+    {
+        switch ($table_name) {
+            case 'complaints': 
+               if($this->session->userdata('user_role_id_fk') == 3)
+               {
+                   return $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'))->count_all_results($table_name);
+               }
+               else
+               {
+                  return  $this->db->count_all_results($table_name);
+               }
+               
+                break;
+            
+            default: 
+              return  $this->db->count_all_results($table_name);
+                break;
+        }
     }
     function thisDay()
-    {
+    {   
+        
+        $curr_date = date('Y-m-d');
+        //$this->db->where('DATE(complaint_entry_timestamp)',$curr_date);
         $this->db->where('DAY(complaint_entry_timestamp)', date('d'));
         $this->db->where('MONTH(complaint_entry_timestamp)', date('m'));
         $this->db->where('YEAR(complaint_entry_timestamp)', date('Y'));
-        return $this->db->count_all_results('complaints');
+        if($this->session->userdata('user_role_id_fk') == 3)
+        {
+            $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'));
+        }
+        return $this->db->count_all_results('complaints'); //echo $this->db->last_query(); exit;
     }
     function thisMonth()
     {
         $this->db->where('MONTH(complaint_entry_timestamp)', date('m'));
         $this->db->where('YEAR(complaint_entry_timestamp)', date('Y'));
+        if($this->session->userdata('user_role_id_fk') == 3)
+        {
+            $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'));
+        }
        return $this->db->count_all_results('complaints'); 
        
     }
     function thisYear()
     {
         $this->db->where('YEAR(complaint_entry_timestamp)',date('Y'));
+        if($this->session->userdata('user_role_id_fk') == 3)
+        {
+            $this->db->where('district_id_fk',$this->session->userdata('user_district_id_fk'));
+        }
        return $this->db->count_all_results('complaints');  
     }
     function IT_district_admins()
@@ -143,6 +213,11 @@ class AdminModel extends CI_Model
                      ->where('user_id',$user_id)
                      ->get('users')
                      ->row()->user_password;
+    }
+
+    function dublicate_district_admin($array)
+    {
+       return $this->db->where($array)->get('users')->num_rows();
     }
 				
 }
