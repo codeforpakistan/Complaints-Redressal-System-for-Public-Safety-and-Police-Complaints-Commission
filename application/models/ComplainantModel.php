@@ -73,7 +73,11 @@ class ComplainantModel extends CI_Model
         //======================================================================
         
         $cond_query_formatted = ltrim(trim($cond_query),"or"); 
-        $get_complainants = $this->db->query('select * from complainants where '.$cond_query_formatted,$cond_arr)->result_array();
+        
+        $get_complainants = $this->db->query('select complainants.*, districts.district_name 
+                                              from complainants
+                                              left join districts on districts.district_id = complainants.complainant_district_id_fk
+                                              where '.$cond_query_formatted,$cond_arr)->result_array();
         return $get_complainants;
     }
     
