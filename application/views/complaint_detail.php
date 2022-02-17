@@ -445,6 +445,7 @@
                                 $(".comp_remarks_add_form")[0].reset();
                                 complaint_remarks_list();
                                 // $('.show_hide_form').click();
+                                $(".dropify-clear").click();
                                 message(1,response);
                             }
                             else

@@ -360,8 +360,34 @@ function cnic_validation()
         return false;
     }
     else
-    {
+    { 
         $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
+        // $('#complainant_cnic').blur();
+        
+        // search compalainant by CNIC
+            // $.ajax({
+            //         url: 'admin/get_complainant_by_cnic/'+rem_hyphens,
+            //         dataType: 'json',
+            //         success: function(response)
+            //         {  
+            //             alert(response.complainant_district_id_fk);
+            //             $('#complainant_name').val(response.complainant_name);
+            //             $('#complainant_guardian_name').val(response.complainant_guardian_name);
+            //             $('#complainant_gender').val(response.complainant_gender);
+            //             $('#complainant_cnic').val(response.complainant_cnic);
+            //             $('#complainant_contact').val(response.complainant_contact);
+            //             $('#complainant_email').val(response.complainant_email);
+            //             // $('#home_district_id').val(response.home_district_id); 
+            //             $( "#complainant_gender option:selected" ).val(response.complainant_gender);
+            //             $('#home_district_id').val(response.complainant_district_id_fk);
+            //             $('#home_district_id').trigger("change");
+            //             $('#complainant_council').val(response.complainant_council);
+            //             $('#complainant_address').val(response.complainant_address);
+            //             $('#complainant_cnic').blur();
+
+            //         }
+            //     });
+        // end of search
         $('#complainant_cnic').blur();
         return true;
     }

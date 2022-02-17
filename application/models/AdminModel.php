@@ -219,6 +219,11 @@ class AdminModel extends CI_Model
     {
        return $this->db->where($array)->get('users')->num_rows();
     }
+    function get_complainant_by_cnic($cnic)
+    {
+       return $this->db->where('complainant_cnic',$cnic)->get('complainants')->row();
+       
+    }
 				
 }
 
