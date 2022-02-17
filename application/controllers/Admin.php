@@ -8,6 +8,8 @@ class Admin extends CI_Controller {
     
     public function __construct()
     {   
+        // testing github 
+        
         parent::__construct();
         $this->load->model('AdminModel','model');
         $this->load->model('ComplaintModel','complaint');
@@ -935,6 +937,7 @@ class Admin extends CI_Controller {
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
             $complainant_cnic           = $this->input->post('complainant_cnic');
+            // $complainant_cnic           = $validate_cnic;
             $complaint_category_id      = $this->input->post('complaint_category_id');
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
@@ -1216,7 +1219,8 @@ class Admin extends CI_Controller {
             {
                 echo "Your session is expired please login again"; exit;
             } 
-            $uploadPath     = FCPATH . 'assets/complaint_remarks_attachment';
+            $uploadPath     = 'assets/complaint_remarks_attachment';
+            $this->load->library('image_lib');
 				if (!file_exists($uploadPath)) 
 				{
 					mkdir($uploadPath);
@@ -1240,6 +1244,20 @@ class Admin extends CI_Controller {
                     echo "Error in uploading attachment";
                     exit;
                 else:
+                    $image_data =   $this->upload->data();
+                   // image resize
+                        $configer =  array(
+                                            'image_library'   => 'gd2',
+                                            'source_image'    =>  $image_data['full_path'],
+                                            'maintain_ratio'  =>  TRUE,
+                                            'width'           =>  auto,
+                                            'height'          =>  auto,
+                                          );
+                                        
+                        $this->image_lib->clear();
+                        $this->image_lib->initialize($configer);
+                        $this->image_lib->resize();
+                    // edn of image resize
                         $data = array(
                             'upload_data' => $this->upload->data()
                         );
@@ -1439,6 +1457,11 @@ class Admin extends CI_Controller {
     function forgot_passord()
     {
         $this->load->view('authForgotPassword');
+    }
+    function get_complainant_by_cnic($cnic)
+    {
+     $response = $this->model->get_complainant_by_cnic($cnic);
+     echo json_encode($response); exit;
     }
 
 }
