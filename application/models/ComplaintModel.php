@@ -248,9 +248,9 @@ class ComplaintModel extends CI_Model
             // size validation 
             //==================================================================
             
-            if($files['size'][$key] > 5000000)
+            if($files['size'][$key] > 25000000)
             {
-                return array('response'=>0,'response_msg'=>'Size should not be larger than 5mb for attachment-no.'.$key.', name: '.$files['name'][$key].', type: '.$files['type'][$key]);
+                return array('response'=>0,'response_msg'=>'Size should not be larger than 25mb for attachment-no.'.$key.', name: '.$files['name'][$key].', type: '.$files['type'][$key]);
             }
         }
         
