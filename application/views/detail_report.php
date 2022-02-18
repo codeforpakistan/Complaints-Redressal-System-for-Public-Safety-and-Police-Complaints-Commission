@@ -36,65 +36,106 @@
 
                             </div>
                     <!-- end of messages  --->
-                       <!-- :::::::::::::::::::::::::::::::::::: list of complaint start :::: -->
-								<form id="reset_form" method="post" action="admin/detail_report"> 
-										<div class="row" style="padding-left:15px;">
-											<div class="col-md-2" style="padding-left:0px;">
-												<label>District</label>
-												<?php 
-												      if($this->session->userdata('user_role_id_fk') == 3)
-													  {
-														  $district_class = 'disabled';
-														  $district_id = $this->session->userdata('user_district_id_fk');
-													  }
-													  else
-													  {
-														$district_class = '';
-														$district_id = 0;  
-													  }
-												?>
-												<select class="form-control select2" name="district_id" id="district_id" <?= $district_class?>>
-													<option disabled value="" selected hidden>Please Select</option>
-													<?php if($districts){ foreach($districts as $dist){?>
-													<option value="<?= $dist->district_id?>" <?= ($district_id == $dist->district_id)? 'selected': '' ?> ><?= $dist->district_name?></option>
-													<?php } }?>
-												</select>
-
-											</div>
-											<div class="col-md-2" style="padding-left:0px;">
-												<label>Status</label>
-												<select class="form-control select2" name="complaint_status_id" id="complaint_status_id">
-													<option disabled value="" selected hidden>Please Select</option>
-													<?php if($complaint_statuses){ foreach($complaint_statuses as $status){?>
-													<option value="<?= $status->complaint_status_id ?>" <?= ($complaint_status_id == $status->complaint_status_id)? 'selected': '' ?> ><?= $status->complaint_status_title?></option>
-													<?php } }?>
-												</select>
-											</div>
-											<div class="col-md-2" style="padding-left:0px;">
-												<label>From</label>
-												<input type="date" name="from_date" class="form-control" value="<?= $from_date ?>" />
-											</div>
-											<div class="col-md-2" style="padding-left:0px;">
-												<label>To</label>
-												<input type="date" name="to_date" class="form-control" value="<?= $to_date ?>" />
-											</div>
-											<div class="col-md-2" style="padding-left:0px;">
-												<label>Source</label>
-												<select class="form-control" name="complaint_source" id="complaint_source">
-													<option value="All" <?= ($complaint_source == "All")? 'selected': '' ?> >ALL</option>
-													<option value="web" <?= ($complaint_source == "web")? 'selected': '' ?>>Web</option>
-													<option value="mobile-app" <?= ($complaint_source == "mobile-app")? 'selected': '' ?> >Mobile-App</option>
-												</select>
-											</div>
-											<div class="col-md-1" style="padding-left:0px;">
-												<button type="submit" class="btn btn-success form-control" style="margin-top: 33%;"><i class="fa fa-search" aria-hidden="true"></i></button> 
-											</div>
-											<div class="col-md-1" style="padding-left:0px;"> 
-											    <button type="button" onclick="reset_form()" class="btn btn-primary form-control" style="margin-top: 33%;"><i class="fas fa-sync"></i></button>
-											</div>
+                    
+                       <!--------------- Data Filteration Form ---------------->
+							
+							<form id="reset_form" method="post" action="admin/detail_report" class="detail_report_filter_form"> 
+								    
+								<div class="row" style="padding-left:15px;">
+								    
+									<div class="col-md-2" style="padding-left:0px;">
+									    <label>District</label>
+										<?php 
+											if($this->session->userdata('user_role_id_fk') == 3)
+											{
+												$district_class = 'disabled';
+												$district_id = $this->session->userdata('user_district_id_fk');
+											}
+											else
+											{
+												$district_class = '';
+												$district_id = 0;  
+											}
+										?>
+										<select class="form-control select2" name="district_id" id="district_id" <?= $district_class?>>
+											<option disabled value="" selected hidden>Please Select</option>
+											
+											<?php if($districts){ foreach($districts as $dist){?>
+											    <option value="<?= $dist->district_id?>" <?= ($district_id == $dist->district_id)? 'selected': '' ?> ><?= $dist->district_name?></option>
+											<?php } }?>
+										</select>
+                                    </div>
+                                    
+									<div class="col-md-2" style="padding-left:0px;">
+										<label>Status</label>
+										<select class="form-control select2" name="complaint_status_id" id="complaint_status_id">
+											<option disabled value="" selected hidden>Please Select</option>
+											<?php if($complaint_statuses){ foreach($complaint_statuses as $status){?>
+												<option value="<?= $status->complaint_status_id ?>" <?= ($complaint_status_id == $status->complaint_status_id)? 'selected': '' ?> ><?= $status->complaint_status_title?></option>
+											<?php } }?>
+										</select>
 									</div>
-								</form>
+									
+									<div class="col-md-2" style="padding-left:0px;">
+										<label>From</label>
+										<input type="date" name="from_date" class="form-control" value="<?= $from_date ?>" />
+									</div>
+											
+									<div class="col-md-2" style="padding-left:0px;">
+										<label>To</label>
+										<input type="date" name="to_date" class="form-control" value="<?= $to_date ?>" />
+									</div>
+									
+									<div class="col-md-2" style="padding-left:0px;">
+										<label>Source</label>
+										<select class="form-control" name="complaint_source" id="complaint_source">
+											<option value="All" <?= ($complaint_source == "All")? 'selected': '' ?> >ALL</option>
+											<option value="web" <?= ($complaint_source == "web")? 'selected': '' ?>>Web</option>
+											<option value="mobile-app" <?= ($complaint_source == "mobile-app")? 'selected': '' ?> >Mobile-App</option>
+										</select>
+									</div>
+									
+									<div class="col-md-1" style="padding-left:0px;">
+										<button type="submit" class="btn btn-success form-control" style="margin-top: 33%;"><i class="fa fa-search" aria-hidden="true"></i></button> 
+									</div>
+									
+									<div class="col-md-1" style="padding-left:0px;"> 
+										<button type="button" onclick="reset_form()" class="btn btn-primary form-control" style="margin-top: 33%;"><i class="fas fa-sync"></i></button>
+									</div>
+									
+								</div> <!-- row -->
+								
+								<div class="row" style="padding-left:15px; padding-top:15px;">
+								    
+								    <div class="col-md-5" style="padding-left:0px;">
+								        <input type="text" name="search_text" class="form-control" placeholder="Type Complaint-Id or Applicant-name to search..">
+								    </div>
+								    
+								    <div class="col-md-3"> </div>
+								    
+								    <div class="col-md-2" style="padding-right:0px;">
+								        <select class="form-control select2" name="sort_by_column" id="">
+											<option disabled value="" selected hidden>Sort By Column</option>
+											<option value="complaint_id"> Complaint Id </option>
+											<option value="complainant_name"> Applicant Name </option>
+											<option value="complaint_status_id_fk"> Status </option>
+											<option value="complaint_source"> Source </option>
+										</select>
+								    </div>
+								    <div class="col-md-2">
+								        <select class="form-control select2" name="sort_by_value" id="">
+											<option value="asc"> Ascending </option>
+											<option value="desc"> Descending </option>
+										</select>
+								    </div>
+								        
+								</div>
+								
+						    </form>
+						    
 						<hr>
+						
+						<!-- :::::::::::::::::::::::::::::::::::: list of complaint start :::: -->
 						
 							<table id="example2lol" class="table table-striped" >
 									<thead>
