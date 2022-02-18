@@ -44,6 +44,15 @@
                             <div class="card-body" bis_skin_checked="1">
                                 <div class="row">
 
+                                   <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>CNIC <span class="asterisk">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required minlength="15" maxlength="15" onblur="cnic_validation()">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="test">Name <span class="asterisk">*</span></label>
@@ -75,16 +84,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>CNIC <span class="asterisk">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="complainant_cnic" id="complainant_cnic" data-inputmask="'mask': '99999-9999999-9'" required minlength="15" maxlength="15" onblur="cnic_validation()">
-                                            </div>
-                                        </div>
-                                    </div> 
-
                                 </div>
                                 <!-- end of row -->
 
@@ -387,40 +386,32 @@ function cnic_validation()
                         $('#home_district_id').trigger("change");
                         $('#complainant_council').val(response.complainant_council);
                         $('#complainant_address').val(response.complainant_address);
+                        $("#complainant_contact").blur();
                       }
                       else
                       {
                         $('.enableDisabled').attr('disabled',false);
                         $('#complainant_name').val('');
                         $('#complainant_guardian_name').val('');
-                        $('#complainant_gender').val(0);
+                        $('#complainant_gender').val('');
                         $('#complainant_contact').val('');
                         $('#complainant_email').val('');
-                        $( "#complainant_gender option:selected" ).val(0);
-                        $('#home_district_id').val(0);
+                        $('#home_district_id').val('');
                         $('#home_district_id').trigger("change");
                         $('#complainant_council').val('');
                         $('#complainant_address').val(); 
                       }
-                        alert(response);
-                        
-                        // $('#complainant_cnic').blur();
 
                     }
                 });
             // end of search
         }
-        // $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
-        // $('#complainant_cnic').blur();
-        
-        
-        // $('#complainant_cnic').blur();
         return true;
     }
 }
 function contact_validation()
-{
-    var contact       = $('#complainant_contact').val();
+{ 
+    var contact       = $('#complainant_contact').val(); 
     var rem_uderscore = contact.replace(/-/g, "");
     var rem_hyphens   = rem_uderscore.replace(/_/g, "");
     var contact_length= rem_hyphens.length;
