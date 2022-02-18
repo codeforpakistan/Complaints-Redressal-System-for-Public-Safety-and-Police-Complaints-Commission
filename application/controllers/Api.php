@@ -1260,7 +1260,7 @@ class Api extends CI_Controller {
     }
     
     //==========================================================================
-    // Forget Passsword Reset - Step 1
+    // Forget Passsword Reset - Step 2
     //==========================================================================
     
     public function forget_password_reset()
