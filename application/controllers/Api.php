@@ -1,16 +1,9 @@
 <?php
 
-
-// noreena testing github
-
 error_reporting(0);
-
-
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-
 use \Firebase\JWT\JWT;
-
+date_default_timezone_set("Asia/Karachi");
 
 class Api extends CI_Controller {
     
@@ -312,6 +305,98 @@ class Api extends CI_Controller {
             $complainant_id = $insert_complainant['complainant_id'];
             $this->format_response('success','Complainant Registered Successfully',array('user_id'=>$user_id,'complainant_id'=>$complainant_id));
         }
+    }
+    
+    //==========================================================================
+    // Complainant-Withdrawal
+    //==========================================================================
+    
+    public function complaint_withdrawal()
+    {
+        $session_info = $this->check_session();
+        $session_user_id = $session_info->user_id;
+        $session_complainant_id = $session_info->complainant_id;
+        
+        $data_arr = [];
+        
+        //======================================================================
+        // Required Data Validation
+        //======================================================================
+        
+        $check_required_values = array('complaint_id_fk','complaint_remarks_detail');
+    
+        foreach($check_required_values as $key=>$value)
+        {
+            if(!$this->input->post($value))
+            {
+                $this->format_response('error',$value.' is required',[]);
+            }
+            else
+            {
+                $data_arr[$value] = trim($this->input->post($value));
+            }
+        }
+        
+        //======================================================================
+        // Complaint Authentication
+        //======================================================================
+        
+        $find_complaint = $this->ComplaintModel->complaints_get(array('complaint_id'=>$data_arr['complaint_id_fk']));
+            
+        if(count($find_complaint) == 0)
+        {
+            $this->format_response_2('error','Complaint-id# '.$data_arr['complaint_id_fk'].' not found ',[]);
+        }
+        else
+        {
+            $complaint_info = $find_complaint[0];
+            
+            if($complaint_info['complainant_id_fk'] != $session_complainant_id)
+            {
+                $this->format_response_2('error','This complaint is not registered under your account',[]);
+            }
+            
+            if($complaint_info['complaint_status_id_fk'] == '9')
+            {
+                $this->format_response_2('error','This complaint has already been closed by applicant',[]);
+            }
+        }
+        
+        //======================================================================
+        // Set default values
+        //======================================================================
+        
+        $data_arr['user_id_fk'] = $session_user_id;
+        $data_arr['complaint_status_id_fk'] = 9; // 9 => closed by applicant
+        $data_arr['respondent_id_fk'] = 0;
+        $data_arr['attachment'] = null;
+        $data_arr['complaint_remarks_timestamp'] = date('Y-m-d H:i:s',time()); // format => 2022-02-17 12:01:51
+        $data_arr['complaint_remarks_status'] = 1;
+        
+        //======================================================================
+        // Close/Withdraw complaint through remarks function
+        //======================================================================
+        
+        $complaint_withdrawal = $this->ComplaintModel->complaint_remarks_add($data_arr);
+         
+        if($complaint_withdrawal['response'] == 0)
+        {
+            if(isset($complaint_withdrawal['response_msg']))
+            {
+                $msg = trim($complaint_withdrawal['response_msg']);
+            }
+            else
+            {
+                $msg = 'Failed to withdraw complaint';   
+            }
+            
+            $this->format_response('error',$msg,[]);
+        }
+        else
+        {
+            $this->format_response_2('success','Complaint withdrawn successfully',[]);
+        }
+        
     }
     
     //==========================================================================
