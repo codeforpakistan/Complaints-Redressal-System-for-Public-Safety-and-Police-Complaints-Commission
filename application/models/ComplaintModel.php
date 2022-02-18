@@ -421,7 +421,7 @@ class ComplaintModel extends CI_Model
             return array('response'=>0,'response_msg'=>'Required Fields: '.implode(", ",array_keys($missing)));
         }
         
-        //======================================================================
+        //====================================================================== 
         // check duplication 
         //======================================================================
         
@@ -457,6 +457,22 @@ class ComplaintModel extends CI_Model
         if($insert_remarks != false)
         {
             $remarks_id = $this->db->insert_id();
+            
+            //==================================================================
+            // update complaint-status in complaint data-table too
+            //==================================================================
+            
+            $update_complaint_status = $this->db->query('update complaints set complaint_status_id_fk = ? where complaint_id = ? ',array('complaint_status_id_fk'=>$data_arr['complaint_status_id_fk'],'complaint_id'=>$data_arr['complaint_id_fk']));
+        
+            if($update_complaint_status == false)
+            {
+                return array('response'=>0,'response_msg'=>'Remarks added successfully but failed to update complaint-status');
+            }
+            
+            //==================================================================
+            // return
+            //==================================================================
+            
             return array('response'=>1,'response_msg'=>'Remarks Submitted Successfully','complaint_remarks_id'=>$remarks_id);
         }
         else
