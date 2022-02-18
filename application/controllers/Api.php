@@ -10,9 +10,6 @@ class Api extends CI_Controller {
     
     public function __construct()
 	{
-        $var_contructor_noreena_1 = 0;
-        $var_contructor_noreena_2 = 0;
-        $var_contructor_noreena_3 = 0;
 		parent::__construct();
 		$this->load->model('AuthModel');
 		$this->load->model('ComplainantModel');
@@ -853,16 +850,7 @@ class Api extends CI_Controller {
                     }
                     else
                     {
-                        // $complainant_data = $this->ComplainantModel->complainants_get(array('complainant_contact'=>trim($complainant_contact),'user_id_fk'=>$user_data[0]['user_contact']));
-            
-                        // if(count($complainant_data) == 0)
-                        // {
-                        //   $this->format_response('error','Provided contact is not linked',[]);
-                        // }
-                        // else
-                        // {
-                            $this->format_response_2('success','Phone.no Verified',['user_id'=>$user_data[0]['user_contact']]);
-                        // }
+                        $this->format_response_2('success','Phone.no Verified',['user_id'=>$user_data[0]['user_contact']]);
                     }
                 }
             }
@@ -1084,6 +1072,10 @@ class Api extends CI_Controller {
         
     }
     
+    //==========================================================================
+    // Get Profile
+    //==========================================================================
+    
     public function profile_get()
     {
         $session_info = $this->check_session();
@@ -1139,6 +1131,10 @@ class Api extends CI_Controller {
         }
     
     }
+    
+    //==========================================================================
+    // Forget Passsword Reset - Step 1
+    //==========================================================================
     
     public function verify_account()
     {
@@ -1262,6 +1258,10 @@ class Api extends CI_Controller {
             }
         }
     }
+    
+    //==========================================================================
+    // Forget Passsword Reset - Step 1
+    //==========================================================================
     
     public function forget_password_reset()
     {
