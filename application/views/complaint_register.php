@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label class="test">Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_name" id="complainant_name" required  maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <input type="text" class="form-control enableDisabled"  name="complainant_name" id="complainant_name" required  maxlength="30" onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -57,7 +57,7 @@
                                         <div class="form-group">
                                             <label>Father/Husband Name <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="30"  onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
+                                                <input type="text" class="form-control enableDisabled"  name="complainant_guardian_name" id="complainant_guardian_name" required maxlength="30"  onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');">
                                             </div>
                                         </div>
                                     </div> 
@@ -66,11 +66,11 @@
                                         <div class="form-group">
                                             <label>Gender <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control" name="complainant_gender" id="complainant_gender" required>
+                                                <select class="form-control enableDisabled" name="complainant_gender" id="complainant_gender" required>
                                                     <option disabled value="" selected hidden>Select Gender</option>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                    <option value="Custom">Custom</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                    <option value="ohter">Other</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -95,7 +95,7 @@
                                         <div class="form-group">
                                             <label>Contact No <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12" onblur="contact_validation()">
+                                                <input type="text" class="form-control enableDisabled"  name="complainant_contact" id="complainant_contact" data-inputmask="'mask': '0399-99999999'" required maxlength = "12" minlenth="12" onblur="contact_validation()">
                                             </div>
                                         </div>
                                     </div> 
@@ -104,7 +104,7 @@
                                             <div class="form-group">
                                                 <label>Email:</label>
                                                 <div class="input-group">
-                                                    <input type="email" class="form-control"  name="complainant_email" id="complainant_email" >
+                                                    <input type="email" class="form-control enableDisabled"  name="complainant_email" id="complainant_email" >
                                                 </div>
                                             </div>
                                     </div> 
@@ -113,7 +113,7 @@
                                         <div class="form-group">
                                             <label>Home District <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <select class="form-control select2 home_district_id" id="home_district_id" name="home_district_id" style="width:100%" required>
+                                                <select class="form-control select2 home_district_id enableDisabled" id="home_district_id" name="home_district_id" style="width:100%" required>
                                                     <option disabled value="" selected hidden>Please Select District</option>
                                                         <?php if($district){ foreach($district as $dist){?>
                                                     <option value="<?= $dist->district_id?>"><?= $dist->district_name?></option>
@@ -127,7 +127,7 @@
                                         <div class="form-group">
                                             <label>Union Council <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                              <input type="text" class="form-control"  name="complainant_council" id="complainant_council" required maxlength="30"> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" -->
+                                              <input type="text" class="form-control enableDisabled"  name="complainant_council" id="complainant_council" required maxlength="30"> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z\s]/g,'');" -->
                                             </div>
                                         </div>
                                     </div> 
@@ -141,7 +141,7 @@
                                         <div class="form-group">
                                             <label>Full Address <span class="asterisk">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"  name="complainant_address" id="complainant_address" required> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" -->
+                                                <input type="text" class="form-control enableDisabled"  name="complainant_address" id="complainant_address" required> <!-- onkeyup="this.value=this.value.replace(/[^A-Za-z0-9\s]/g,'');" -->
                                             </div>
                                         </div>
                                     </div> 
@@ -361,34 +361,60 @@ function cnic_validation()
     }
     else
     { 
-        $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
+        if(cnic_length != 13)
+        {
+          $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
+          $('#complainant_cnic').blur();  
+        }
+        else
+        {
+           // search compalainant by CNIC
+               $.ajax({
+                    url: 'admin/get_complainant_by_cnic/'+rem_hyphens,
+                    dataType: 'json',
+                    success: function(response)
+                    {  
+                      if(response != null)
+                      {
+                        $('.enableDisabled').attr('disabled',true);
+                        $('#complainant_name').val(response.complainant_name);
+                        $('#complainant_guardian_name').val(response.complainant_guardian_name);
+                        $('#complainant_gender').val(response.complainant_gender);
+                        $('#complainant_contact').val(response.complainant_contact);
+                        $('#complainant_email').val(response.complainant_email); 
+                        $( "#complainant_gender option:selected" ).val(response.complainant_gender);
+                        $('#home_district_id').val(response.complainant_district_id_fk);
+                        $('#home_district_id').trigger("change");
+                        $('#complainant_council').val(response.complainant_council);
+                        $('#complainant_address').val(response.complainant_address);
+                      }
+                      else
+                      {
+                        $('.enableDisabled').attr('disabled',false);
+                        $('#complainant_name').val('');
+                        $('#complainant_guardian_name').val('');
+                        $('#complainant_gender').val(0);
+                        $('#complainant_contact').val('');
+                        $('#complainant_email').val('');
+                        $( "#complainant_gender option:selected" ).val(0);
+                        $('#home_district_id').val(0);
+                        $('#home_district_id').trigger("change");
+                        $('#complainant_council').val('');
+                        $('#complainant_address').val(); 
+                      }
+                        alert(response);
+                        
+                        // $('#complainant_cnic').blur();
+
+                    }
+                });
+            // end of search
+        }
+        // $('#complainant_cnic').css({'border' : '1px solid #e4e6fc'});
         // $('#complainant_cnic').blur();
         
-        // search compalainant by CNIC
-            // $.ajax({
-            //         url: 'admin/get_complainant_by_cnic/'+rem_hyphens,
-            //         dataType: 'json',
-            //         success: function(response)
-            //         {  
-            //             alert(response.complainant_district_id_fk);
-            //             $('#complainant_name').val(response.complainant_name);
-            //             $('#complainant_guardian_name').val(response.complainant_guardian_name);
-            //             $('#complainant_gender').val(response.complainant_gender);
-            //             $('#complainant_cnic').val(response.complainant_cnic);
-            //             $('#complainant_contact').val(response.complainant_contact);
-            //             $('#complainant_email').val(response.complainant_email);
-            //             // $('#home_district_id').val(response.home_district_id); 
-            //             $( "#complainant_gender option:selected" ).val(response.complainant_gender);
-            //             $('#home_district_id').val(response.complainant_district_id_fk);
-            //             $('#home_district_id').trigger("change");
-            //             $('#complainant_council').val(response.complainant_council);
-            //             $('#complainant_address').val(response.complainant_address);
-            //             $('#complainant_cnic').blur();
-
-            //         }
-            //     });
-        // end of search
-        $('#complainant_cnic').blur();
+        
+        // $('#complainant_cnic').blur();
         return true;
     }
 }

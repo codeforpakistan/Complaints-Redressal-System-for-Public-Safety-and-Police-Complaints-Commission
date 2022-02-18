@@ -930,14 +930,15 @@ class Admin extends CI_Controller {
         {  // get form data
             $attachments = array(); 
             $complainant_name           = $this->input->post('complainant_name');
-            $complainant_contact        = $this->input->post('complainant_contact');
+            // $complainant_contact        = $this->input->post('complainant_contact');
+            $complainant_contact        = $validate_contact;
             $complainant_guardian_name  = $this->input->post('complainant_guardian_name'); 
             $complainant_council        = $this->input->post('complainant_council'); 
             $complaint_council          = $this->input->post('complaint_council');
             $complainant_email          = $this->input->post('complainant_email');
             $complainant_gender         = $this->input->post('complainant_gender');
-            $complainant_cnic           = $this->input->post('complainant_cnic');
-            // $complainant_cnic           = $validate_cnic;
+            // $complainant_cnic           = $this->input->post('complainant_cnic');
+            $complainant_cnic           = $validate_cnic;
             $complaint_category_id      = $this->input->post('complaint_category_id');
             $complainant_address        = $this->input->post('complainant_address');
             $complaint_detail           = $this->input->post('complaint_detail');
