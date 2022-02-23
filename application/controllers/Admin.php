@@ -54,7 +54,6 @@ class Admin extends CI_Controller {
     
     public function index()
     { 
-        
         if($this->session->userdata('user_role_id_fk'))
         {
             $this->dashboard();
@@ -107,7 +106,6 @@ class Admin extends CI_Controller {
     
     public function login_user()
     {   
-       
         $this->form_validation->set_rules('user_name', 'Username', 'required|trim');
         $this->form_validation->set_rules('user_password', 'Password', 'required|trim');
         // $this->form_validation->set_rules('captcha', 'Captcha', 'required|trim');
@@ -1530,6 +1528,123 @@ class Admin extends CI_Controller {
     {
      $response = $this->model->get_complainant_by_cnic($cnic);
      echo json_encode($response); exit;
+    }
+    function forgot_email_validation()
+    {
+        $user_email = $this->input->post('user_email');
+        $returing_array = array();
+        if(!empty($user_email))
+        {
+            $response = $this->model->forgot_email_validation($user_email);
+            if(!empty($response))
+            {
+                $user_first_name = $response->user_first_name;
+                $user_last_name  = $response->user_last_name;
+                $user_email      = $response->user_email;
+                $user_id         = $response->user_id;
+                $otp = substr(str_shuffle(time()), 0, 6);
+
+                $update_array = array('vcode'=>trim($otp));
+                $this->model->update($update_array,'users','user_id',$user_id);
+                $htmlContent = "
+                                    <p>Hi, ".$user_first_name.' '.$user_last_name.", </p>
+                                    <p>We received a request to reset your password through your email address. Your PPSC verification code is: </p>
+                                    <h2>".$otp."</h2>
+                                    <p>
+                                        If you did not request this code, it is possible that someone else is trying to access your PPSC Account. 
+                                        <b>Do not forward or give this code to anyone.</b>
+                                    </p>
+                                    <a href='https://ppsc.kp.gov.pk'> https://ppsc.kp.gov.pk </a>
+                                ";
+                            $this->load->library('email');
+                            $this->email->from('info@ppsc.kp.gov.pk', 'PPSC');
+                            $this->email->to($user_email);
+                            $this->email->subject('PPSC Verification Code');
+                            $this->email->message($htmlContent); 
+                            $this->email->set_mailtype("html");
+                            
+                            if($this->email->send())
+                            {
+                                $message =  "Kindly check your email for verification code.";
+                                $returing_array['message'] = $message;
+                                $returing_array['user_email'] = $user_email;
+                                $returing_array['user_id'] = $user_id;
+                                
+                            }
+                            else
+                            {  $message =  "Kindly check your email for verification code.";
+                                // echo "Failed to send verification code on email."; exit;
+                                //$message =  "Kindly check your email for verification code.";
+                                $returing_array['message'] = $message;
+                                $returing_array['user_email'] = $user_email;
+                                $returing_array['user_id'] = $user_id;
+                            }
+            }
+            else
+            {
+                $returing_array['message'] = "Invalid Email";
+            }
+            
+        }
+        else
+        {
+            $returing_array['message'] = "Email filed is required";
+        }
+        echo json_encode($returing_array); exit;
+    }
+
+
+    function conformation_code()
+    {
+       $user_email =  $this->input->post('user_email');
+       $user_id    =  $this->input->post('user_id');
+       $vcode      =  $this->input->post('vcode');
+       $returing_array = array();
+       if(!empty($user_id) && !empty($vcode) )
+       {
+           $array = array('user_email'=>$user_email,'vcode'=>$vcode,'user_id'=>$user_id);
+           $user_response = $this->model->check_record_by_array($array,'users');
+           if(!empty($user_response))
+           {
+               $returing_array['message']=  "record exists";
+               $returing_array['user_id']=  $user_id;
+               $returing_array['user_email']=  $user_email;
+           }
+           else
+           {
+               $returing_array['message'] =  "invalic conformation code";
+           }
+       }
+       else
+       {
+           $returing_array['message'] = "vscode field is required";
+       }
+       echo json_encode($returing_array); exit;
+    }
+    function update_password()
+    {
+       $user_email       =  $this->input->post('user_email');
+       $user_id          =  $this->input->post('user_id');
+       $user_password    =  $this->input->post('r_cpassword');
+
+       if(!empty($user_id) && !empty($user_password) )
+       {
+           $update_array = array('user_password'=>md5($user_password),'vcode'=>'');
+           $user_response = $this->model->update($update_array,'users','user_id',$user_id);
+           if(!empty($user_response))
+           {
+               echo "Password Update Successfully please Login now"; exit;
+           }
+           else
+           {
+               echo "invalic conformation code"; exit;
+           }
+       }
+       else
+       {
+           echo "vscode field is required"; exit;
+       }
+       echo "password and conform passwor field is required"; exit;
     }
 
 }

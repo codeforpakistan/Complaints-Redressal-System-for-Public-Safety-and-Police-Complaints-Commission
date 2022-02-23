@@ -43,6 +43,10 @@ class AdminModel extends CI_Model
     {
         return $this->db->insert($table_name,$inert_array);
     }
+    function check_record_by_array($array,$table_name)
+    { 
+        return $this->db->where($array)->get($table_name)->row();
+    }
     function get_all_records($table_name,$order_by = NULL,$order = NULL) // order_by and order is optional
     {
 
@@ -223,6 +227,11 @@ class AdminModel extends CI_Model
     {
        return $this->db->where('complainant_cnic',$cnic)->get('complainants')->row();
        
+    }
+
+    function forgot_email_validation($user_email)
+    {
+        return $this->db->where('user_email',$user_email)->get('users')->row();
     }
 				
 }
