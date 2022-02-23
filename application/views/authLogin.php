@@ -52,7 +52,7 @@
             <!-- end of messages  --->
            
                 <form method="POST" action="<?= base_url('Admin/login_user')?>" class="needs-validation" novalidate="">
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label for="email">Username</label>
                     <input id="email" type="text" class="form-control" name="user_name" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
@@ -61,14 +61,14 @@
                   </div>
                   <div class="form-group">
                     <div class="d-block">
-                      <label for="password" class="control-label">Password</label>
+                      <label for="password" class="control-label">Password</label> -->
                       <!-- <div class="float-right">
                         <a href="admin/forgot_passord" class="text-small">
                           Forgot Password?
                         </a>
                       </div> -->
-                    </div>
-                    <input id="password" type="password" class="form-control" name="user_password" tabindex="2" required>
+                    <!-- </div>
+                    <input id="password" type="password" class="form-control" name="user_password" tabindex="2" required >
                     <div class="invalid-feedback">
                       please fill in your password
                     </div>
@@ -78,7 +78,44 @@
                       <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                       <label class="custom-control-label" for="remember-me" onclick="hideShowPassword()" id="showHideLabel">Show password</label>
                     </div>
-                  </div> 
+                  </div>  -->
+
+
+                  <div class="form-row">
+                    <div class="col-12">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input name="user_name" type="text" value="" class="input form-control" id="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"  require autofocus/>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                    <div class="float-right">
+                        <a href="admin/forgot_passord" class="text-small">
+                          Forgot Password?
+                        </a>
+                      </div> 
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <input name="user_password" type="password" value="" class="input form-control" id="password" placeholder="password" required="true" aria-label="password" aria-describedby="basic-addon1" />
+                        <div class="input-group-append">
+                          <span class="input-group-text" onclick="hideShowPassword();">
+                            <i class="fas fa-eye" id="show_eye"></i>
+                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                        <label class="custom-control-label" for="remember-me">Remember Me</label>
+                      </div>
+                    </div>
+                  </div><br>
                   <!-- <div class="form-group">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
@@ -153,14 +190,19 @@ $(document).ready(function(){
 function hideShowPassword() 
 {
   var passsword = document.getElementById("password");
-  var label     = document.getElementById('showHideLabel');
 
-  if (passsword.type === "password") {
+  if (passsword.type === "password") 
+  {
     passsword.type = "text";
-    label.innerHTML='Hide Password';
-  } else {
+    $('#show_eye').addClass('d-none');
+    $('#hide_eye').removeClass('d-none');
+    
+  } 
+  else 
+  {
     passsword.type = "password";
-    label.innerHTML='Show Password';
+    $('#show_eye').removeClass('d-none');
+    $('#hide_eye').addClass('d-none');
   }
 }
 </script>

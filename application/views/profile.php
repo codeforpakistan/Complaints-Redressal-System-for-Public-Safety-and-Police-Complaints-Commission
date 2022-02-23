@@ -95,11 +95,16 @@
                                 </div>
                               </div>
                               <div class="row">
-                                <div class="form-group col-12">
+                                <div class="form-group col-9">
                                   <label>Address</label>
                                   <textarea
                                     class="form-control summernote-simple" name="user_address"></textarea>
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label>Profile Image</label>
+                                    <input type="file" name="attachment"  class="form-control dropify" data-height="100"  data-max-file-size="40M" data-allowed-file-extensions="png jpg jpeg" >
+                                    <!-- <input type="text" name="old_profile_image" id="old_profile_image" />  -->
+                                </div> <!-- end of col-md-3 --> 
                               </div>
                               <div class="row">
                                   <div class="form-group col-md-12 col-12">
@@ -154,6 +159,7 @@
         }
       $(document).ready(function()
       {
+        $('.dropify').dropify();
         user_profile_list();
         function user_profile_list()
         {

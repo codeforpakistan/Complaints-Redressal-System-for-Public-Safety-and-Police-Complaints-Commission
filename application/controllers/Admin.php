@@ -1407,14 +1407,81 @@ class Admin extends CI_Controller {
             {
                 echo "Please login now"; exit;
             }
-        $update_profile = array(
-                                 'user_first_name'  => $this->input->post('user_first_name'),
-                                 'user_last_name'   => $this->input->post('user_last_name'),
-                                 'user_email'       => $this->input->post('user_email'),
-                                 'user_contact'     => $this->input->post('user_contact'),
-                                 'user_address'     => $this->input->post('user_address'),
-                                 'user_password'    => md5($this->input->post('confirm'))
-                                );
+            // ::::::::::: profile image 
+                $uploadPath     = 'assets/profile';
+                $this->load->library('image_lib');
+                    if (!file_exists($uploadPath)) 
+                    {
+                        mkdir($uploadPath);
+                        chmod($uploadPath, 0777);
+                    }
+                if (!empty($_FILES['attachment']['name']))
+                {
+                    $this->load->library('upload');
+                    $config['upload_path']   = $uploadPath;
+                    $config['allowed_types'] = '*';
+                    $config['max_width']     = '';
+                    $config['max_height']    = '';
+                    $config['remove_spaces'] = TRUE;
+                    $config['encrypt_name']  = FALSE;
+                    $config['detect_mime']   = TRUE;
+                    $config['overwrite']     = FALSE;
+                    $varAttachment = 'attachment_'.date("YmdHis");;
+                    $config['file_name'] = $varAttachment;
+                    $this->upload->initialize($config);
+                    if (!$this->upload->do_upload('attachment')):
+                        echo "Error in uploading attachment";
+                        exit;
+                    else:
+                        $image_data =   $this->upload->data();
+                    // image resize
+                            $configer =  array(
+                                                'image_library'   => 'gd2',
+                                                'source_image'    =>  $image_data['full_path'],
+                                                'maintain_ratio'  =>  TRUE,
+                                                'width'           =>  auto,
+                                                'height'          =>  auto,
+                                            );
+                                            
+                            $this->image_lib->clear();
+                            $this->image_lib->initialize($configer);
+                            $this->image_lib->resize();
+                        // edn of image resize
+                            $data = array(
+                                'upload_data' => $this->upload->data()
+                            );
+                            $prifile_image = $data['upload_data']['file_name'];
+                    endif;
+                }
+                else
+                {
+                 $prifile_image = ''; 
+                }
+            // ::::::::::  profile image end
+            if(!empty($prifile_image))
+            {
+                $update_profile = array(
+                    'user_first_name'  => $this->input->post('user_first_name'),
+                    'user_last_name'   => $this->input->post('user_last_name'),
+                    'user_email'       => $this->input->post('user_email'),
+                    'user_contact'     => $this->input->post('user_contact'),
+                    'user_address'     => $this->input->post('user_address'),
+                    'user_password'    => md5($this->input->post('confirm')),
+                    'prifile_image'    => $prifile_image,
+                   );
+            }
+            else
+            {
+                $update_profile = array(
+                    'user_first_name'  => $this->input->post('user_first_name'),
+                    'user_last_name'   => $this->input->post('user_last_name'),
+                    'user_email'       => $this->input->post('user_email'),
+                    'user_contact'     => $this->input->post('user_contact'),
+                    'user_address'     => $this->input->post('user_address'),
+                    'user_password'    => md5($this->input->post('confirm'))
+                   );
+            }
+        
         $response = $this->model->update($update_profile,'users','user_id',$user_id);
             if($response == true)
             {
@@ -1457,7 +1524,7 @@ class Admin extends CI_Controller {
 
     function forgot_passord()
     {
-        $this->load->view('authForgotPassword');
+        $this->load->view('auth-forgot-password');
     }
     function get_complainant_by_cnic($cnic)
     {
