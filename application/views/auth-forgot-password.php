@@ -81,7 +81,7 @@
                             <input name="user_email" type="email" value="" class="input form-control" id="user_email" placeholder="Email ID" aria-label="Username" aria-describedby="basic-addon1" disabled/>
                           </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 hideShowVcode">
                           <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
@@ -91,9 +91,11 @@
                         </div>
                       </div>
                     <div class="form-group">
+                      <input type="checkbox" name="resend_code" id="resend_code" value="resend_code"> <lable style="color:blue;"> &nbsp; Resend Code</lable>
                       <button type="submit" class="btn btn-primary btn-lg btn-block vcode_button" tabindex="4">
                          Conform Verification code
                       </button>
+                
                       <input type="hidden" name="user_id" id="user_id" />
                       <input type="hidden" name="user_email" id="vcode_user_email">
                     </div>
@@ -180,7 +182,7 @@
                       cache:false,
                       async:false,
                       success: function(response)
-                      {  
+                      { 
                         response = JSON.parse(response);
                         // alert(response.message);
                         $('.forgot_button').prop("disabled", false);
@@ -203,7 +205,7 @@
     });
     // conformation code
     $('.conformation_code_form').submit(function(e)
-    {
+    { 
         e.preventDefault(); 
         var formData = new FormData( $(".conformation_code_form")[0] );
         $('.vcode_button').prop("disabled", true);
@@ -218,7 +220,7 @@
                       cache:false,
                       async:false,
                       success: function(response)
-                      {  
+                      {   
                        response = JSON.parse(response);
                         // alert(response);
                         $('.vcode_button').prop("disabled", false);
@@ -230,8 +232,23 @@
                             $('#r_user_email').val(response.user_email);
                             $('#rr_user_email').val(response.user_email);
                             $('#r_user_id').val(response.user_id);
+                            // $('.hideShowVcode').removeClass('d-none');
+                            // $('#resend_code').prop('checked', false);
                             message(1,response.message);
                           }
+                          else if(response.message == 'Kindly check your email for verification code.')
+                          {
+                            $('#resend_code').prop('checked', false);
+                            $('.hideShowVcode').removeClass('d-none');
+                            $('.vcode_button').html('Conform Conformation Code');
+                            $('.forgot_email_form').addClass('d-none');
+                            $('.conformation_code_form').removeClass('d-none');
+                            $('#user_email').val(response.user_email);
+                            $('#user_id').val(response.user_id);
+                            $('#vcode_user_email').val(response.user_email);
+                            message(1,response.message);
+                          }
+
                           else
                           { 
                             message(0,response.message);
@@ -280,6 +297,22 @@
                   }); 
                         
     });
+
+    $("#resend_code").on("click", function()
+    {
+      check = $("#resend_code").prop("checked");
+        if(check) 
+        {
+            $('.hideShowVcode').addClass('d-none');
+            $('.vcode_button').html('Resend Code');
+        } 
+        else 
+        {
+            $('.hideShowVcode').removeClass('d-none');
+            $('.vcode_button').html('Conform Conformation Code');
+        }
+   }); 
+
   });            
 
 
@@ -316,6 +349,8 @@
 
     }
 }
+
+
 </script>
 
 <style>
