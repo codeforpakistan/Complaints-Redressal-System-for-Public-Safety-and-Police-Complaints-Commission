@@ -157,7 +157,7 @@ class AuthModel extends CI_Model
         $data_arr_update = [];
         $set_query = '';
         
-        $optional_update_cols = array('user_district_id_fk','user_name','user_contact','user_status','vcode');
+        $optional_update_cols = array('user_district_id_fk','user_name','user_contact','user_status','vcode','user_avatar');
         
         foreach($optional_update_cols as $key=>$value)
         {
