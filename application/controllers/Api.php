@@ -1351,9 +1351,161 @@ class Api extends CI_Controller {
                     $this->format_response('success','Password updated successfully',[]);
                 }
             }
+        }   
+    }
+
+    //==========================================================================
+    // Upload profile-picture
+    //==========================================================================
+
+    public function profile_picture_upload()
+    {
+        $session_info = $this->check_session();
+        $session_user_id = $session_info->user_id;
+        $session_complainant_id = $session_info->complainant_id;
+
+        //======================================================================
+
+        if(isset($_FILES["profile_picture"]))
+        { 
+            // complainant_image
+            // user_avatar
+
+            //==================================================================
+            // validate user_id 
+            //==================================================================
+
+            $find_user = $this->AuthModel->users_get(array('user_id'=>$session_user_id));
+            
+            if(count($find_user) == 0)
+            {
+                $this->format_response('error','User not found',[]);
+            }
+
+            //==================================================================
+            // validate complainant id 
+            //==================================================================
+            
+            $find_complainant = $this->ComplainantModel->complainants_get(array('user_id_fk'=>$session_user_id));
+            
+            if(count($find_complainant) == 0)
+            {
+                $this->format_response('error','Logged-in user is not linked with any complainant',[]);
+            }
+
+            //==================================================================
+            // basic information of image
+            //==================================================================
+
+            $image = $_FILES["profile_picture"]["tmp_name"];
+            $path_info = pathinfo($_FILES["profile_picture"]["name"]);
+
+            $complainant_image_name = 'complainant_'.$session_complainant_id.'_'.str_shuffle(time()).'.'.$path_info['extension'];
+            $user_image_name = 'user_'.$session_complainant_id.'_'.str_shuffle(time()).'.'.$path_info['extension'];
+
+            //===========================
+            // upload thumbnail
+            //===========================
+
+            if(!in_array($path_info['extension'],['jpg','png','jpeg','JPG','JPEG','PNG']))
+            {
+                $this->format_response('error','Invalid format',[]);
+            }
+
+            //=============================================================
+            // upload image in complainants folder
+            //=============================================================
+
+            // if(move_uploaded_file($image,'./assets/images/complainants/'.$complainant_image_name))
+            // {
+                //===============================================
+                // update name in database
+                //===============================================
+
+                $complianant_image_name_update = $this->ComplainantModel->complainant_edit(array('complainant_id'=>$session_complainant_id,'complainant_image'=>$complainant_image_name));
+        
+                if($complianant_image_name_update['response'] == 0)
+                {
+                    if(isset($complianant_image_name_update['response_msg']))
+                    {
+                        $msg = trim($complianant_image_name_update['response_msg']);
+                    }
+                    else
+                    {
+                        $msg = 'Failed to update complainant\'s image';   
+                    }
+            
+                    $this->format_response('error',$msg,[]);
+                }
+                else
+                {
+                    //=======================================================================
+                    // now resize the same image and upload as user_avatar in users folder
+                    //=======================================================================
+
+            
+                    $this->load->library('upload');
+                    $image_data = $this->upload->data();
+                    $configer =  array( 'image_library'   => 'gd2',
+                                        'source_image'    =>  $image_data['full_path'], // ./assets/images/users/
+                                        'maintain_ratio'  =>  TRUE,
+                                        'width'           =>  150,
+                                        'height'          =>  150,
+                                        'allowed_types'   => 'gif|jpg|png'
+                                      );
+
+                    $this->image_lib->clear();
+                    $this->image_lib->initialize($configer);
+
+                    if($this->image_lib->resize())
+                    {
+                        // $this->upload->data();
+                        $this->format_response('error','Error uploading user_avatar '.$this->upload->display_errors(),[]);
+                    }
+                    else
+                    {
+                            //==============================================
+                            // update name in database
+                            //==============================================
+
+                            $user_avatar_name_update = $this->UserModel->user_edit(array('user_id'=>$session_user_id,'user_avatar'=>$user_image_name));
+        
+                            if($user_avatar_name_update['response'] == 0)
+                            {
+                                if(isset($user_avatar_name_update['response_msg']))
+                                {
+                                    $msg = trim($user_avatar_name_update['response_msg']);
+                                }
+                                else
+                                {
+                                    $msg = 'Failed to update users\'s avatar';   
+                                }
+                        
+                                $this->format_response('error',$msg,[]);
+                            }
+
+                            //==============================================
+                            // return
+                            //==============================================
+
+                            $image_path = base_url().'/assets/images/users/'.$user_image_name;
+                            $this->format_response_2('error','Profile image updated successfully',['user_avatar' => $image_path]);
+                    }
+                }
+            // }
+            // else
+            // {
+            //     $this->format_response('error','Failed to upload complainant_image',[]);
+            // }
+            
         }
-        
-        
+        else
+        {
+            $this->format_response('error','kindly select profile_picture to upload',[]);
+        }
+
+        @Response::error(['msg'=>"No photo selected"]);
+
     }
 
 }
