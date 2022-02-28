@@ -1045,6 +1045,9 @@ class Admin extends CI_Controller {
         $from_date           = "";
         $to_date             = "";
         $complaint_source    = "";
+        $search_text         = "";
+        $sort_by_column      = "";
+        $sort_by_value       = "";
 
         if($this->session->userdata('displayLimit'))
         {
@@ -1070,6 +1073,18 @@ class Admin extends CI_Controller {
         {
             $complaint_source = $this->session->userdata('complaint_source');
         }
+        if($this->session->userdata('search_text'))
+        {
+            $search_text = $this->session->userdata('search_text');
+        }
+        if($this->session->userdata('sort_by_column'))
+        {
+            $sort_by_column = $this->session->userdata('sort_by_column');
+        }
+        if($this->session->userdata('sort_by_value'))
+        {
+            $sort_by_value = $this->session->userdata('sort_by_value');
+        }
 
         
         if($this->input->post())
@@ -1089,6 +1104,15 @@ class Admin extends CI_Controller {
 
             $complaint_source    = $this->input->post('complaint_source');
             $this->session->set_userdata('complaint_source',$complaint_source);
+
+            $search_text    = $this->input->post('search_text');
+            $this->session->set_userdata('search_text',$search_text);
+
+            $sort_by_column    = $this->input->post('sort_by_column');
+            $this->session->set_userdata('sort_by_column',$sort_by_column);
+
+            $sort_by_value    = $this->input->post('sort_by_value');
+            $this->session->set_userdata('sort_by_value',$sort_by_value);
         }
 
         // $data['district']=$district;
@@ -1098,6 +1122,9 @@ class Admin extends CI_Controller {
         $data['from_date']           = $from_date;
         $data['to_date']             = $to_date;
         $data['complaint_source']    = $complaint_source;
+        $data['search_text']         = $search_text;
+        $data['sort_by_column']      = $sort_by_column;
+        $data['sort_by_value']       = $sort_by_value;
 
        
         $uri_segment = 3;
