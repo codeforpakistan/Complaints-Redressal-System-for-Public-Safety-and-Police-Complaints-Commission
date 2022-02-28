@@ -1448,7 +1448,8 @@ class Api extends CI_Controller {
                     $this->load->library('upload', $config);
                     if(!$this->upload->do_upload($user_image_name))
                     {
-                        $this->format_response('error','Error uploading user_avatar',[]);
+                        // $this->upload->data();
+                        $this->format_response('error','Error uploading user_avatar '.$this->upload->display_errors(),[]);
                     }
                     else
                     {
