@@ -1443,30 +1443,27 @@ class Api extends CI_Controller {
                     // now resize the same image and upload as user_avatar in users folder
                     //=======================================================================
 
-                    $config['upload_path'] = './assets/images/users/';
-                    $config['allowed_types'] = 'gif|jpg|png';
-                    $this->load->library('upload', $config);
-                    if(!$this->upload->do_upload('profile_picture'))
+            
+                    $this->load->library('upload');
+                    $image_data = $this->upload->data();
+                    $configer =  array( 'image_library'   => 'gd2',
+                                        'source_image'    =>  $image_data['full_path'], // ./assets/images/users/
+                                        'maintain_ratio'  =>  TRUE,
+                                        'width'           =>  150,
+                                        'height'          =>  150,
+                                        'allowed_types'   => 'gif|jpg|png'
+                                      );
+
+                    $this->image_lib->clear();
+                    $this->image_lib->initialize($configer);
+
+                    if($this->image_lib->resize())
                     {
-                        $this->upload->data();
+                        // $this->upload->data();
                         $this->format_response('error','Error uploading user_avatar '.$this->upload->display_errors(),[]);
                     }
                     else
                     {
-                        $image_data = $this->upload->data();
-
-                        $configer =  array(
-                                            'image_library'   => 'gd2',
-                                            'source_image'    =>  $image_data['full_path'],
-                                            'maintain_ratio'  =>  TRUE,
-                                            'width'           =>  150,
-                                            'height'          =>  150,
-                                          );
-
-                            $this->image_lib->clear();
-                            $this->image_lib->initialize($configer);
-                            $this->image_lib->resize();
-
                             //==============================================
                             // update name in database
                             //==============================================
