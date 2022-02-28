@@ -1446,9 +1446,9 @@ class Api extends CI_Controller {
                     $config['upload_path'] = './assets/images/users/';
                     $config['allowed_types'] = 'gif|jpg|png';
                     $this->load->library('upload', $config);
-                    if(!$this->upload->do_upload($user_image_name))
+                    if(!$this->upload->do_upload('profile_picture'))
                     {
-                        // $this->upload->data();
+                        $this->upload->data();
                         $this->format_response('error','Error uploading user_avatar '.$this->upload->display_errors(),[]);
                     }
                     else
