@@ -507,6 +507,9 @@ class ComplaintModel extends CI_Model
         $from_date           = "";
         $to_date             = "";
         $complaint_source    = "";
+        $search_text         = "";
+        $sort_by_column      = "";
+        $sort_by_value       = "";
 
         if($this->session->userdata('displayLimit'))
         {
@@ -532,6 +535,18 @@ class ComplaintModel extends CI_Model
         {
             $complaint_source = $this->session->userdata('complaint_source');
         }
+        if($this->session->userdata('search_text'))
+        {
+            $search_text = $this->session->userdata('search_text');
+        }
+        if($this->session->userdata('sort_by_column'))
+        {
+            $sort_by_column = $this->session->userdata('sort_by_column');
+        }
+        if($this->session->userdata('sort_by_value'))
+        {
+            $sort_by_value = $this->session->userdata('sort_by_value');
+        }
 
       $this->db->select('complaints.*,complainants.complainant_name,cat.complaint_category_name,districts.district_name,complaint_statuses.complaint_status_title,complaint_statuses.complaint_status_color')->from('complaints');
       $this->db->join('complainants', 'complainants.complainant_id=complaints.complainant_id_fk','left');
@@ -556,8 +571,6 @@ class ComplaintModel extends CI_Model
             {
                 if($complaint_source == 'All')
                 {
-                  // $this->db->or_where('complaint_source','web');
-                  // $this->db->or_where('complaint_source',' mobile-app');
                      $this->db->where("(`complaints`.`complaint_source` = 'web' or `complaints`.`complaint_source`= 'mobile-app')");
                 }
                 else
@@ -565,13 +578,43 @@ class ComplaintModel extends CI_Model
                     $this->db->like('complaint_source',$complaint_source);
                 }
             }
+            if(trim($search_text)!="")
+            {
+                if(is_numeric($search_text))
+                {
+                    $this->db->where('`complaints`.`complaint_id`',$search_text);
+                }
+                else
+                {
+                    $this->db->like('`complainants`.`complainant_name`', $search_text);
+                }
+            }
+
         $session_role_id     = $this->session->userdata('user_role_id_fk');
         $session_district_id = $this->session->userdata('user_district_id_fk');
         if($session_role_id != 1 )
         {
             $this->db->where('complaints.district_id_fk',$session_district_id);
-        }
-     $this->db->order_by('complaint_id','desc');
+        } 
+    if(trim($sort_by_value)!="" && trim($sort_by_column) =="" )
+    {  
+        $this->db->order_by('complaint_id',$sort_by_value);
+    }
+    elseif(trim($sort_by_value) =="" && trim($sort_by_column)!="")
+    { 
+        $table_name = substr($sort_by_column, 0, strpos($sort_by_column, '_'),$sort_by_column);
+        $this->db->order_by($table_name.$sort_by_column,'desc');
+    }
+    elseif(trim($sort_by_value)!="" && trim($sort_by_column) !="" )
+    { 
+        $table_name = substr($sort_by_column, 0, strpos($sort_by_column, '_'),$sort_by_column);
+       $this->db->order_by($table_name.$sort_by_column,$sort_by_value);
+    }
+    else
+    {
+      $this->db->order_by('complaint_id','desc');  
+    }
+     
      $this->db->limit($limit,$offset);
       $query = $this->db->get(); 
     //  echo $this->db->last_query(); 
@@ -585,7 +628,7 @@ class ComplaintModel extends CI_Model
           return FALSE;
         }
     }
-    // by sadam
+   
     function count_complaints()
     {
         $district_id = "";

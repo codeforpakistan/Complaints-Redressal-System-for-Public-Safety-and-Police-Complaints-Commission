@@ -108,24 +108,24 @@
 								<div class="row" style="padding-left:15px; padding-top:15px;">
 								    
 								    <div class="col-md-5" style="padding-left:0px;">
-								        <input type="text" name="search_text" class="form-control" placeholder="Type Complaint-Id or Applicant-name to search..">
+								        <input type="text" name="search_text" class="form-control search_text" placeholder="Type Complaint-Id or Applicant-name to search.." value="<?= $search_text ?>">
 								    </div>
 								    
 								    <div class="col-md-3"> </div>
 								    
 								    <div class="col-md-2" style="padding-right:0px;">
-								        <select class="form-control select2" name="sort_by_column" id="">
+								        <select class="form-control sort_by_column" name="sort_by_column" id="">
 											<option disabled value="" selected hidden>Sort By Column</option>
-											<option value="complaint_id"> Complaint Id </option>
-											<option value="complainant_name"> Applicant Name </option>
-											<option value="complaint_status_id_fk"> Status </option>
+											<option value="complaint_id"           <?= ($sort_by_column == "complaint_id")? 'selected': '' ?>> Complaint Id </option>
+											<!-- <option value="complainant_name"       <?= ($sort_by_column == "complainant_name")? 'selected': '' ?>> Applicant Name </option> -->
+											<option value="complaint_status_id_fk" <?= ($sort_by_column == "complaint_status_id_fk")? 'selected': '' ?>> Status </option>
 											<!-- <option value="complaint_source"> Source </option> -->
 										</select>
 								    </div>
 								    <div class="col-md-2">
-								        <select class="form-control select2" name="sort_by_value" id="">
-											<option value="asc"> Ascending </option>
-											<option value="desc"> Descending </option>
+								        <select class="form-control sort_by_value" name="sort_by_value" id="">
+										    <option value="desc" <?= ($sort_by_value == "desc")? 'selected': '' ?>> Descending </option>
+											<option value="asc" <?= ($sort_by_value == "asc")? 'selected': '' ?>> Ascending </option>
 										</select>
 								    </div>
 								        
@@ -206,6 +206,9 @@
       		$('#district_id').val("");
       		$('#complaint_status_id').val("");
       		$('#complaint_source').val("");
+			$('.search_text').val("");
+			$('.sort_by_column').val("");
+			$('.sort_by_value').val("");
       		document.getElementById("reset_form").submit();
 
       	}
