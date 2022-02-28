@@ -1424,11 +1424,11 @@ class Api extends CI_Controller {
 
                 $complianant_image_name_update = $this->ComplainantModel->complainant_edit(array('complainant_id'=>$session_complainant_id,'complainant_image'=>$complainant_image_name));
         
-                if($complianant_update['response'] == 0)
+                if($complianant_image_name_update['response'] == 0)
                 {
-                    if(isset($complianant_update['response_msg']))
+                    if(isset($complianant_image_name_update['response_msg']))
                     {
-                        $msg = trim($complianant_update['response_msg']);
+                        $msg = trim($complianant_image_name_update['response_msg']);
                     }
                     else
                     {
