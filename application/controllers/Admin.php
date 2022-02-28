@@ -144,6 +144,7 @@ class Admin extends CI_Controller {
                 $this->session->set_userdata('user_district_id_fk',$response->user_district_id_fk);
                 $this->session->set_userdata('user_first_name',$response->user_first_name);
                 $this->session->set_userdata('user_last_name',$response->user_last_name);
+                $this->session->set_userdata('prifile_image',$response->prifile_image);
                   if($response->user_role_id_fk == 4)
                   {
                     $this->session->set_flashdata('errorMsg', "Complainant Not allowed");
@@ -1691,7 +1692,12 @@ class Admin extends CI_Controller {
     {
        $user_email       =  $this->input->post('user_email');
        $user_id          =  $this->input->post('user_id');
-       $user_password    =  $this->input->post('r_cpassword');
+       $user_cpassword    =  $this->input->post('r_cpassword');
+       $user_password    =  $this->input->post('r_password');
+       if($user_password  !== $user_cpassword)
+       {
+           echo "Password Not Match"; exit;
+       }
 
        if(!empty($user_id) && !empty($user_password) )
        {

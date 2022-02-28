@@ -193,7 +193,7 @@ class AdminModel extends CI_Model
 
     function profile($user_role_id_fk)
     {
-        return $this->db->select('users.user_first_name,users.user_last_name,users.user_email,users.user_address,users.user_contact,r.user_role_name,d.district_name')
+        return $this->db->select('users.user_first_name,users.user_last_name,users.user_email,users.user_address,users.user_contact,users.prifile_image,r.user_role_name,d.district_name')
                         ->from('users')
                         ->where('user_role_id_fk =',$user_role_id_fk)
                         ->join('districts d','d.district_id=users.user_district_id_fk','left')

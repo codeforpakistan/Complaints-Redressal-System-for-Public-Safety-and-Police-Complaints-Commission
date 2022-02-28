@@ -7,7 +7,7 @@
                 <div class="card author-box">
                   <div class="card-body">
                     <div class="author-box-center">
-                      <!-- <img alt="image" src="assets/img/users/user-1.png" class="rounded-circle author-box-picture"> -->
+                      <img alt="image" src="assets/img/users/user-1.png" class="rounded-circle author-box-picture">
                       <div class="clearfix"></div>
                       <div class="author-box-name" style="margin-top:10px;">
                         <a href="#"><span class="user_profile_name"></span></a>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Profile Image</label>
-                                    <input type="file" name="attachment"  class="form-control dropify" data-height="100"  data-max-file-size="40M" data-allowed-file-extensions="png jpg jpeg" >
+                                    <input type="file" name="attachment"  class="form-control dropify prifile_image" data-default-file="" data-height="100"  data-max-file-size="40M" data-allowed-file-extensions="png jpg jpeg" >
                                     <!-- <input type="text" name="old_profile_image" id="old_profile_image" />  -->
                                 </div> <!-- end of col-md-3 --> 
                               </div>
@@ -170,19 +170,21 @@
           var user_contact    = '';
           var user_role_name  = '';
           var district_name   = ''; 
+          var prifile_image   = '';
           $.ajax({
             url: 'admin/profle_info',
             dataType:'json',
             success: function(response)
             { 
               $.each(response, function( index, oneByOne ) 
-              {
+              { 
                  user_first_name = oneByOne.user_first_name;
                  user_last_name  = oneByOne.user_last_name;
                  user_email      = oneByOne.user_email;
                  user_address    = oneByOne.user_address;
                  user_contact    = oneByOne.user_contact;
                  user_role_name  = oneByOne.user_role_name;
+                 prifile_image   = oneByOne.prifile_image;
                  if(oneByOne.district_name == '' || oneByOne.district_name == null || oneByOne.district_name == 0)
                  {
                   district_name   = 'Super admin';
@@ -191,9 +193,9 @@
                  {
                   district_name   = oneByOne.district_name;c
 
-                 }
+                 } 
                  
-              });
+              }); 
               // profile 
               $('.user_profile_name').html(user_first_name+' '+user_last_name);
               $('.user_profile_role').html(user_role_name);
@@ -201,12 +203,16 @@
               $('.user_profile_contact').html(user_contact);
               $('.user_profile_email').html(user_email);
               $('.user_profile_address').html(user_address);
+              $('.author-box-picture').attr('src','assets/profile/'+prifile_image);
+              $('.user-img-radious-style').attr('src','assets/profile/'+prifile_image);
               // form values
               $('[name="user_first_name"]').val(user_first_name);
               $('[name="user_last_name"]').val(user_last_name);
               $('[name="user_email"]').val(user_email);
               $('[name="user_contact"]').val(user_contact);
               $('[name="user_address"]').val(user_address);
+              $('.prifile_image').attr('data-default-file','assets/profile/'+prifile_image);
+              $('.prifile_image').dropify();
               $('[name="old_password"]').val('');
               $('[name="password"]').val('');
               $('[name="confirm"]').val('');
