@@ -91,11 +91,11 @@
                       </div>
                     </div>
                     <div class="col-12">
-                    <div class="float-right">
+                    <!-- <div class="float-right">
                         <a href="admin/forgot_passord" class="text-small">
                           Forgot Password?
                         </a>
-                      </div> 
+                      </div>  -->
                       <div class="input-group mb-3">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
@@ -109,7 +109,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12">
+                    <div class="float-right">
+                        <a href="admin/forgot_passord" class="text-small">
+                          Forgot Password?
+                        </a>
+                      </div> 
                       <div class="custom-control custom-checkbox">
                         <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                         <label class="custom-control-label" for="remember-me">Remember Me</label>
